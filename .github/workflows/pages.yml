@@ -28,7 +28,7 @@ jobs:
         continue-on-error: true
       - name: Build Mana Geyser front layer
         run: |
-          base64 -d site/v36-mana-geyser.js.gz.b64 | gzip -d > site/v36-mana-geyser.js
+          cat site/v36-part-0.txt site/v36-part-1.txt site/v36-part-2.txt site/v36-part-3.txt | base64 -d | gzip -d > site/v36-mana-geyser.js
           node --check site/v36-mana-geyser.js
       - name: Apply planner enhancement layers
         run: |
