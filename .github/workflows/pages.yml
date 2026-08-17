@@ -26,6 +26,10 @@ jobs:
       - name: Refresh poe.ninja snapshot
         run: python scripts/sync_poe.py
         continue-on-error: true
+      - name: Build Mana Geyser front layer
+        run: |
+          base64 -d site/v36-mana-geyser.js.gz.b64 | gzip -d > site/v36-mana-geyser.js
+          node --check site/v36-mana-geyser.js
       - name: Apply planner enhancement layers
         run: |
           python - <<'PY'
@@ -37,6 +41,7 @@ jobs:
               '<script src="./v33-quest-rewards.js"></script>',
               '<script src="./v34-front.js"></script>',
               '<script src="./v35-progression-visuals.js"></script>',
+              '<script src="./v36-mana-geyser.js"></script>',
           ]
           for tag in tags:
               if tag not in s:
