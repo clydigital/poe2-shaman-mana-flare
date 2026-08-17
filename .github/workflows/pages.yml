@@ -29,6 +29,7 @@ jobs:
       - name: Build Guide + long Research page
         run: |
           python scripts/build_v44.py
+          python scripts/build_v44_remnants.py
           node --check site/v44-data.js
           node --check site/v44-core.js
           node --check site/v44-research.js
@@ -36,6 +37,8 @@ jobs:
           grep -q 'Mana Geyser Shaman' site/index.html
           grep -q 'poe.ninja · DaSilkRoad-5508 / ToaBBMcy' site/index.html
           grep -q 'NODE LIBRARY' site/index.html
+          grep -q 'REMNANT ENGINE' site/index.html
+          grep -q 'Arcane Remnants' site/index.html
           grep -q 'ITEM LIBRARY' site/index.html
           grep -q 'FLASK ENGINE' site/index.html
           grep -q 'assets/druid-shaman.webp' site/v44.css
