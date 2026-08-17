@@ -26,39 +26,17 @@ jobs:
       - name: Refresh poe.ninja snapshot
         run: python scripts/sync_poe.py
         continue-on-error: true
-      - name: Build planner / research engine
+      - name: Build simplified Guide + Research site
         run: |
-          cat site/v36-part-0.txt site/v36-part-1.txt site/v36-part-2.txt site/v36-part-3.txt | base64 -d | gzip -d > site/v36-mana-geyser.js
-          python scripts/build_transform.py
-          node --check site/v36-mana-geyser.js
-          node --check site/v37-corrections.js
-          node --check site/v38-skills-research.js
-          node --check site/v39-front-guide.js
-      - name: Apply planner engine scripts
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          p = Path('site/index.html')
-          s = p.read_text(encoding='utf-8')
-          tags = [
-              '<script src="./v32-enhancements.js"></script>',
-              '<script src="./v33-quest-rewards.js"></script>',
-              '<script src="./v36-mana-geyser.js"></script>',
-              '<script src="./v37-corrections.js"></script>',
-              '<script src="./v38-skills-research.js"></script>',
-              '<script src="./v39-front-guide.js"></script>',
-          ]
-          for tag in tags:
-              if tag not in s:
-                  s = s.replace('</body>', tag + '\n</body>')
-          p.write_text(s, encoding='utf-8')
-          PY
-      - name: Compile static Build page
-        run: |
-          python scripts/build_v42.py
-          node --check site/v42-build.js
+          cp site/v43-index.html site/index.html
+          node --check site/v43.js
           grep -q 'Mana Geyser Shaman' site/index.html
-          grep -q 'v42Build' site/index.html
+          grep -q 'DPS + Mana Recovery' site/index.html
+          grep -q 'MANA REGEN / RECOVERY' site/index.html
+          if grep -q 'v32-enhancements.js\|v34-front.js\|v42-build.js' site/index.html; then
+            echo 'Legacy UI layer leaked into v43 index' >&2
+            exit 1
+          fi
       - uses: actions/configure-pages@v5
         with:
           enablement: true
