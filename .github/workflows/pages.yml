@@ -23,18 +23,24 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Refresh poe.ninja snapshot
+      - name: Refresh canonical poe.ninja snapshot
         run: python scripts/sync_poe.py
         continue-on-error: true
-      - name: Build simplified Guide + Research site
+      - name: Build Guide + long Research page
         run: |
-          cp site/v43-index.html site/index.html
-          node --check site/v43.js
+          python scripts/build_v44.py
+          node --check site/v44-data.js
+          node --check site/v44-core.js
+          node --check site/v44-research.js
+          node --check site/v44-instils.js
           grep -q 'Mana Geyser Shaman' site/index.html
-          grep -q 'DPS + Mana Recovery' site/index.html
-          grep -q 'MANA REGEN / RECOVERY' site/index.html
-          if grep -q 'v32-enhancements.js\|v34-front.js\|v42-build.js' site/index.html; then
-            echo 'Legacy UI layer leaked into v43 index' >&2
+          grep -q 'poe.ninja · DaSilkRoad-5508 / ToaBBMcy' site/index.html
+          grep -q 'NODE LIBRARY' site/index.html
+          grep -q 'ITEM LIBRARY' site/index.html
+          grep -q 'FLASK ENGINE' site/index.html
+          grep -q 'assets/druid-shaman.webp' site/v44.css
+          if grep -q 'v32-enhancements.js\|v34-front.js\|v42-build.js\|v43.js' site/index.html; then
+            echo 'Legacy UI layer leaked into v44 index' >&2
             exit 1
           fi
       - uses: actions/configure-pages@v5
