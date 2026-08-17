@@ -1,5 +1,4 @@
 name: Sync PoE Ninja and deploy Pages
-# clean-navigation + raw-instil deployment retry
 on:
   push:
     branches: [main]
@@ -27,17 +26,15 @@ jobs:
       - name: Refresh poe.ninja snapshot
         run: python scripts/sync_poe.py
         continue-on-error: true
-      - name: Build Mana Geyser front layer
+      - name: Build planner / research engine
         run: |
           cat site/v36-part-0.txt site/v36-part-1.txt site/v36-part-2.txt site/v36-part-3.txt | base64 -d | gzip -d > site/v36-mana-geyser.js
           python scripts/build_transform.py
-          node --check site/v34-front.js
           node --check site/v36-mana-geyser.js
           node --check site/v37-corrections.js
           node --check site/v38-skills-research.js
           node --check site/v39-front-guide.js
-          node --check site/v40-progression-rewards-nodes.js
-      - name: Apply planner enhancement layers
+      - name: Apply planner engine scripts
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -46,19 +43,22 @@ jobs:
           tags = [
               '<script src="./v32-enhancements.js"></script>',
               '<script src="./v33-quest-rewards.js"></script>',
-              '<script src="./v34-front.js"></script>',
-              '<script src="./v35-progression-visuals.js"></script>',
               '<script src="./v36-mana-geyser.js"></script>',
               '<script src="./v37-corrections.js"></script>',
               '<script src="./v38-skills-research.js"></script>',
               '<script src="./v39-front-guide.js"></script>',
-              '<script src="./v40-progression-rewards-nodes.js"></script>',
           ]
           for tag in tags:
               if tag not in s:
                   s = s.replace('</body>', tag + '\n</body>')
           p.write_text(s, encoding='utf-8')
           PY
+      - name: Compile static Build page
+        run: |
+          python scripts/build_v42.py
+          node --check site/v42-build.js
+          grep -q 'Mana Geyser Shaman' site/index.html
+          grep -q 'v42Build' site/index.html
       - uses: actions/configure-pages@v5
         with:
           enablement: true
