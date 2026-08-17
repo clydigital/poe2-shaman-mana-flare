@@ -34,6 +34,7 @@ jobs:
           node --check site/v38-skills-research.js
           node --check site/v39-front-guide.js
           node --check site/v40-progression-rewards-nodes.js
+          node --check site/v41-reward-locations.js
       - name: Apply planner enhancement layers
         run: |
           python - <<'PY'
@@ -50,6 +51,7 @@ jobs:
               '<script src="./v38-skills-research.js"></script>',
               '<script src="./v39-front-guide.js"></script>',
               '<script src="./v40-progression-rewards-nodes.js"></script>',
+              '<script src="./v41-reward-locations.js"></script>',
           ]
           for tag in tags:
               if tag not in s:
