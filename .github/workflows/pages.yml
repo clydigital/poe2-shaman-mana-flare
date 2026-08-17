@@ -1,4 +1,5 @@
 name: Sync PoE Ninja and deploy Pages
+# clean-navigation + raw-instil deployment retry
 on:
   push:
     branches: [main]
