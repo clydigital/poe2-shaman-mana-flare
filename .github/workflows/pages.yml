@@ -29,12 +29,12 @@ jobs:
       - name: Build Mana Geyser front layer
         run: |
           cat site/v36-part-0.txt site/v36-part-1.txt site/v36-part-2.txt site/v36-part-3.txt | base64 -d | gzip -d > site/v36-mana-geyser.js
+          python scripts/build_transform.py
           node --check site/v36-mana-geyser.js
           node --check site/v37-corrections.js
           node --check site/v38-skills-research.js
           node --check site/v39-front-guide.js
           node --check site/v40-progression-rewards-nodes.js
-          node --check site/v41-reward-locations.js
       - name: Apply planner enhancement layers
         run: |
           python - <<'PY'
@@ -51,7 +51,6 @@ jobs:
               '<script src="./v38-skills-research.js"></script>',
               '<script src="./v39-front-guide.js"></script>',
               '<script src="./v40-progression-rewards-nodes.js"></script>',
-              '<script src="./v41-reward-locations.js"></script>',
           ]
           for tag in tags:
               if tag not in s:
