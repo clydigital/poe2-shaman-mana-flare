@@ -36,6 +36,7 @@ jobs:
               '<script src="./v32-enhancements.js"></script>',
               '<script src="./v33-quest-rewards.js"></script>',
               '<script src="./v34-front.js"></script>',
+              '<script src="./v35-progression-visuals.js"></script>',
           ]
           for tag in tags:
               if tag not in s:
