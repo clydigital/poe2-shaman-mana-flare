@@ -30,6 +30,7 @@ jobs:
         run: |
           cat site/v36-part-0.txt site/v36-part-1.txt site/v36-part-2.txt site/v36-part-3.txt | base64 -d | gzip -d > site/v36-mana-geyser.js
           node --check site/v36-mana-geyser.js
+          node --check site/v37-corrections.js
       - name: Apply planner enhancement layers
         run: |
           python - <<'PY'
@@ -42,6 +43,7 @@ jobs:
               '<script src="./v34-front.js"></script>',
               '<script src="./v35-progression-visuals.js"></script>',
               '<script src="./v36-mana-geyser.js"></script>',
+              '<script src="./v37-corrections.js"></script>',
           ]
           for tag in tags:
               if tag not in s:
