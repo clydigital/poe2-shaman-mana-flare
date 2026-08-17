@@ -1,5 +1,4 @@
 name: Sync PoE Ninja and deploy Pages
-# v39 clean Pages retry
 on:
   push:
     branches: [main]
@@ -34,6 +33,7 @@ jobs:
           node --check site/v37-corrections.js
           node --check site/v38-skills-research.js
           node --check site/v39-front-guide.js
+          node --check site/v40-progression-rewards-nodes.js
       - name: Apply planner enhancement layers
         run: |
           python - <<'PY'
@@ -49,6 +49,7 @@ jobs:
               '<script src="./v37-corrections.js"></script>',
               '<script src="./v38-skills-research.js"></script>',
               '<script src="./v39-front-guide.js"></script>',
+              '<script src="./v40-progression-rewards-nodes.js"></script>',
           ]
           for tag in tags:
               if tag not in s:
