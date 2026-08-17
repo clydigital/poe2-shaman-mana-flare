@@ -26,6 +26,17 @@ jobs:
       - name: Refresh poe.ninja snapshot
         run: python scripts/sync_poe.py
         continue-on-error: true
+      - name: Apply planner enhancement layer
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('site/index.html')
+          s = p.read_text(encoding='utf-8')
+          tag = '<script src="./v32-enhancements.js"></script>'
+          if tag not in s:
+              s = s.replace('</body>', tag + '\n</body>')
+              p.write_text(s, encoding='utf-8')
+          PY
       - uses: actions/configure-pages@v5
         with:
           enablement: true
