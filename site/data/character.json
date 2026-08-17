@@ -14,5 +14,23 @@
     "entangle": {"chance": 0.32, "cdb": 1.91},
     "orbOfStorms": {"chance": 0.32, "cdb": 1.91}
   },
-  "tree": {"passivePoints": 63, "ascendancyPoints": 8}
+  "tree": {"passivePoints": 63, "ascendancyPoints": 8},
+  "treeStats": {
+    "manaPct": 0.08,
+    "flatMana": 30,
+    "manaRegen": 0.89,
+    "spellCritInc": 0.26,
+    "cdbInc": 0.30
+  },
+  "knownNodes": [
+    "Eldritch Battery",
+    "Mind Over Matter",
+    "Raw Mana",
+    "Arcane Intensity",
+    "Invocated Efficiency",
+    "Druidic Champion",
+    "Furious Wellspring",
+    "Sacred Flow",
+    "Wisdom of the Maji"
+  ]
 }
