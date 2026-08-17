@@ -1,4 +1,5 @@
 name: Sync PoE Ninja and deploy Pages
+# v39 clean Pages retry
 on:
   push:
     branches: [main]
