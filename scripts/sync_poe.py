@@ -7,12 +7,13 @@ from pathlib import Path
 ACCOUNT = "DaSilkRoad-5508"
 CHARACTER = "ToaBBMcy"
 LEAGUE_SLUG = "runesofaldur"
+PROFILE_URL = "https://poe.ninja/poe2/profile/DaSilkRoad-5508/runesofaldur/character/ToaBBMcy"
 INDEX_URL = "https://poe.ninja/poe2/api/data/index-state"
 OUT = Path("site/data/character.json")
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151 Safari/537.36",
     "Accept": "application/json,text/plain,*/*",
-    "Referer": "https://poe.ninja/poe2/builds/runesofaldur",
+    "Referer": PROFILE_URL,
 }
 
 
@@ -122,15 +123,17 @@ def main():
         ward = first_number(raw, "runicWard", "ward")
         spirit = first_number(raw, "spirit", "maximumSpirit", "maxSpirit")
 
-        # Keep known-good values for fields the API schema does not expose directly.
         data = dict(previous)
         data.update({
             "fetchedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "source": char_url,
+            "profileUrl": PROFILE_URL,
+            "snapshotAuthority": "poe.ninja",
             "poeNinjaVersion": version,
             "poeNinjaOverview": overview,
             "syncStatus": "live-api",
         })
+        fetched_fields = []
         for key, value in {
             "level": level,
             "mana": mana,
@@ -142,6 +145,7 @@ def main():
         }.items():
             if value is not None:
                 data[key] = int(value) if float(value).is_integer() else value
+                fetched_fields.append(key)
 
         crit = dict(data.get("crit") or {})
         for out_key, skill in (("frostDarts", "Frost Darts"), ("entangle", "Entangle"), ("orbOfStorms", "Orb of Storms")):
@@ -149,21 +153,25 @@ def main():
             if found:
                 old = crit.get(out_key) or {}
                 crit[out_key] = {k: (found.get(k) if found.get(k) is not None else old.get(k)) for k in ("chance", "cdb")}
+                fetched_fields.append(f"crit.{out_key}")
         data["crit"] = crit
+        data["fetchedFields"] = sorted(set(fetched_fields))
+        data["preservedFromLastVerifiedPoeNinjaSnapshot"] = [k for k in ("resists", "tree", "treeStats", "knownNodes") if k in data]
 
         if not data.get("mana"):
-            raise RuntimeError("Character API returned no usable Mana value and there is no previous snapshot")
+            raise RuntimeError("Character API returned no usable Mana value and there is no previous poe.ninja snapshot")
 
         OUT.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        print(json.dumps({"ok": True, "character": CHARACTER, "version": version, "mana": data.get("mana"), "level": data.get("level")}, indent=2))
+        print(json.dumps({"ok": True, "profile": PROFILE_URL, "character": CHARACTER, "version": version, "mana": data.get("mana"), "level": data.get("level")}, indent=2))
     except Exception as exc:
-        # A poe.ninja/API outage should not stop the guide from deploying.
         if previous:
+            previous["profileUrl"] = PROFILE_URL
+            previous["snapshotAuthority"] = "poe.ninja"
             previous["syncStatus"] = "stale-fallback"
             previous["syncError"] = str(exc)
             previous["syncAttemptedAt"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
             OUT.write_text(json.dumps(previous, indent=2), encoding="utf-8")
-            print(json.dumps({"ok": False, "usingPreviousSnapshot": True, "error": str(exc)}, indent=2))
+            print(json.dumps({"ok": False, "profile": PROFILE_URL, "usingPreviousPoeNinjaSnapshot": True, "error": str(exc)}, indent=2))
             return
         raise
 
