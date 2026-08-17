@@ -1,43 +1,172 @@
-import json,re,urllib.request,datetime
-PROFILE="https://poe.ninja/poe2/profile/DaSilkRoad-5508/runesofaldur/character/ToaBBMcy"
-TREE=PROFILE+"/passive-tree"
-HEAD={"User-Agent":"Mozilla/5.0 ManaFlareGuide/1.0"}
+import json
+import datetime
+import urllib.parse
+import urllib.request
+from pathlib import Path
 
-def get(url):
-    req=urllib.request.Request(url,headers=HEAD)
-    with urllib.request.urlopen(req,timeout=30) as r:
-        return r.read().decode("utf-8","ignore")
-
-def text(html):
-    x=re.sub(r"<style[^>]*>.*?</style>"," ",html,flags=re.S|re.I)
-    x=re.sub(r"<[^>]+>"," ",x)
-    return re.sub(r"\s+"," ",x)
-
-def first(s,*patterns):
-    for p in patterns:
-        m=re.search(p,s,re.I|re.S)
-        if m:return m.group(1)
-def n(x):
-    try:return float(str(x).replace(",",""))
-    except:return None
-def skill(t,name):
-    m=re.search(re.escape(name)+r".{0,220}?(\d+(?:\.\d+)?)%[\s/|,]+(\d+(?:\.\d+)?)%",t,re.I|re.S)
-    return {"chance":float(m.group(1))/100,"cdb":float(m.group(2))/100} if m else None
-
-ph,th=get(PROFILE),get(TREE); pt,tt=text(ph),text(th)
-data={
- "fetchedAt":datetime.datetime.now(datetime.timezone.utc).isoformat(),
- "source":PROFILE,
- "level":int(n(first(pt,r"\blevel\s+(\d{1,3})\b",r'"level"\s*:\s*(\d+)')) or 0),
- "mana":int(n(first(pt,r"Maximum Mana\s*[:\-]?\s*([0-9,]+)",r'\bMana\s*[:\-]\s*([0-9,]{3,})',r'"mana"\s*:\s*([0-9,]+)')) or 0),
- "intelligence":int(n(first(pt,r"\bIntelligence\s*[:\-]?\s*([0-9,]+)",r'"intelligence"\s*:\s*([0-9,]+)')) or 0),
- "life":int(n(first(pt,r"\bLife\s*[:\-]?\s*([0-9,]+)")) or 0),
- "armour":int(n(first(pt,r"\bArmou?r\s*[:\-]?\s*([0-9,]+)")) or 0),
- "ward":int(n(first(pt,r"Runic Ward\s*[:\-]?\s*([0-9,]+)")) or 0),
- "spirit":int(n(first(pt,r"\bSpirit\s*[:\-]?\s*([0-9,]+)")) or 0),
- "crit":{"frostDarts":skill(pt,"Frost Darts"),"entangle":skill(pt,"Entangle"),"orbOfStorms":skill(pt,"Orb of Storms")},
- "tree":{"passivePoints":int(n(first(tt,r"Passive:\s*(\d+)",r'"total_passive_points"\s*:\s*(\d+)')) or 0),"ascendancyPoints":int(n(first(tt,r"Ascendancy:\s*(\d+)",r'"total_ascendancy_points"\s*:\s*(\d+)')) or 0)}
+ACCOUNT = "DaSilkRoad-5508"
+CHARACTER = "ToaBBMcy"
+LEAGUE_SLUG = "runesofaldur"
+INDEX_URL = "https://poe.ninja/poe2/api/data/index-state"
+OUT = Path("site/data/character.json")
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151 Safari/537.36",
+    "Accept": "application/json,text/plain,*/*",
+    "Referer": "https://poe.ninja/poe2/builds/runesofaldur",
 }
-if not data["mana"]: raise SystemExit("Could not parse Mana from poe.ninja")
-open("site/data/character.json","w").write(json.dumps(data,indent=2))
-print(json.dumps(data,indent=2))
+
+
+def get_json(url):
+    req = urllib.request.Request(url, headers=HEADERS)
+    with urllib.request.urlopen(req, timeout=30) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
+def walk(value):
+    if isinstance(value, dict):
+        yield value
+        for child in value.values():
+            yield from walk(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from walk(child)
+
+
+def first_number(root, *keys):
+    wanted = {k.lower() for k in keys}
+    for obj in walk(root):
+        for key, value in obj.items():
+            if str(key).lower() in wanted and isinstance(value, (int, float)):
+                return value
+    return None
+
+
+def first_string_number(root, *keys):
+    wanted = {k.lower() for k in keys}
+    for obj in walk(root):
+        for key, value in obj.items():
+            if str(key).lower() in wanted:
+                try:
+                    return float(str(value).replace(",", ""))
+                except Exception:
+                    pass
+    return None
+
+
+def find_snapshot(index_state):
+    versions = index_state.get("snapshotVersions") or index_state.get("snapshot_versions") or []
+    for entry in versions:
+        if str(entry.get("url", "")).lower() == LEAGUE_SLUG:
+            return entry
+    for entry in versions:
+        text = " ".join(str(entry.get(k, "")) for k in ("url", "snapshotName", "name"))
+        if "runes" in text.lower() and "aldur" in text.lower():
+            return entry
+    raise RuntimeError("Could not locate Runes of Aldur snapshot in poe.ninja index-state")
+
+
+def extract_skill(character_json, skill_name):
+    target = skill_name.lower()
+    for obj in walk(character_json):
+        text = " ".join(str(obj.get(k, "")) for k in ("name", "skill", "skillName", "displayName"))
+        if target not in text.lower():
+            continue
+        chance = None
+        cdb = None
+        for key in ("critChance", "criticalStrikeChance", "crit", "criticalChance"):
+            if key in obj:
+                try:
+                    chance = float(obj[key])
+                    if chance > 1:
+                        chance /= 100
+                except Exception:
+                    pass
+        for key in ("criticalDamageBonus", "critDamageBonus", "cdb"):
+            if key in obj:
+                try:
+                    cdb = float(obj[key])
+                    if cdb > 10:
+                        cdb /= 100
+                except Exception:
+                    pass
+        if chance is not None or cdb is not None:
+            return {"chance": chance, "cdb": cdb}
+    return None
+
+
+def main():
+    previous = {}
+    if OUT.exists():
+        try:
+            previous = json.loads(OUT.read_text(encoding="utf-8"))
+        except Exception:
+            previous = {}
+
+    try:
+        index_state = get_json(INDEX_URL)
+        snap = find_snapshot(index_state)
+        version = snap.get("version")
+        overview = snap.get("snapshotName") or snap.get("snapshot_name") or snap.get("name") or LEAGUE_SLUG
+        if not version:
+            raise RuntimeError("poe.ninja snapshot is missing version")
+
+        params = urllib.parse.urlencode({"overview": overview, "account": ACCOUNT, "name": CHARACTER})
+        char_url = f"https://poe.ninja/poe2/api/builds/{version}/character?{params}"
+        raw = get_json(char_url)
+
+        level = first_number(raw, "level", "characterLevel")
+        mana = first_number(raw, "mana", "maximumMana", "maxMana") or first_string_number(raw, "mana", "maximumMana", "maxMana")
+        intelligence = first_number(raw, "intelligence", "int")
+        life = first_number(raw, "life", "maximumLife", "maxLife")
+        armour = first_number(raw, "armour", "armor")
+        ward = first_number(raw, "runicWard", "ward")
+        spirit = first_number(raw, "spirit", "maximumSpirit", "maxSpirit")
+
+        # Keep known-good values for fields the API schema does not expose directly.
+        data = dict(previous)
+        data.update({
+            "fetchedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "source": char_url,
+            "poeNinjaVersion": version,
+            "poeNinjaOverview": overview,
+            "syncStatus": "live-api",
+        })
+        for key, value in {
+            "level": level,
+            "mana": mana,
+            "intelligence": intelligence,
+            "life": life,
+            "armour": armour,
+            "ward": ward,
+            "spirit": spirit,
+        }.items():
+            if value is not None:
+                data[key] = int(value) if float(value).is_integer() else value
+
+        crit = dict(data.get("crit") or {})
+        for out_key, skill in (("frostDarts", "Frost Darts"), ("entangle", "Entangle"), ("orbOfStorms", "Orb of Storms")):
+            found = extract_skill(raw, skill)
+            if found:
+                old = crit.get(out_key) or {}
+                crit[out_key] = {k: (found.get(k) if found.get(k) is not None else old.get(k)) for k in ("chance", "cdb")}
+        data["crit"] = crit
+
+        if not data.get("mana"):
+            raise RuntimeError("Character API returned no usable Mana value and there is no previous snapshot")
+
+        OUT.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        print(json.dumps({"ok": True, "character": CHARACTER, "version": version, "mana": data.get("mana"), "level": data.get("level")}, indent=2))
+    except Exception as exc:
+        # A poe.ninja/API outage should not stop the guide from deploying.
+        if previous:
+            previous["syncStatus"] = "stale-fallback"
+            previous["syncError"] = str(exc)
+            previous["syncAttemptedAt"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+            OUT.write_text(json.dumps(previous, indent=2), encoding="utf-8")
+            print(json.dumps({"ok": False, "usingPreviousSnapshot": True, "error": str(exc)}, indent=2))
+            return
+        raise
+
+
+if __name__ == "__main__":
+    main()
