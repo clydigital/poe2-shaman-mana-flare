@@ -1,0 +1,18 @@
+{
+  "fetchedAt": "2026-08-17T03:05:00Z",
+  "source": "embedded verified poe.ninja snapshot",
+  "level": 49,
+  "mana": 2497,
+  "intelligence": 294,
+  "life": 1214,
+  "armour": 2487,
+  "ward": 119,
+  "spirit": 140,
+  "resists": [40, 41, 75, 0],
+  "crit": {
+    "frostDarts": {"chance": 0.42, "cdb": 1.91},
+    "entangle": {"chance": 0.32, "cdb": 1.91},
+    "orbOfStorms": {"chance": 0.32, "cdb": 1.91}
+  },
+  "tree": {"passivePoints": 63, "ascendancyPoints": 8}
+}
