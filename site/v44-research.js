@@ -1,0 +1,11 @@
+(() => {
+'use strict';
+const $=id=>document.getElementById(id),D=window.MANA_GEYSER_V44||{nodes:[],items:[],flasks:[]};
+const alloc=new Set(['Eldritch Battery','Mind Over Matter','Raw Mana','Arcane Intensity','Invocated Efficiency','Druidic Champion','Furious Wellspring','Sacred Flow','Wisdom of the Maji']);
+const tag=c=>`<span class="tagPill ${String(c).toLowerCase()}">${c}</span>`;
+function nodeRows(){const h=$('nodeLibrary');if(!h)return;const q=($('nodeSearch')?.value||'').toLowerCase(),cat=$('nodeCat')?.value||'All';const a=D.nodes.map(x=>({name:x[0],effect:x[1],cat:x[2],grade:x[3],status:x[4]})).filter(x=>(cat==='All'||x.cat===cat)&&(!q||`${x.name} ${x.effect} ${x.cat} ${x.grade}`.toLowerCase().includes(q)));$('nodeCount').textContent=`${a.length} / ${D.nodes.length} nodes`;h.innerHTML=a.map(x=>`<tr><td><b>${x.name}</b>${alloc.has(x.name)?' <span class="tier test">POE.NINJA TREE</span>':''}</td><td>${tag(x.cat)}</td><td>${x.effect}</td><td><b>${x.grade}</b></td><td class="${x.status==='Verified'?'statusVerified':'statusResearch'}">${x.status}</td></tr>`).join('')}
+function itemRows(){const h=$('itemLibrary');if(!h)return;const q=($('itemSearch')?.value||'').toLowerCase(),slot=$('itemSlot')?.value||'All';const a=D.items.map(x=>({name:x[0],slot:x[1],level:x[2],role:x[3],grade:x[4],status:x[5]})).filter(x=>(slot==='All'||x.slot===slot)&&(!q||`${x.name} ${x.slot} ${x.role} ${x.grade}`.toLowerCase().includes(q)));$('itemCount').textContent=`${a.length} / ${D.items.length} items`;h.innerHTML=a.map(x=>`<tr><td><b>${x.name}</b></td><td>${x.slot}</td><td>${x.level}</td><td>${x.role}</td><td><b>${x.grade}</b></td><td class="${x.status==='Verified'?'statusVerified':'statusResearch'}">${x.status}</td></tr>`).join('')}
+function flaskRows(){const h=$('flaskLibrary');if(!h)return;h.innerHTML=D.flasks.map(x=>`<article class="${x[4]==='S'?'best':''}"><span>REQ ${x[1]} · ${x[4]}</span><b>${x[0]}</b><p><strong>${x[2]}</strong><br>${x[3]}</p></article>`).join('')}
+['nodeSearch','nodeCat'].forEach(id=>$(id)?.addEventListener(id==='nodeCat'?'change':'input',nodeRows));['itemSearch','itemSlot'].forEach(id=>$(id)?.addEventListener(id==='itemSlot'?'change':'input',itemRows));
+nodeRows();itemRows();flaskRows();
+})();
