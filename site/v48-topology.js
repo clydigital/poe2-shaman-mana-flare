@@ -81,7 +81,15 @@ function apply(){
 async function load(){
   try{const r=await fetch(`./data/topology.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw 0;topo=await r.json();apply()}catch(e){}
 }
+function loadBodyLab(){
+  if(document.querySelector('script[data-v49-body-lab]'))return;
+  const s=document.createElement('script');
+  s.src='./v49-body-lab.js';
+  s.dataset.v49BodyLab='1';
+  document.head.appendChild(s);
+}
 load();
+loadBodyLab();
 window.addEventListener('v44calc',()=>setTimeout(apply,0));
 setTimeout(()=>{if(topo)apply()},250);
 })();
