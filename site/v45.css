@@ -1,14 +1,14 @@
 @import url('./v44.css');
 
 .heroArt{
-  background-image:url('./assets/shaman-mana-geyser.webp')!important;
-  background-position:center 50%!important;
+  background-image:url('./assets/druid-shaman.webp'),url('./assets/shaman-mana-geyser.webp')!important;
+  background-position:center 48%!important;
   background-size:cover!important;
-  filter:saturate(.78) contrast(1.10) brightness(.72)!important;
+  filter:saturate(.96) contrast(1.08) brightness(.74)!important;
 }
 .heroBlue{
-  background:linear-gradient(90deg,rgba(3,13,25,.90),rgba(8,71,126,.48) 50%,rgba(9,126,214,.38)),radial-gradient(circle at 58% 45%,rgba(63,180,255,.58),transparent 34%)!important;
-  mix-blend-mode:color!important;
+  background:radial-gradient(circle at 58% 44%,rgba(86,177,255,.12),transparent 30%),linear-gradient(90deg,rgba(4,22,36,.18),rgba(16,74,118,.08) 52%,rgba(181,67,26,.06))!important;
+  mix-blend-mode:screen!important;
 }
 .heroShade{
   background:linear-gradient(90deg,rgba(7,5,5,.98) 0%,rgba(7,8,11,.82) 42%,rgba(4,18,30,.20) 70%,rgba(4,10,18,.56) 100%),linear-gradient(0deg,#0d0907 0%,rgba(13,9,7,.48) 26%,transparent 55%)!important;
@@ -26,5 +26,6 @@ button[data-page="research"]:hover{background:#417e5d!important;border-color:#65
 .frontAnointHero{display:grid;grid-template-columns:1.15fr .85fr;gap:10px;margin:14px 0 12px}.frontAnointHero>article{border:1px solid var(--line);border-radius:15px;background:linear-gradient(180deg,rgba(32,23,17,.98),rgba(17,12,9,.98));padding:15px}.frontAnointHero .bestPack{border-color:rgba(91,174,229,.45);background:linear-gradient(180deg,rgba(15,42,61,.72),rgba(17,12,9,.98))}.frontAnointHero span{display:block;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:#83c4e9;font-weight:900}.frontAnointHero b{display:block;font-size:28px;letter-spacing:-.04em;margin:5px 0;color:#ead8b8}.frontAnointHero p{font-size:9.5px;line-height:1.5;color:#a99d88;margin:0}.anointTable .liquidStack{display:flex;flex-wrap:wrap;gap:4px}.anointTable .liquidStack i{font-style:normal;font-size:7px;border:1px solid rgba(119,175,209,.24);background:#0d1720;color:#b9dbea;border-radius:999px;padding:4px 6px;white-space:nowrap}.anointGain{font-weight:950;color:#bfe3c8}.anointAllocated{display:block;color:#e0bb7b;font-size:7px;font-weight:900;margin-top:3px}.chatRefresh{border-color:rgba(105,183,228,.48)!important;color:#c8ebfb!important;background:rgba(12,40,58,.72)!important}.refreshStatus{display:inline-block;font-size:7px;color:#7f9eae;margin-left:5px}.guideRule{margin-top:10px;font-size:9px;color:#8f826e;line-height:1.45}
 
 .triggerRecommendation{margin:16px 0 30px;border:1px solid rgba(95,179,223,.30);border-radius:15px;background:linear-gradient(180deg,rgba(13,33,47,.72),rgba(19,13,10,.98));padding:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.triggerRecommendation>span{grid-column:1/-1;font-size:7px;letter-spacing:.13em;text-transform:uppercase;color:#81c4ea;font-weight:950}.triggerRecommendation>div{border:1px solid rgba(217,179,112,.13);border-radius:10px;background:rgba(13,10,8,.65);padding:10px}.triggerRecommendation b{display:block;font-size:10px;color:#ead6b1;margin-bottom:4px}.triggerRecommendation p{margin:0;font-size:8.5px;line-height:1.45;color:#a99c87}.triggerRecommendation .triggerLock{grid-column:1/-1;border-left:3px solid #8a7656;padding:8px 10px;color:#8f826e;background:rgba(25,18,13,.72);font-size:8px;line-height:1.45}
+.calcMicro{display:block;margin-top:2px;color:#6f8490;font-size:6px;letter-spacing:0;text-transform:none;font-weight:600;line-height:1.25}.calcStats .wide{grid-column:1/-1}.calcStats .wide b{font-size:11px}.deepCard strong,.card strong{color:#ead9b8}
 
-@media(max-width:760px){.frontAnointHero,.triggerRecommendation{grid-template-columns:1fr}.triggerRecommendation>span,.triggerRecommendation .triggerLock{grid-column:1}.heroArt{background-position:58% 50%!important}}
+@media(max-width:760px){.frontAnointHero,.triggerRecommendation{grid-template-columns:1fr}.triggerRecommendation>span,.triggerRecommendation .triggerLock{grid-column:1}.heroArt{background-position:55% 48%!important}}
