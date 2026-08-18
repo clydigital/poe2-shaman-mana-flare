@@ -159,3 +159,13 @@ function mount(){
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mount);
 else mount();
 })();
+
+// v55: load the Strugglescream instill-first optimizer after the shared table enhancer.
+(() => {
+  if(document.querySelector('script[data-v55-instills]')) return;
+  const s=document.createElement('script');
+  s.src='./v55-instills-lab.js';
+  s.dataset.v55Instills='1';
+  s.defer=true;
+  document.head.appendChild(s);
+})();
