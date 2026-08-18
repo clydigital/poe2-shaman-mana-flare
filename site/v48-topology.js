@@ -95,9 +95,17 @@ function loadVisualRestoration(){
   s.dataset.v50Visuals='1';
   document.head.appendChild(s);
 }
+function loadStrugglescreamPackage(){
+  if(document.querySelector('script[data-v51-strugglescream]'))return;
+  const s=document.createElement('script');
+  s.src='./v51-strugglescream-package.js';
+  s.dataset.v51Strugglescream='1';
+  document.head.appendChild(s);
+}
 load();
 loadBodyLab();
 loadVisualRestoration();
+loadStrugglescreamPackage();
 window.addEventListener('v44calc',()=>setTimeout(apply,0));
 setTimeout(()=>{if(topo)apply()},250);
 })();
