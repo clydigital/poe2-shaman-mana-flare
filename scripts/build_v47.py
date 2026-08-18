@@ -27,6 +27,12 @@ s = re.sub(r'<aside class="calcRail".*?</aside>', '', s, flags=re.S)
 s = re.sub(r'\s*<div class="ninjaPanel" id="poeNinjaSnapshot">.*?</article>\s*</div>', '', s, flags=re.S)
 s = re.sub(r'<a href="https://poe\.ninja/[^\"]*"[^>]*>.*?</a>', '', s, flags=re.S | re.I)
 
+# The Research catalogue no longer needs a character-profile field either.
+data_path = Path('site/v44-data.js')
+data = data_path.read_text(encoding='utf-8')
+data = re.sub(r"\n\s*profile:\s*'https://poe\.ninja/[^']*',", '', data, count=1)
+data_path.write_text(data, encoding='utf-8')
+
 needle = '</body>'
 if needle not in s:
     raise SystemExit('body closing tag missing')
