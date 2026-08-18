@@ -25,23 +25,29 @@ jobs:
         run: |
           python scripts/build_v47.py
           node --check site/v44-data.js
-          node --check site/v44-core.js
           node --check site/v44-research.js
           node --check site/v54-sortable-tables.js
           node --check site/v60-front-guide.js
           node --check site/v61-chase-defence-notes.js
+          node --check site/v62-guide-shell.js
           test -s site/assets/shaman-mana-geyser.webp
           grep -q 'Mana Geyser Shaman' site/index.html
           grep -q '<div class="heroArt"></div>' site/index.html
           grep -q 'NODE LIBRARY' site/index.html
           grep -q 'ITEM LIBRARY' site/index.html
           grep -q 'FLASK ENGINE' site/index.html
+          grep -q 'REMNANT ENGINE' site/index.html
           grep -q 'v54-sortable-tables.js' site/index.html
           grep -q 'v60-front-guide.js' site/index.html
           grep -q 'v61-chase-defence-notes.js' site/index.html
+          grep -q 'v62-guide-shell.js' site/index.html
           grep -q "background-image:url('./assets/shaman-mana-geyser.webp')" site/v45.css
-          if grep -q 'v44-instils.js\|v45.js\|v46.js\|v46-benchmark.js\|v47.js\|v48-topology.js' site/index.html; then
+          if grep -q 'v44-core.js\|v44-instils.js\|v45.js\|v46.js\|v46-benchmark.js\|v47.js\|v48-topology.js' site/index.html; then
             echo 'Removed optimizer/live-character runtime leaked back into final guide' >&2
+            exit 1
+          fi
+          if grep -q 'poe.ninja\|calcRail\|poeNinjaSnapshot' site/index.html; then
+            echo 'Removed poe.ninja/calculator markup leaked back into final guide' >&2
             exit 1
           fi
           if grep -q 'v55-instills-lab.js\|v56-flex-instills-attributes.js\|v57-regalia-attr-note.js' site/v54-sortable-tables.js; then
