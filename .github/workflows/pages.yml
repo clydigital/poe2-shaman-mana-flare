@@ -28,6 +28,8 @@ jobs:
         continue-on-error: true
       - name: Preserve verified fields poe.ninja does not expose to plain fetches
         run: python scripts/normalize_snapshot.py
+      - name: Rebuild exact current-tree topology from poe.ninja PoB
+        run: python scripts/build_topology.py
       - name: Build v47 player Guide + recovery/pathing Research
         run: |
           python scripts/build_v47.py
@@ -39,6 +41,8 @@ jobs:
           node --check site/v46.js
           node --check site/v46-benchmark.js
           node --check site/v47.js
+          test -s site/data/topology.json
+          grep -q '"candidates"' site/data/topology.json
           grep -q 'Mana Geyser Shaman' site/index.html
           grep -q 'poe.ninja · DaSilkRoad-5508 / ToaBBMcy' site/index.html
           grep -q 'NODE LIBRARY' site/index.html
