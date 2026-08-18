@@ -28,9 +28,10 @@ if needle not in s:
 for script in [
     '<script src="./v54-sortable-tables.js"></script>\n',
     '<script src="./v60-front-guide.js"></script>\n',
+    '<script src="./v61-chase-defence-notes.js"></script>\n',
 ]:
     if script.strip() not in s:
         s = s.replace(needle, script + needle, 1)
 
 p.write_text(s, encoding='utf-8')
-print('built findings-first v60 guide + static Research', len(s))
+print('built findings-first v61 guide + static Research', len(s))
