@@ -102,10 +102,18 @@ function loadStrugglescreamPackage(){
   s.dataset.v51Strugglescream='1';
   document.head.appendChild(s);
 }
+function loadGainAsExtraLab(){
+  if(document.querySelector('script[data-v52-gain-extra]'))return;
+  const s=document.createElement('script');
+  s.src='./v52-gain-as-extra-lab.js';
+  s.dataset.v52GainExtra='1';
+  document.head.appendChild(s);
+}
 load();
 loadBodyLab();
 loadVisualRestoration();
 loadStrugglescreamPackage();
+loadGainAsExtraLab();
 window.addEventListener('v44calc',()=>setTimeout(apply,0));
 setTimeout(()=>{if(topo)apply()},250);
 })();
