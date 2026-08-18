@@ -26,6 +26,9 @@ const EXTRA_ITEMS=[
  ['Legacy of Greymake','Augment','65','Helmets: +50 to all Attributes; Bonded: +1 Maximum Life per Level.','STAT FIX','Verified'],
  ['Cloak of Defiance','Body','65','+100–150 Mana, Mana regen, ES, 50% damage taken from Mana before Life.','DEFENCE','Verified'],
  ['Adonia\'s Ego','Wand','65','+100–150 Mana, +3 Spell Skills, cast speed; hybrid native-spell route.','HYBRID','Verified'],
+ ['Darkness Enthroned · Helmet variant','Belt','62','50–100% increased effect of socketed Augments; socketed items act as Helmet; 2 hidden augment sockets. Premium Mana-engine platform.','CHASE','Verified'],
+ ['Jiquani\'s Thesis','Augment','60','Helmet: +1 maximum Mana per 2 Item Energy Shield on equipped Helmet. Ancient Augment; limited to one.','CHASE','Verified'],
+ ['Soul Core of Zalatl','Augment','35','Helmet: 3% increased maximum Mana. Strong second socket in the Helmet-version Darkness Enthroned.','HIGH','Verified'],
  ['Powertread','Boots','—','Power-charge/CDB boot experiment; compare expected crit payload against rare CDR boots.','TEST','Research'],
  ['Ab Aeterno','Boots','—','High defensive boot; trades Mana/CDR flexibility for broad mitigation/roll utility.','DEFENCE','Research'],
  ['Wake of Destruction','Boots','—','Creates Shocked Ground while moving; Stormwalker self-ground interaction requires live proof.','TEST','Research']
@@ -53,5 +56,6 @@ function itemRows(){
 }
 function flaskRows(){const h=$('flaskLibrary');if(!h)return;h.innerHTML=D.flasks.map(x=>`<article class="${x[4]==='S'?'best':''}"><span>REQ ${x[1]} · ${x[4]}</span><b>${x[0]}</b><p><strong>${x[2]}</strong><br>${x[3]}</p></article>`).join('')}
 ['nodeSearch','nodeCat'].forEach(id=>$(id)?.addEventListener(id==='nodeCat'?'change':'input',nodeRows));['itemSearch','itemSlot'].forEach(id=>$(id)?.addEventListener(id==='itemSlot'?'change':'input',itemRows));
+window.v44ResearchRenderItems=itemRows;
 nodeRows();itemRows();flaskRows();
 })();
