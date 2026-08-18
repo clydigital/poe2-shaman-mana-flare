@@ -169,3 +169,13 @@ else mount();
   s.defer=true;
   document.head.appendChild(s);
 })();
+
+// v56: custom four-slot mix/match + Grand Regalia attribute solutions.
+(() => {
+  if(document.querySelector('script[data-v56-flex]')) return;
+  const s=document.createElement('script');
+  s.src='./v56-flex-instills-attributes.js';
+  s.dataset.v56Flex='1';
+  s.defer=true;
+  document.head.appendChild(s);
+})();
