@@ -52,6 +52,7 @@ jobs:
           node --check site/v56-flex-instills-attributes.js
           node --check site/v57-regalia-attr-note.js
           node --check site/v58-boots-lab.js
+          node --check site/v59-decision-ledger-visuals.js
           python -m py_compile scripts/build_topology.py scripts/build_topology_v2.py
           test -s site/data/topology.json
           grep -q '"candidates"' site/data/topology.json
@@ -80,6 +81,9 @@ jobs:
           grep -q 'v56-flex-instills-attributes.js' site/v54-sortable-tables.js
           grep -q 'v57-regalia-attr-note.js' site/v54-sortable-tables.js
           grep -q 'v58-boots-lab.js' site/v57-regalia-attr-note.js
+          grep -q 'v59-decision-ledger-visuals.js' site/v57-regalia-attr-note.js
+          grep -q 'MORIOR · EXCEPTIONAL GRAND REGALIA' site/v59-decision-ledger-visuals.js
+          grep -q 'REPLACEMENT LEDGER · NO SILENT REMOVALS' site/v59-decision-ledger-visuals.js
           grep -q 'assets/shaman-mana-geyser.webp' site/v45.css
           if grep -q 'v32-enhancements.js\|v34-front.js\|v42-build.js\|v43.js' site/index.html; then
             echo 'Legacy UI layer leaked into v47 index' >&2
