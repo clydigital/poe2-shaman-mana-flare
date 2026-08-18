@@ -179,3 +179,13 @@ else mount();
   s.defer=true;
   document.head.appendChild(s);
 })();
+
+// v57: Morior all-attribute roll + 41/41/41 requirement clarification.
+(() => {
+  if(document.querySelector('script[data-v57-regalia]')) return;
+  const s=document.createElement('script');
+  s.src='./v57-regalia-attr-note.js';
+  s.dataset.v57Regalia='1';
+  s.defer=true;
+  document.head.appendChild(s);
+})();
