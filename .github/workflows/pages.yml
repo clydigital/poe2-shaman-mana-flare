@@ -46,8 +46,12 @@ jobs:
             echo 'Removed optimizer/live-character runtime leaked back into final guide' >&2
             exit 1
           fi
-          if grep -q 'poe.ninja\|calcRail\|poeNinjaSnapshot' site/index.html; then
-            echo 'Removed poe.ninja/calculator markup leaked back into final guide' >&2
+          if grep -q 'poe.ninja\|calcRail\|poeNinjaSnapshot' site/index.html site/v44-data.js; then
+            echo 'Removed poe.ninja/calculator data leaked back into final guide' >&2
+            exit 1
+          fi
+          if grep -q 'compact calculator\|Overflow toggle\|Other Mana recovery / sec' site/index.html; then
+            echo 'Stale calculator instructions leaked into static Research' >&2
             exit 1
           fi
           if grep -q 'v55-instills-lab.js\|v56-flex-instills-attributes.js\|v57-regalia-attr-note.js' site/v54-sortable-tables.js; then
