@@ -1,9 +1,9 @@
 """Value-aware topology wrapper for the Mana Geyser guide.
 
 The base topology builder already measures exact distance from the current poe.ninja
-PoB allocation over GGG's official graph.  This wrapper fixes the remaining subtle
+PoB allocation over GGG's official graph. This wrapper fixes the remaining subtle
 problem: plain BFS can choose an arbitrary route when two routes use the same number
-of new passive points.  We still minimise NEW POINTS first, but ties are broken by
+of new passive points. We still minimise NEW POINTS first, but ties are broken by
 lead-in value for this EB Mana-Flare build.
 """
 
@@ -14,6 +14,30 @@ from pathlib import Path
 import build_topology as base
 
 OUT = Path("site/data/topology.json")
+
+ADVANCED_DAMAGE_CANDIDATES = [
+    "Temporal Mastery",
+    "Cremation",
+    "Electric Amplification",
+    "Pure Chaos",
+    "Wild Storm",
+    "Molten Being",
+    "Bond of the Owl",
+    "Marked for Sickness",
+    "Melting Flames",
+    "Harmonic Generator",
+    "Breaking Point",
+    "Power Conduction",
+    "Pure Power",
+    "Lightning Rod",
+    "Stormwalker",
+    "Flamewalker",
+    "Glaciation",
+    "Exposed to the Storm",
+]
+for candidate in ADVANCED_DAMAGE_CANDIDATES:
+    if candidate not in base.CANDIDATES:
+        base.CANDIDATES.append(candidate)
 
 
 def utility(node_id, nodes, target_ids):
@@ -33,10 +57,16 @@ def utility(node_id, nodes, target_ids):
         return 1.00
     if "triggered" in stats and "spell" in stats and "damage" in stats:
         return 1.00
+    if "gain" in stats and "extra" in stats and "damage" in stats:
+        return 1.00
+    if "penetrates" in stats and "resistance" in stats:
+        return 0.95
     if "critical hit chance" in stats and "spell" in stats:
         return 0.85
     if "critical spell damage" in stats or "critical damage bonus" in stats:
         return 0.75
+    if "shock" in stats and "magnitude" in stats:
+        return 0.80
 
     # EB-specific defence tie-break. Maximum ES remains useful because EB converts it
     # to Mana. ES recharge speed does not refill the converted pool, while Armour
@@ -71,7 +101,7 @@ def shortest_route_value_aware(allocated, target_ids, nodes, adj):
         raise RuntimeError("No PoB allocated node ids matched the official GGG tree export")
 
     # Cost is lexicographic: fewer NEW points always wins; for equal point count,
-    # higher cumulative travel utility wins.  Every allocated node is a zero-cost
+    # higher cumulative travel utility wins. Every allocated node is a zero-cost
     # source, so walking around the existing tree is never miscounted as new travel.
     heap = []
     best = {}
@@ -123,9 +153,11 @@ if OUT.exists():
     data = json.loads(OUT.read_text(encoding="utf-8"))
     data["routeSelectionRule"] = (
         "Minimise new passive points from the current allocated PoB tree; among equal-point routes, "
-        "maximise EB Mana-Flare lead-in utility. Mana regen, Triggered Spell Damage and Jewel sockets "
-        "rank highest; spell crit/CDB are useful; maximum ES and Armour-to-Elemental are preferred over "
-        "Energy Shield recharge; attributes are minor and Physical Damage is dead travel."
+        "maximise EB Mana-Flare lead-in utility. Mana regen, gain-as-extra, penetration, Triggered Spell Damage "
+        "and Jewel sockets rank highest; useful spell crit/CDB and Shock magnitude follow; maximum ES and "
+        "Armour-to-Elemental are preferred over Energy Shield recharge; attributes are minor and Physical Damage "
+        "is dead travel for this spell build."
     )
-    data["routeSelectionVersion"] = 2
+    data["routeSelectionVersion"] = 3
+    data["advancedDamageCandidates"] = ADVANCED_DAMAGE_CANDIDATES
     OUT.write_text(json.dumps(data, indent=2), encoding="utf-8")
