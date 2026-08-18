@@ -9,7 +9,11 @@ import zlib
 from collections import deque
 from pathlib import Path
 
-PROFILE_URL = "https://poe.ninja/poe2/profile/DaSilkRoad-5508/runesofaldur/character/ToaBBMcy"
+ACCOUNT = "DaSilkRoad-5508"
+CHARACTER = "ToaBBMcy"
+LEAGUE_SLUG = "runesofaldur"
+PROFILE_URL = f"https://poe.ninja/poe2/profile/{ACCOUNT}/{LEAGUE_SLUG}/character/{CHARACTER}"
+POB_RAW_URL = f"https://poe.ninja/poe2/pob/raw/profile/code/{ACCOUNT}/{LEAGUE_SLUG}/{CHARACTER}"
 GRAPH_URL = "https://raw.githubusercontent.com/grindinggear/poe2-skilltree-export/main/data.json"
 OUT = Path("site/data/topology.json")
 HEADERS = {
@@ -49,6 +53,17 @@ def extract_pob_import(page):
             raise RuntimeError("poe.ninja PoB import code is unexpectedly short")
         return code
     raise RuntimeError("Could not find poe.ninja Path of Building import code")
+
+
+def current_pob_code():
+    try:
+        code = get_text(POB_RAW_URL).strip()
+        if len(code) >= 100:
+            return code, POB_RAW_URL
+    except Exception:
+        pass
+    page = get_text(PROFILE_URL)
+    return extract_pob_import(page), PROFILE_URL
 
 
 def decode_pob(code):
@@ -228,8 +243,7 @@ def main():
             previous = None
 
     try:
-        profile = get_text(PROFILE_URL)
-        code = extract_pob_import(profile)
+        code, pob_source = current_pob_code()
         root = decode_pob(code)
         allocated, pob_meta = active_spec_nodes(root)
 
@@ -265,7 +279,7 @@ def main():
             "generatedAt": now,
             "status": "verified",
             "profileUrl": PROFILE_URL,
-            "treeSource": "current poe.ninja Path of Building import",
+            "treeSource": pob_source,
             "graphSource": GRAPH_URL,
             "pob": pob_meta,
             "allocatedNodeCount": len(allocated),
