@@ -42,6 +42,8 @@ jobs:
           node --check site/v46-benchmark.js
           node --check site/v47.js
           node --check site/v48-topology.js
+          node --check site/v49-body-lab.js
+          node --check site/v50-visual-restoration.js
           python -m py_compile scripts/build_topology.py scripts/build_topology_v2.py
           test -s site/data/topology.json
           grep -q '"candidates"' site/data/topology.json
@@ -59,6 +61,8 @@ jobs:
           grep -q 'v46-benchmark.js' site/index.html
           grep -q 'v47.js' site/index.html
           grep -q 'v48-topology.js' site/index.html
+          grep -q 'v49-body-lab.js' site/v48-topology.js
+          grep -q 'v50-visual-restoration.js' site/v48-topology.js
           grep -q 'assets/shaman-mana-geyser.webp' site/v45.css
           if grep -q 'v32-enhancements.js\|v34-front.js\|v42-build.js\|v43.js' site/index.html; then
             echo 'Legacy UI layer leaked into v47 index' >&2
