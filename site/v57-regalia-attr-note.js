@@ -29,3 +29,13 @@ setTimeout(mount,700);
   s.defer=true;
   document.head.appendChild(s);
 })();
+
+// v59: visible Morior/Exceptional Regalia coverage, direct replacement comparisons, robust item/skill art.
+(() => {
+  if(document.querySelector('script[data-v59-decisions]')) return;
+  const s=document.createElement('script');
+  s.src='./v59-decision-ledger-visuals.js';
+  s.dataset.v59Decisions='1';
+  s.defer=true;
+  document.head.appendChild(s);
+})();
