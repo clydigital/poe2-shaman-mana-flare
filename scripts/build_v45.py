@@ -18,6 +18,32 @@ for old, new in replacements.items():
         raise SystemExit(f'missing guide-copy marker: {old[:60]}')
     s = s.replace(old, new, 1)
 
+# Mana Flare is itself a Triggered Spell. Surface the passive-tree pieces that directly
+# scale the payload instead of burying them in Research.
+invocated_row = '<tr><td><b>Invocated Efficiency</b></td><td>40% increased Triggered Spell Damage</td><td>Directly relevant to Mana Flare as a triggered payload.</td></tr>'
+trigger_rows = '''<tr><td><b>Invocated Efficiency</b></td><td>Triggered Spells deal 40% increased Spell Damage</td><td><strong>CORE.</strong> Directly scales every Mana Flare hit. One of the cleanest damage notables for the build.</td></tr>
+          <tr><td><b>Triggered Spell Damage</b></td><td>Triggered Spells deal 14% increased Spell Damage per small passive</td><td><strong>HIGH VALUE PATHING.</strong> These small passives directly scale Mana Flare. Take them when the route is efficient; do not treat them as travel-only points.</td></tr>
+          <tr><td><b>Dynamism</b></td><td>40% increased Damage if you have Triggered a Skill Recently</td><td><strong>CORE / INSTIL CANDIDATE.</strong> After the first trigger, subsequent Mana Flares gain another 40% additive damage while the Recently condition is active.</td></tr>
+          <tr><td><b>Evocational Practitioner</b></td><td>25% increased Critical Hit Chance if you have Triggered a Skill Recently</td><td><strong>CONDITIONAL.</strong> Less direct than Invocated Efficiency, but can improve carrier crit consistency and Mana Flare crits after the trigger loop starts.</td></tr>'''
+if invocated_row not in s:
+    raise SystemExit('Invocated Efficiency front-row marker missing')
+s = s.replace(invocated_row, trigger_rows, 1)
+
+recommendation = '''
+        <div class="triggerRecommendation">
+          <span>MANA FLARE DAMAGE PRIORITY</span>
+          <div><b>1 · Invocated Efficiency</b><p>40% increased Spell Damage that is always valid on the triggered Mana Flare.</p></div>
+          <div><b>2 · Dynamism</b><p>Another 40% increased damage in sustained combat after you have triggered once. Excellent Strugglescream candidate if tree pathing is awkward.</p></div>
+          <div><b>3 · Triggered Spell Damage small passives</b><p>14% each. Their value is unusually good when they are already on the route to Invocated Efficiency or another useful wheel.</p></div>
+          <div><b>4 · Evocational Practitioner</b><p>Use when crit reliability still needs help. It is not a flat 25% more damage.</p></div>
+          <p class="triggerLock"><strong>Do not plan around class-locked trigger nodes:</strong> the 16% Triggered Spell Damage minor is an Invoker Ascendancy passive, and Power of the Storm is Oracle / Unseen Path only.</p>
+        </div>
+'''
+marker = '        <h3 class="subhead">Defence / Mana protection</h3>'
+if marker not in s:
+    raise SystemExit('defence subhead marker missing')
+s = s.replace(marker, recommendation + '\n' + marker, 1)
+
 nav_old = '<a href="#items">Items</a><a href="#runeseeker">Runeseeker</a>'
 nav_new = '<a href="#items">Items</a><a href="#anoints">Strugglescream</a><a href="#runeseeker">Runeseeker</a>'
 if nav_old not in s:
