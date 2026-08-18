@@ -24,6 +24,7 @@ function configFor(p){
   c.mana=pre+rawManaEq(p)*scale;
   c.cp=Math.max(.1,input('v49CurrentMana',90)/100);
   c.cdr=Math.max(0,input('v49CdrElse',70)/100);
+  c.carrierHits=Math.max(0,input('v49CarrierHits',10));
   c.regen=Math.max(-.95,input('v49RegenElse',500)/100+(p.regen||0));
   c.other=Math.max(0,input('v49OtherRecovery',2500));
   c.mom=!!$('v49Mom')?.checked;
@@ -64,6 +65,7 @@ function build(){
       <div class="control"><label>Existing max-Mana multiplier on chest contribution</label><input id="v49ManaScale" type="number" value="1.25" min="0" step="0.05"></div>
       <div class="control"><label>Current Mana before Flare %</label><input id="v49CurrentMana" type="number" value="90" min="10" max="150" step="1"></div>
       <div class="control"><label>CDR from non-body sources %</label><input id="v49CdrElse" type="number" value="70" min="0" step="5"></div>
+      <div class="control"><label>Eligible carrier hits / sec</label><input id="v49CarrierHits" type="number" value="10" min="0" step="0.5"></div>
       <div class="control"><label>Non-body increased Mana regen %</label><input id="v49RegenElse" type="number" value="500" min="0" step="25"></div>
       <div class="control"><label>Other recovery / sec</label><input id="v49OtherRecovery" type="number" value="2500" min="0" step="100"></div>
     </div>
