@@ -19,3 +19,13 @@ function mount(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
 setTimeout(mount,700);
 })();
+
+// v58: rare/unique boots, attribute fixing and boot-based CDR paths.
+(() => {
+  if(document.querySelector('script[data-v58-boots]')) return;
+  const s=document.createElement('script');
+  s.src='./v58-boots-lab.js';
+  s.dataset.v58Boots='1';
+  s.defer=true;
+  document.head.appendChild(s);
+})();
