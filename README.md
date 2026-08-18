@@ -18,4 +18,4 @@ Go to **Settings → Pages → Build and deployment → Source → GitHub Action
 
 The workflow also supports a manual run from **Actions → Sync PoE Ninja and deploy Pages → Run workflow**.
 
-<!-- v39 clean deployment trigger -->
+<!-- v48 Mana Geyser deployment trigger authorized 2026-08-18 -->
