@@ -26,9 +26,9 @@ jobs:
       - name: Refresh canonical poe.ninja snapshot
         run: python scripts/sync_poe.py
         continue-on-error: true
-      - name: Build v46 player Guide + recovery/pathing Research
+      - name: Build v47 player Guide + recovery/pathing Research
         run: |
-          python scripts/build_v46.py
+          python scripts/build_v47.py
           node --check site/v44-data.js
           node --check site/v44-core.js
           node --check site/v44-research.js
@@ -36,6 +36,7 @@ jobs:
           node --check site/v45.js
           node --check site/v46.js
           node --check site/v46-benchmark.js
+          node --check site/v47.js
           grep -q 'Mana Geyser Shaman' site/index.html
           grep -q 'poe.ninja · DaSilkRoad-5508 / ToaBBMcy' site/index.html
           grep -q 'NODE LIBRARY' site/index.html
@@ -47,9 +48,10 @@ jobs:
           grep -q 'Refresh with ChatGPT' site/index.html
           grep -q 'v46.js' site/index.html
           grep -q 'v46-benchmark.js' site/index.html
+          grep -q 'v47.js' site/index.html
           grep -q 'assets/shaman-mana-geyser.webp' site/v45.css
           if grep -q 'v32-enhancements.js\|v34-front.js\|v42-build.js\|v43.js' site/index.html; then
-            echo 'Legacy UI layer leaked into v46 index' >&2
+            echo 'Legacy UI layer leaked into v47 index' >&2
             exit 1
           fi
       - uses: actions/configure-pages@v5
