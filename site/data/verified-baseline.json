@@ -1,0 +1,46 @@
+{
+  "observedAt": "2026-08-18T04:21:00Z",
+  "profileUrl": "https://poe.ninja/poe2/profile/DaSilkRoad-5508/runesofaldur/character/ToaBBMcy",
+  "tree": {
+    "passivePoints": 69,
+    "normalPassivePoints": 68,
+    "weaponSetPassivePoints": 1,
+    "ascendancyPoints": 8,
+    "displayedCounters": [68, 1, 8]
+  },
+  "explicitCurrentNamedNodes": [
+    "Eldritch Battery",
+    "Mind Over Matter",
+    "Druidic Champion",
+    "Furious Wellspring",
+    "Sacred Flow",
+    "Wisdom of the Maji"
+  ],
+  "aggregateEffectMatches": [
+    "Raw Mana",
+    "Arcane Intensity",
+    "Invocated Efficiency"
+  ],
+  "knownNodes": [
+    "Eldritch Battery",
+    "Mind Over Matter",
+    "Raw Mana",
+    "Arcane Intensity",
+    "Invocated Efficiency",
+    "Druidic Champion",
+    "Furious Wellspring",
+    "Sacred Flow",
+    "Wisdom of the Maji"
+  ],
+  "gear": {
+    "status": "partial",
+    "verifiedNamedItems": ["Against the Darkness Time-Lost Diamond"],
+    "observedSocketedRuneTypes": {
+      "Lightning Rune Tier 2": 3,
+      "Fire Rune Tier 2": 2,
+      "Enhance Rune Tier 2": 3
+    },
+    "materialManaFlareModifiers": "unavailable",
+    "note": "Last verified rendered equipment evidence. Equipped weapon/armour/ring/amulet/belt tooltip modifiers were not exposed, so no Mana Flare or recovery modifiers are inferred."
+  }
+}
