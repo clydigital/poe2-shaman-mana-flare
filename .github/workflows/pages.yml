@@ -48,6 +48,7 @@ jobs:
           node --check site/v52-gain-as-extra-lab.js
           node --check site/v53-advanced-damage-nodes.js
           node --check site/v54-sortable-tables.js
+          node --check site/v55-instills-lab.js
           python -m py_compile scripts/build_topology.py scripts/build_topology_v2.py
           test -s site/data/topology.json
           grep -q '"candidates"' site/data/topology.json
@@ -72,6 +73,7 @@ jobs:
           grep -q 'v51-strugglescream-package.js' site/v48-topology.js
           grep -q 'v52-gain-as-extra-lab.js' site/v48-topology.js
           grep -q 'v53-advanced-damage-nodes.js' site/v48-topology.js
+          grep -q 'v55-instills-lab.js' site/v54-sortable-tables.js
           grep -q 'assets/shaman-mana-geyser.webp' site/v45.css
           if grep -q 'v32-enhancements.js\|v34-front.js\|v42-build.js\|v43.js' site/index.html; then
             echo 'Legacy UI layer leaked into v47 index' >&2
