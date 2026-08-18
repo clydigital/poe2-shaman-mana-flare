@@ -35,6 +35,7 @@ jobs:
           node --check site/v44-instils.js
           node --check site/v45.js
           node --check site/v46.js
+          node --check site/v46-benchmark.js
           grep -q 'Mana Geyser Shaman' site/index.html
           grep -q 'poe.ninja · DaSilkRoad-5508 / ToaBBMcy' site/index.html
           grep -q 'NODE LIBRARY' site/index.html
@@ -45,6 +46,7 @@ jobs:
           grep -q 'STRUGGLESCREAM · 4 INSTILS' site/index.html
           grep -q 'Refresh with ChatGPT' site/index.html
           grep -q 'v46.js' site/index.html
+          grep -q 'v46-benchmark.js' site/index.html
           grep -q 'assets/shaman-mana-geyser.webp' site/v45.css
           if grep -q 'v32-enhancements.js\|v34-front.js\|v42-build.js\|v43.js' site/index.html; then
             echo 'Legacy UI layer leaked into v46 index' >&2
