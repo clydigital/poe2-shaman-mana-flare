@@ -16,6 +16,75 @@ HEADERS = {
     "Referer": PROFILE_URL,
 }
 
+VERIFIED_RENDERED = {
+    "fetchedAt": "2026-08-18T04:00:44Z",
+    "observedAt": "2026-08-18T04:00:44Z",
+    "source": "verified poe.ninja rendered snapshot",
+    "profileUrl": PROFILE_URL,
+    "snapshotAuthority": "poe.ninja",
+    "syncStatus": "verified-rendered-snapshot",
+    "poeNinjaLastFetchedText": "22 minutes ago",
+    "level": 53,
+    "attributesDisplayed": [175, 130, 299],
+    "intelligence": 299,
+    "life": 1331,
+    "energyShieldDisplay": "-",
+    "armour": 2487,
+    "evasion": 8,
+    "block": 25,
+    "ward": 119,
+    "mana": 2669,
+    "spirit": 140,
+    "resists": [37, 38, 73, 0],
+    "crit": {
+        "frostDarts": {"chance": 0.46, "cdb": 1.91},
+        "entangle": {"chance": 0.35, "cdb": 1.91},
+        "orbOfStorms": {"chance": 0.35, "cdb": 1.91},
+        "detonateDead": {"chance": 0.18, "cdb": 2.30},
+    },
+    "critModel": {
+        "manaFlareBaseCrit": 0.07,
+        "pinpointMoreCritOnCarriers": 0.60,
+        "genericSpellCritIncEstimate": 1.1955128205,
+        "flareCritEstimate": 0.1536858974,
+        "payloadCdbProxy": 1.91,
+        "payloadCdbStatus": "unavailable on poe.ninja; using the common 191% carrier CDB as a labelled calculator proxy",
+        "method": "Average shared crit multiplier inferred from Frost Darts 46% at 13% base and Entangle/Orb of Storms 35% at 10% base after dividing out Pinpoint Critical's 60% more Critical Hit Chance.",
+    },
+    "tree": {"passivePoints": 69, "ascendancyPoints": 8, "displayedCounters": [69, 0, 0, 8]},
+    "treeStats": {
+        "manaPct": 0.08,
+        "flatMana": 30,
+        "manaRegen": 1.09,
+        "manaRegenMovingBonus": 0.50,
+        "manaRegenStationaryPenalty": 0.25,
+        "spellCritInc": 0.46,
+        "cdbInc": 0.30,
+        "manaRecoup": 0.09,
+        "flaskRecoveryInc": 0.12,
+    },
+    "explicitCurrentNamedNodes": ["Eldritch Battery", "Mind Over Matter"],
+    "knownNodesStatus": "Eldritch Battery and Mind Over Matter are explicitly named in the current poe.ninja passive view; the remaining named nodes are preserved from the last verified named-node snapshot because the current view exposes their aggregate effects without their names.",
+    "knownNodes": [
+        "Eldritch Battery", "Mind Over Matter", "Raw Mana", "Arcane Intensity",
+        "Invocated Efficiency", "Druidic Champion", "Furious Wellspring",
+        "Sacred Flow", "Wisdom of the Maji",
+    ],
+    "gear": {
+        "status": "unavailable",
+        "note": "The current poe.ninja rendered snapshot did not expose trustworthy equipped item names/modifier text. No gear changes were guessed.",
+    },
+    "calculatorDefaults": {
+        "carrier": "Frost Darts",
+        "carrierHitsPerSecond": 4.0,
+        "carrierHitsStatus": "manual preserved estimate; poe.ninja does not expose eligible Mana Flare trigger events per second",
+        "otherRecoveryPerSecond": 0,
+        "otherRecoveryStatus": "manual; 9% Mana recoup is conditional and is not auto-counted",
+        "manaLeechPerSecond": 0,
+        "manaLeechStatus": "manual; no qualifying attack-based Mana leech source verified",
+    },
+}
+
 
 def get_json(url):
     req = urllib.request.Request(url, headers=HEADERS)
@@ -95,6 +164,20 @@ def extract_skill(character_json, skill_name):
     return None
 
 
+def parse_iso(text):
+    try:
+        return datetime.datetime.fromisoformat(str(text).replace("Z", "+00:00"))
+    except Exception:
+        return datetime.datetime.min.replace(tzinfo=datetime.timezone.utc)
+
+
+def best_fallback(previous):
+    verified = json.loads(json.dumps(VERIFIED_RENDERED))
+    if previous and parse_iso(previous.get("fetchedAt")) > parse_iso(verified.get("fetchedAt")):
+        return dict(previous), "stale-fallback"
+    return verified, "verified-rendered-fallback"
+
+
 def main():
     previous = {}
     if OUT.exists():
@@ -124,7 +207,7 @@ def main():
         ward = first_number(raw, "runicWard", "ward")
         spirit = first_number(raw, "spirit", "maximumSpirit", "maxSpirit")
 
-        data = dict(previous)
+        data = dict(previous or VERIFIED_RENDERED)
         data.update({
             "fetchedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "source": char_url,
@@ -136,14 +219,8 @@ def main():
         })
         fetched_fields = []
         for key, value in {
-            "level": level,
-            "mana": mana,
-            "intelligence": intelligence,
-            "life": life,
-            "armour": armour,
-            "evasion": evasion,
-            "ward": ward,
-            "spirit": spirit,
+            "level": level, "mana": mana, "intelligence": intelligence, "life": life,
+            "armour": armour, "evasion": evasion, "ward": ward, "spirit": spirit,
         }.items():
             if value is not None:
                 data[key] = int(value) if float(value).is_integer() else value
@@ -158,7 +235,9 @@ def main():
                 fetched_fields.append(f"crit.{out_key}")
         data["crit"] = crit
         data["fetchedFields"] = sorted(set(fetched_fields))
-        data["preservedFromLastVerifiedPoeNinjaSnapshot"] = [k for k in ("resists", "tree", "treeStats", "knownNodes") if k in data]
+        data["preservedFromLastVerifiedPoeNinjaSnapshot"] = [
+            k for k in ("resists", "tree", "treeStats", "knownNodes", "critModel", "gear", "calculatorDefaults") if k in data
+        ]
 
         if not data.get("mana"):
             raise RuntimeError("Character API returned no usable Mana value and there is no previous poe.ninja snapshot")
@@ -166,16 +245,14 @@ def main():
         OUT.write_text(json.dumps(data, indent=2), encoding="utf-8")
         print(json.dumps({"ok": True, "profile": PROFILE_URL, "character": CHARACTER, "version": version, "mana": data.get("mana"), "level": data.get("level")}, indent=2))
     except Exception as exc:
-        if previous:
-            previous["profileUrl"] = PROFILE_URL
-            previous["snapshotAuthority"] = "poe.ninja"
-            previous["syncStatus"] = "stale-fallback"
-            previous["syncError"] = str(exc)
-            previous["syncAttemptedAt"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
-            OUT.write_text(json.dumps(previous, indent=2), encoding="utf-8")
-            print(json.dumps({"ok": False, "profile": PROFILE_URL, "usingPreviousPoeNinjaSnapshot": True, "error": str(exc)}, indent=2))
-            return
-        raise
+        fallback, status = best_fallback(previous)
+        fallback["profileUrl"] = PROFILE_URL
+        fallback["snapshotAuthority"] = "poe.ninja"
+        fallback["syncStatus"] = status
+        fallback["syncError"] = str(exc)
+        fallback["syncAttemptedAt"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        OUT.write_text(json.dumps(fallback, indent=2), encoding="utf-8")
+        print(json.dumps({"ok": False, "profile": PROFILE_URL, "usingVerifiedPoeNinjaFallback": status == "verified-rendered-fallback", "error": str(exc)}, indent=2))
 
 
 if __name__ == "__main__":
