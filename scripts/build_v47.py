@@ -18,6 +18,10 @@ for src in [
 ]:
     s = re.sub(r'\s*<script src="' + re.escape(src) + r'"></script>\s*', '\n', s)
 
+# The old compact calculator and poe.ninja link are not part of the new product.
+s = re.sub(r'<aside class="calcRail".*?</aside>', '', s, flags=re.S)
+s = re.sub(r'<a href="https://poe\.ninja/[^\"]*"[^>]*>poe\.ninja.*?</a>', '', s, flags=re.S | re.I)
+
 needle = '</body>'
 if needle not in s:
     raise SystemExit('body closing tag missing')
