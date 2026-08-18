@@ -16,6 +16,7 @@ PROFILE_URL = f"https://poe.ninja/poe2/profile/{ACCOUNT}/{LEAGUE_SLUG}/character
 POB_RAW_URL = f"https://poe.ninja/poe2/pob/raw/profile/code/{ACCOUNT}/{LEAGUE_SLUG}/{CHARACTER}"
 GRAPH_URL = "https://raw.githubusercontent.com/grindinggear/poe2-skilltree-export/main/data.json"
 OUT = Path("site/data/topology.json")
+CHARACTER_JSON = Path("site/data/character.json")
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/json,text/plain,*/*",
@@ -31,6 +32,19 @@ CANDIDATES = [
     "Throatseeker",
     "Shredding Force",
     "Desensitisation",
+]
+
+NAMED_ALLOCATION_CHECKS = [
+    "Eldritch Battery",
+    "Mind Over Matter",
+    "Raw Mana",
+    "Arcane Intensity",
+    "Invocated Efficiency",
+    "Druidic Champion",
+    "Furious Wellspring",
+    "Sacred Flow",
+    "Wisdom of the Maji",
+    "Controlling Magic",
 ]
 
 
@@ -234,6 +248,40 @@ def route_payload(name, path, allocated, nodes):
     }
 
 
+def allocation_status(name, by_name, allocated):
+    ids = by_name.get(norm(name), [])
+    allocated_ids = sorted(set(ids) & allocated)
+    return {
+        "name": name,
+        "found": bool(ids),
+        "allocated": bool(allocated_ids),
+        "nodeIds": ids,
+        "allocatedNodeIds": allocated_ids,
+    }
+
+
+def reconcile_character(named_allocations, checked_at):
+    if not CHARACTER_JSON.exists():
+        return []
+    try:
+        character = json.loads(CHARACTER_JSON.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    exact = [name for name in NAMED_ALLOCATION_CHECKS if named_allocations.get(name, {}).get("allocated")]
+    character["knownNodes"] = exact
+    character["pobAllocatedNamedNodes"] = exact
+    character["pobAllocationCheckedAt"] = checked_at
+    character["knownNodesStatus"] = (
+        "Named passive allocations are reconciled from the current poe.ninja Path of Building node IDs "
+        "against GGG's official passive-tree export; aggregate stat text is not treated as proof of allocation."
+    )
+    character["aggregateEffectMatchesStatus"] = (
+        "Aggregate rendered effects are informational only and do not establish that a named notable is allocated."
+    )
+    CHARACTER_JSON.write_text(json.dumps(character, indent=2), encoding="utf-8")
+    return exact
+
+
 def main():
     previous = None
     if OUT.exists():
@@ -274,7 +322,13 @@ def main():
             route = shortest_route(matched_allocated, target_ids, nodes, adj)
             candidates[name] = route_payload(name, route, matched_allocated, nodes)
 
+        named_allocations = {
+            name: allocation_status(name, by_name, matched_allocated)
+            for name in NAMED_ALLOCATION_CHECKS
+        }
+
         now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        reconciled_known_nodes = reconcile_character(named_allocations, now)
         data = {
             "generatedAt": now,
             "status": "verified",
@@ -284,6 +338,8 @@ def main():
             "pob": pob_meta,
             "allocatedNodeCount": len(allocated),
             "matchedAllocatedNodeCount": len(matched_allocated),
+            "namedAllocationStatus": named_allocations,
+            "reconciledKnownNodes": reconciled_known_nodes,
             "classificationRule": {
                 "allocated": "already on tree; never instil",
                 "natural": "1-3 new passive points from the current allocated tree; path it instead of spending a Strugglescream slot",
@@ -298,6 +354,7 @@ def main():
             "ok": True,
             "allocated": len(allocated),
             "matched": len(matched_allocated),
+            "named": {name: value.get("allocated") for name, value in named_allocations.items()},
             "routes": {name: {"points": value.get("newPoints"), "class": value.get("classification")} for name, value in candidates.items()},
         }, indent=2))
     except Exception as exc:
