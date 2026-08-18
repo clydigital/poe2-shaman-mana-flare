@@ -74,6 +74,7 @@ async function snapshot(){
     if($('cCdb'))$('cCdb').value=((d.critModel?.payloadCdbProxy??d.crit?.frostDarts?.cdb??1.91)*100).toFixed(0);
     if($('cRegen'))$('cRegen').value=((d.treeStats?.manaRegen??1.09)*100).toFixed(0);
     if($('cFlaskRecInc')&&d.treeStats?.flaskRecoveryInc!=null)$('cFlaskRecInc').value=(d.treeStats.flaskRecoveryInc*100).toFixed(0);
+    if($('cArch')&&d.calculatorDefaults?.archmageVerified!=null)$('cArch').checked=!!d.calculatorDefaults.archmageVerified;
     const v={
       snapLevel:d.level??'—',snapMana:(d.mana??'—').toLocaleString?.()||d.mana,snapInt:d.intelligence??'—',
       snapSpirit:d.spirit??'—',snapArmour:(d.armour??'—').toLocaleString?.()||d.armour,snapWard:d.ward??'—',
