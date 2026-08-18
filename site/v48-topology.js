@@ -88,8 +88,16 @@ function loadBodyLab(){
   s.dataset.v49BodyLab='1';
   document.head.appendChild(s);
 }
+function loadVisualRestoration(){
+  if(document.querySelector('script[data-v50-visuals]'))return;
+  const s=document.createElement('script');
+  s.src='./v50-visual-restoration.js';
+  s.dataset.v50Visuals='1';
+  document.head.appendChild(s);
+}
 load();
 loadBodyLab();
+loadVisualRestoration();
 window.addEventListener('v44calc',()=>setTimeout(apply,0));
 setTimeout(()=>{if(topo)apply()},250);
 })();
