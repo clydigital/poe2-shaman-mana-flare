@@ -26,6 +26,8 @@ jobs:
       - name: Refresh canonical poe.ninja snapshot
         run: python scripts/sync_poe.py
         continue-on-error: true
+      - name: Preserve verified fields poe.ninja does not expose to plain fetches
+        run: python scripts/normalize_snapshot.py
       - name: Build v47 player Guide + recovery/pathing Research
         run: |
           python scripts/build_v47.py
