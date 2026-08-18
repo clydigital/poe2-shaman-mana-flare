@@ -1,27 +1,56 @@
 {
-  "fetchedAt": "2026-08-17T03:05:00Z",
-  "source": "embedded verified poe.ninja snapshot",
-  "level": 49,
-  "mana": 2497,
-  "intelligence": 294,
-  "life": 1214,
+  "fetchedAt": "2026-08-18T04:00:44Z",
+  "observedAt": "2026-08-18T04:00:44Z",
+  "source": "verified poe.ninja rendered snapshot",
+  "profileUrl": "https://poe.ninja/poe2/profile/DaSilkRoad-5508/runesofaldur/character/ToaBBMcy",
+  "snapshotAuthority": "poe.ninja",
+  "syncStatus": "verified-rendered-snapshot",
+  "poeNinjaLastFetchedText": "22 minutes ago",
+  "level": 53,
+  "attributesDisplayed": [175, 130, 299],
+  "intelligence": 299,
+  "life": 1331,
+  "energyShieldDisplay": "-",
   "armour": 2487,
+  "evasion": 8,
+  "block": 25,
   "ward": 119,
+  "mana": 2669,
   "spirit": 140,
-  "resists": [40, 41, 75, 0],
+  "resists": [37, 38, 73, 0],
   "crit": {
-    "frostDarts": {"chance": 0.42, "cdb": 1.91},
-    "entangle": {"chance": 0.32, "cdb": 1.91},
-    "orbOfStorms": {"chance": 0.32, "cdb": 1.91}
+    "frostDarts": {"chance": 0.46, "cdb": 1.91},
+    "entangle": {"chance": 0.35, "cdb": 1.91},
+    "orbOfStorms": {"chance": 0.35, "cdb": 1.91},
+    "detonateDead": {"chance": 0.18, "cdb": 2.30}
   },
-  "tree": {"passivePoints": 63, "ascendancyPoints": 8},
+  "critModel": {
+    "manaFlareBaseCrit": 0.07,
+    "pinpointMoreCritOnCarriers": 0.60,
+    "genericSpellCritIncEstimate": 1.1955128205,
+    "flareCritEstimate": 0.1536858974,
+    "payloadCdbProxy": 1.91,
+    "payloadCdbStatus": "unavailable on poe.ninja; using the common 191% carrier CDB as a labelled calculator proxy",
+    "method": "Average shared crit multiplier inferred from Frost Darts 46% at 13% base and Entangle/Orb of Storms 35% at 10% base after dividing out Pinpoint Critical's 60% more Critical Hit Chance."
+  },
+  "tree": {
+    "passivePoints": 69,
+    "ascendancyPoints": 8,
+    "displayedCounters": [69, 0, 0, 8]
+  },
   "treeStats": {
     "manaPct": 0.08,
     "flatMana": 30,
-    "manaRegen": 0.89,
-    "spellCritInc": 0.26,
-    "cdbInc": 0.30
+    "manaRegen": 1.09,
+    "manaRegenMovingBonus": 0.50,
+    "manaRegenStationaryPenalty": 0.25,
+    "spellCritInc": 0.46,
+    "cdbInc": 0.30,
+    "manaRecoup": 0.09,
+    "flaskRecoveryInc": 0.12
   },
+  "explicitCurrentNamedNodes": ["Eldritch Battery", "Mind Over Matter"],
+  "knownNodesStatus": "Eldritch Battery and Mind Over Matter are explicitly named in the current poe.ninja passive view; the remaining named nodes are preserved from the last verified named-node snapshot because the current view exposes their aggregate effects without their names.",
   "knownNodes": [
     "Eldritch Battery",
     "Mind Over Matter",
@@ -32,5 +61,18 @@
     "Furious Wellspring",
     "Sacred Flow",
     "Wisdom of the Maji"
-  ]
+  ],
+  "gear": {
+    "status": "unavailable",
+    "note": "The current poe.ninja rendered snapshot did not expose trustworthy equipped item names/modifier text. No gear changes were guessed."
+  },
+  "calculatorDefaults": {
+    "carrier": "Frost Darts",
+    "carrierHitsPerSecond": 4.0,
+    "carrierHitsStatus": "manual preserved estimate; poe.ninja does not expose eligible Mana Flare trigger events per second",
+    "otherRecoveryPerSecond": 0,
+    "otherRecoveryStatus": "manual; 9% Mana recoup is conditional and is not auto-counted",
+    "manaLeechPerSecond": 0,
+    "manaLeechStatus": "manual; no qualifying attack-based Mana leech source verified"
+  }
 }
