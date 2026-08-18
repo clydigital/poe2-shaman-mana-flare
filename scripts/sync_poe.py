@@ -120,6 +120,7 @@ def main():
         intelligence = first_number(raw, "intelligence", "int")
         life = first_number(raw, "life", "maximumLife", "maxLife")
         armour = first_number(raw, "armour", "armor")
+        evasion = first_number(raw, "evasion", "evasionRating") or first_string_number(raw, "evasion", "evasionRating")
         ward = first_number(raw, "runicWard", "ward")
         spirit = first_number(raw, "spirit", "maximumSpirit", "maxSpirit")
 
@@ -140,6 +141,7 @@ def main():
             "intelligence": intelligence,
             "life": life,
             "armour": armour,
+            "evasion": evasion,
             "ward": ward,
             "spirit": spirit,
         }.items():
