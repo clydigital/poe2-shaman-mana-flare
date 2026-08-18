@@ -1,7 +1,7 @@
 @import url('./v43.css');
 
 /* v44 keeps the v43 Mana Geyser visual language, but restores the actual Shaman WebP and adds research-library UI. */
-.heroArt{background-image:url('./assets/druid-shaman.webp')!important;background-position:center 35%!important;filter:saturate(.82) contrast(1.08) brightness(.82)!important}
+.heroArt{background-image:url('./assets/shaman-mana-geyser.webp')!important;background-position:center 43%!important;filter:saturate(.82) contrast(1.08) brightness(.82)!important}
 .heroBlue{background:linear-gradient(90deg,rgba(4,17,31,.86),rgba(19,99,162,.34) 52%,rgba(16,126,215,.32)),radial-gradient(circle at 64% 45%,rgba(67,179,255,.56),transparent 34%)!important;mix-blend-mode:color!important}
 .heroShade{background:linear-gradient(90deg,rgba(8,6,6,.97),rgba(8,8,9,.76) 43%,rgba(4,20,31,.12) 72%,rgba(5,13,20,.56)),linear-gradient(0deg,#0d0907 0%,transparent 40%)!important}
 
@@ -15,7 +15,7 @@
 
 .calcDivider{height:1px;background:var(--line);margin:9px 0}.calcSectionLabel{font-size:6.5px;letter-spacing:.12em;text-transform:uppercase;color:#79b8dc;font-weight:950;margin:8px 0 5px}.calcStats .wide{grid-column:1/-1}.calcStats .wide b{font-size:12px}.calcHint{font-size:7px;line-height:1.4;color:#7d7161;margin:4px 0 8px}.miniPreset{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px}.miniPreset button{border:1px solid var(--line);background:#100b08;color:#bfae91;border-radius:7px;padding:6px;font-size:7px;cursor:pointer}.miniPreset button:hover{border-color:rgba(107,184,229,.5);color:#d8eef9}
 
-.researchHero:before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,8,6,.98),rgba(12,29,41,.74)),url('./assets/druid-shaman.webp') center 40%/cover;opacity:.20;z-index:-1}.researchHero{position:relative;isolation:isolate;overflow:hidden;border-bottom:1px solid var(--line)}
+.researchHero:before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,8,6,.98),rgba(12,29,41,.74)),url('./assets/shaman-mana-geyser.webp') center 43%/cover;opacity:.20;z-index:-1}.researchHero{position:relative;isolation:isolate;overflow:hidden;border-bottom:1px solid var(--line)}
 .sourceList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.sourceList a{display:block;border:1px solid var(--line);border-radius:10px;padding:10px;background:#130d09;text-decoration:none;color:#b7d9eb;font-size:9px}.sourceList a small{display:block;color:#817562;margin-top:3px}
 
 @media(max-width:900px){.ninjaPanel,.deepGrid{grid-template-columns:1fr}.flaskStrip{grid-template-columns:1fr 1fr}.libCount{margin-left:0}}
