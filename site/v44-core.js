@@ -7,10 +7,11 @@ function cfg(){
   if(!$('cOverflow')?.checked)cp=Math.min(1,cp);
   const per=n('cFlaskPerUse',0)*(1+n('cFlaskRecInc',0)/100),rate=Math.max(0,n('cFlaskUseRate',0));
   return{
-    mana:n('cMana',2497),cp,base:n('cBaseRegen',4)/100,regen:n('cRegen',89)/100,
+    mana:n('cMana',2669),cp,base:n('cBaseRegen',4)/100,regen:n('cRegen',109)/100,
     other:n('cOtherRec',0)+per*rate+n('cLeech',0),flask:per*rate,leech:n('cLeech',0),
-    cdr:n('cCdr',0)/100,carrierCrit:n('cCrit',42)/100,carrierHits:Math.max(0,n('cCarrierHits',4)),
-    flareCrit:n('cFlareCrit',23)/100,cdb:n('cCdb',191)/100,inc:n('cInc',0)/100,rage:n('cRage',43),
+    cdr:n('cCdr',0)/100,carrierCrit:n('cCrit',46)/100,carrierHits:Math.max(0,n('cCarrierHits',4)),
+    flareCrit:n('cFlareCrit',15.37)/100,genericCritInc:n('cGenericCritInc',119.55)/100,
+    cdb:n('cCdb',191)/100,inc:n('cInc',0)/100,rage:n('cRage',43),
     arch:$('cArch')?.checked,arc:$('cArcane')?.checked,inv:$('cInvoc')?.checked,druid:$('cDruid')?.checked,
     mom:$('cMom')?.checked,rath:$('cRath')?.checked,rr:n('cRecoveryRate',0)/100
   }
@@ -65,12 +66,14 @@ async function snapshot(){
   const s=$('snapStatus');if(s){s.textContent='SYNCING…';s.className=''}
   try{
     const r=await fetch(`./data/character.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw 0;const d=await r.json();
-    if($('cMana'))$('cMana').value=d.mana||2497;
-    const carrier=d.crit?.frostDarts?.chance||.42;
-    if($('cCrit'))$('cCrit').value=Math.round(carrier*100);
-    if($('cFlareCrit'))$('cFlareCrit').value=Math.round(Math.min(.99,carrier*(7/13))*100);
-    if($('cCdb'))$('cCdb').value=Math.round((d.crit?.frostDarts?.cdb||1.91)*100);
-    if($('cRegen'))$('cRegen').value=Math.round((d.treeStats?.manaRegen||.89)*100);
+    if($('cMana'))$('cMana').value=d.mana||2669;
+    const carrier=d.crit?.frostDarts?.chance??.46;
+    if($('cCrit'))$('cCrit').value=(carrier*100).toFixed(1);
+    if($('cFlareCrit'))$('cFlareCrit').value=((d.critModel?.flareCritEstimate??.1536858974)*100).toFixed(2);
+    if($('cGenericCritInc'))$('cGenericCritInc').value=((d.critModel?.genericSpellCritIncEstimate??1.1955128205)*100).toFixed(2);
+    if($('cCdb'))$('cCdb').value=((d.critModel?.payloadCdbProxy??d.crit?.frostDarts?.cdb??1.91)*100).toFixed(0);
+    if($('cRegen'))$('cRegen').value=((d.treeStats?.manaRegen??1.09)*100).toFixed(0);
+    if($('cFlaskRecInc')&&d.treeStats?.flaskRecoveryInc!=null)$('cFlaskRecInc').value=(d.treeStats.flaskRecoveryInc*100).toFixed(0);
     const v={
       snapLevel:d.level??'—',snapMana:(d.mana??'—').toLocaleString?.()||d.mana,snapInt:d.intelligence??'—',
       snapSpirit:d.spirit??'—',snapArmour:(d.armour??'—').toLocaleString?.()||d.armour,snapWard:d.ward??'—',
@@ -78,9 +81,15 @@ async function snapshot(){
     };
     Object.entries(v).forEach(([id,x])=>{if($(id))$(id).textContent=x});
     if($('snapResists'))$('snapResists').textContent=Array.isArray(d.resists)?d.resists.join(' / '):'—';
-    if(s){s.textContent=(d.syncStatus||'POE.NINJA SNAPSHOT').replaceAll('-',' ').toUpperCase();s.className=d.syncStatus==='stale-fallback'?'syncStale':'syncGood'}
-    document.querySelectorAll('[data-snap-mana]').forEach(x=>x.textContent=(d.mana||2497).toLocaleString());
-    document.querySelectorAll('[data-snap-level]').forEach(x=>x.textContent=d.level||49);
+    document.querySelectorAll('[data-snap-mana]').forEach(x=>x.textContent=(d.mana||2669).toLocaleString());
+    document.querySelectorAll('[data-snap-level]').forEach(x=>x.textContent=d.level||53);
+    document.querySelectorAll('[data-snap-int]').forEach(x=>x.textContent=`${d.intelligence??'—'} INT`);
+    document.querySelectorAll('[data-snap-passives]').forEach(x=>x.textContent=`${d.tree?.passivePoints??'—'} passives`);
+    if(s){
+      const st=d.syncStatus||'poe-ninja-snapshot';
+      s.textContent=st.replaceAll('-',' ').toUpperCase();
+      s.className=st==='stale-fallback'?'syncStale':'syncGood'
+    }
     render()
   }catch(e){if(s){s.textContent='SNAPSHOT LOAD FAILED';s.className='syncBad'}}
 }
