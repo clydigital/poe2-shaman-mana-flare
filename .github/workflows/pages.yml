@@ -55,10 +55,12 @@ jobs:
           node --check site/v59-decision-ledger-visuals.js
           python -m py_compile scripts/build_topology.py scripts/build_topology_v2.py
           test -s site/data/topology.json
+          test -s site/assets/shaman-mana-geyser.webp
           grep -q '"candidates"' site/data/topology.json
           grep -q '"routeSelectionVersion": 3' site/data/topology.json
           grep -q '"advancedDamageCandidates"' site/data/topology.json
           grep -q 'Mana Geyser Shaman' site/index.html
+          grep -q '<div class="heroArt"></div>' site/index.html
           grep -q 'poe.ninja · DaSilkRoad-5508 / ToaBBMcy' site/index.html
           grep -q 'NODE LIBRARY' site/index.html
           grep -q 'REMNANT ENGINE' site/index.html
@@ -84,9 +86,18 @@ jobs:
           grep -q 'v59-decision-ledger-visuals.js' site/v57-regalia-attr-note.js
           grep -q 'MORIOR · EXCEPTIONAL GRAND REGALIA' site/v59-decision-ledger-visuals.js
           grep -q 'REPLACEMENT LEDGER · NO SILENT REMOVALS' site/v59-decision-ledger-visuals.js
-          grep -q 'assets/shaman-mana-geyser.webp' site/v45.css
+          grep -q "background-image:url('./assets/shaman-mana-geyser.webp')" site/v45.css
+          grep -q "shaman-mana-geyser.webp" site/v44.css
           if grep -q 'v32-enhancements.js\|v34-front.js\|v42-build.js\|v43.js' site/index.html; then
             echo 'Legacy UI layer leaked into v47 index' >&2
+            exit 1
+          fi
+          if grep -q "heroArt.*druid-shaman.webp" site/v45.css; then
+            echo 'Legacy druid hero is covering the Mana Geyser Shaman art' >&2
+            exit 1
+          fi
+          if grep -q "researchHero:before.*druid-shaman.webp" site/v44.css; then
+            echo 'Legacy druid art leaked into the Research header' >&2
             exit 1
           fi
       - uses: actions/configure-pages@v5
