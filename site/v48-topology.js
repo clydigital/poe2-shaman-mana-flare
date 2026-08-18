@@ -15,6 +15,8 @@ function utility(node){
   if(name.includes('jewel')&&name.includes('socket'))return 1.00;
   if(stats.includes('mana regeneration'))return 1.00;
   if(stats.includes('triggered')&&stats.includes('spell')&&stats.includes('damage'))return 1.00;
+  if(stats.includes('gain')&&stats.includes('extra')&&stats.includes('damage'))return 1.00;
+  if(stats.includes('penetrates')&&stats.includes('resistance'))return .95;
   if(stats.includes('critical hit chance')&&stats.includes('spell'))return .85;
   if(stats.includes('critical spell damage')||stats.includes('critical damage bonus'))return .75;
   const armour=stats.includes('armour'),maxEs=stats.includes('maximum')&&stats.includes('energy shield');
@@ -75,45 +77,24 @@ function apply(){
   const ranked=ORDER.map(name=>({name,s:score(name,topo.candidates[name])})).filter(x=>x.s!=null).sort((a,b)=>b.s-a.s).slice(0,4);
   if($('v47EffNames'))$('v47EffNames').textContent=ranked.map(x=>x.name).join(' · ');
   if($('v47EffCombo'))$('v47EffCombo').textContent=`${ranked.length}/4 slots · topology-filtered`;
-  if($('v47TopoRule'))$('v47TopoRule').textContent=`${topo.matchedAllocatedNodeCount??'—'} / ${topo.allocatedNodeCount??'—'} current PoB node IDs matched to GGG's graph. Route distance is exact; equal-length routes are tie-broken for this EB build, preferring Mana regen, Triggered Spell Damage, useful crit/CDB, maximum ES and Armour→Elemental over ES recharge/dead travel.`;
-  if($('v47TopoCallout'))$('v47TopoCallout').innerHTML='<strong>Topology result:</strong> Controlling Magic is directly adjacent to the allocated tree — 1 point, so path it. Ruinic Helm is 4 points, but its equal-length route now correctly uses the +maximum ES / Armour-applies-to-Elemental branch instead of the EB-useless recharge branch.';
+  if($('v47TopoRule'))$('v47TopoRule').textContent=`${topo.matchedAllocatedNodeCount??'—'} / ${topo.allocatedNodeCount??'—'} current PoB node IDs matched to GGG's graph. Route distance is exact; equal-length routes are tie-broken for this EB build, preferring Mana regen, gain-as-extra, penetration, Triggered Spell Damage, useful crit/CDB, maximum ES and Armour→Elemental over ES recharge/dead travel.`;
+  if($('v47TopoCallout'))$('v47TopoCallout').innerHTML='<strong>Topology result:</strong> Controlling Magic is directly adjacent to the allocated tree — 1 point, so path it. Advanced gain-as-extra / penetration nodes are now tracked separately in the damage-notable lab.';
 }
 async function load(){
   try{const r=await fetch(`./data/topology.json?t=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw 0;topo=await r.json();apply()}catch(e){}
 }
-function loadBodyLab(){
-  if(document.querySelector('script[data-v49-body-lab]'))return;
-  const s=document.createElement('script');
-  s.src='./v49-body-lab.js';
-  s.dataset.v49BodyLab='1';
-  document.head.appendChild(s);
-}
-function loadVisualRestoration(){
-  if(document.querySelector('script[data-v50-visuals]'))return;
-  const s=document.createElement('script');
-  s.src='./v50-visual-restoration.js';
-  s.dataset.v50Visuals='1';
-  document.head.appendChild(s);
-}
-function loadStrugglescreamPackage(){
-  if(document.querySelector('script[data-v51-strugglescream]'))return;
-  const s=document.createElement('script');
-  s.src='./v51-strugglescream-package.js';
-  s.dataset.v51Strugglescream='1';
-  document.head.appendChild(s);
-}
-function loadGainAsExtraLab(){
-  if(document.querySelector('script[data-v52-gain-extra]'))return;
-  const s=document.createElement('script');
-  s.src='./v52-gain-as-extra-lab.js';
-  s.dataset.v52GainExtra='1';
-  document.head.appendChild(s);
-}
+function addScript(selector,src,key){if(document.querySelector(selector))return;const s=document.createElement('script');s.src=src;s.dataset[key]='1';document.head.appendChild(s)}
+function loadBodyLab(){addScript('script[data-v49-body-lab]','./v49-body-lab.js','v49BodyLab')}
+function loadVisualRestoration(){addScript('script[data-v50-visuals]','./v50-visual-restoration.js','v50Visuals')}
+function loadStrugglescreamPackage(){addScript('script[data-v51-strugglescream]','./v51-strugglescream-package.js','v51Strugglescream')}
+function loadGainAsExtraLab(){addScript('script[data-v52-gain-extra]','./v52-gain-as-extra-lab.js','v52GainExtra')}
+function loadAdvancedDamageLab(){addScript('script[data-v53-damage-nodes]','./v53-advanced-damage-nodes.js','v53DamageNodes')}
 load();
 loadBodyLab();
 loadVisualRestoration();
 loadStrugglescreamPackage();
 loadGainAsExtraLab();
+loadAdvancedDamageLab();
 window.addEventListener('v44calc',()=>setTimeout(apply,0));
 setTimeout(()=>{if(topo)apply()},250);
 })();
