@@ -32,10 +32,13 @@ jobs:
           node --check site/v64-display-themes.js
           node --check site/v65-budget-theorycraft.js
           node --check site/v66-current-checkpoint.js
+          node --check site/v67-build-visuals.js
+          node --check site/v69-research-theorycraft.js
           test -s site/assets/shaman-mana-geyser.webp
           test -s research/mana-flare-budget-thesis-2026-08-19.md
           test -s research/current-checkpoint-2026-08-19.md
           test -s research/archmage-sustain-snapshot-2026-08-19.md
+          test -s research/rage-defense-spirit-theorycraft-2026-08-19.md
           grep -q 'Mana Geyser Shaman' site/index.html
           grep -q '<div class="heroArt"></div>' site/index.html
           grep -q 'NODE LIBRARY' site/index.html
@@ -47,6 +50,8 @@ jobs:
           grep -q 'v62-guide-shell.js' site/index.html
           grep -q 'v65-budget-theorycraft.js' site/index.html
           grep -q 'v66-current-checkpoint.js' site/index.html
+          grep -q 'v67-build-visuals.js' site/index.html
+          grep -q 'v69-research-theorycraft.js' site/index.html
           grep -q 'v64-display-themes.js' site/index.html
           grep -q 'CURRENT MINMAX THESIS' site/v65-budget-theorycraft.js
           grep -q 'DEFAULT FIRST · MANA' site/v65-budget-theorycraft.js
@@ -65,6 +70,25 @@ jobs:
           grep -q 'SNAPSHOT · ARCHMAGE SUSTAIN' site/v66-current-checkpoint.js
           grep -q '2,100–2,400' site/v66-current-checkpoint.js
           grep -q '#next15' site/v66-current-checkpoint.js
+          grep -q 'Astramentis' site/v67-build-visuals.js
+          grep -q "The Prisoner's Manacles\|Prisoner's Manacles" site/v67-build-visuals.js
+          grep -q 'Perfect Mind' site/v67-build-visuals.js
+          grep -q 'Invocated Efficiency' site/v67-build-visuals.js
+          grep -q 'Mystical Rage' site/v67-build-visuals.js
+          grep -q 'Electric Amplification' site/v67-build-visuals.js
+          grep -q 'Aspiring Genius' site/v67-build-visuals.js
+          grep -q 'Temporal Mastery' site/v67-build-visuals.js
+          grep -q 'Pure Chaos' site/v67-build-visuals.js
+          grep -q 'Arcane Intensity' site/v67-build-visuals.js
+          grep -q 'Sacred Flow' site/v67-build-visuals.js
+          grep -q 'BUDGET VS 20K' site/v69-research-theorycraft.js
+          grep -q 'Mystical Rage' site/v69-research-theorycraft.js
+          grep -q 'Reactive Growth' site/v69-research-theorycraft.js
+          grep -q 'Cast on Critical + Comet' site/v69-research-theorycraft.js
+          if grep -q 'Apocalypse' site/v69-research-theorycraft.js research/rage-defense-spirit-theorycraft-2026-08-19.md; then
+            echo 'Removed Apocalypse branch leaked back into current Research theorycraft' >&2
+            exit 1
+          fi
           grep -q 'Exceptional 2-socket rare Wand' site/v44-research.js
           grep -q 'Aspiring Genius' site/v44-research.js
           grep -q 'Perfect Inspiration Rune' site/v44-research.js
