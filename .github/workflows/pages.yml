@@ -34,6 +34,7 @@ jobs:
           node --check site/v66-current-checkpoint.js
           node --check site/v67-build-visuals.js
           node --check site/v69-research-theorycraft.js
+          node --check site/v70-build-lock.js
           test -s site/assets/shaman-mana-geyser.webp
           test -s research/mana-flare-budget-thesis-2026-08-19.md
           test -s research/current-checkpoint-2026-08-19.md
@@ -52,6 +53,7 @@ jobs:
           grep -q 'v66-current-checkpoint.js' site/index.html
           grep -q 'v67-build-visuals.js' site/index.html
           grep -q 'v69-research-theorycraft.js' site/index.html
+          grep -q 'v70-build-lock.js' site/index.html
           grep -q 'v64-display-themes.js' site/index.html
           grep -q 'CURRENT MINMAX THESIS' site/v65-budget-theorycraft.js
           grep -q 'DEFAULT FIRST · MANA' site/v65-budget-theorycraft.js
@@ -85,6 +87,20 @@ jobs:
           grep -q 'Mystical Rage' site/v69-research-theorycraft.js
           grep -q 'Reactive Growth' site/v69-research-theorycraft.js
           grep -q 'Cast on Critical + Comet' site/v69-research-theorycraft.js
+          grep -q 'LOCKED BUILD THESIS' site/v70-build-lock.js
+          grep -q 'Armour + Eldritch Battery' site/v70-build-lock.js
+          grep -q 'Entangle first' site/v70-build-lock.js
+          grep -q '43 maximum Rage' site/v70-build-lock.js
+          grep -q 'Morior Invictus' site/v70-build-lock.js
+          grep -q 'Spectral Ward' site/v70-build-lock.js
+          grep -q 'Legacy of Blackbraid' site/v70-build-lock.js
+          grep -q 'Cultivated Rathpith Globe' site/v70-build-lock.js
+          grep -q '6,667' site/v70-build-lock.js
+          grep -q '1.5×' site/v70-build-lock.js
+          if grep -q 'researchPage' site/v70-build-lock.js; then
+            echo 'Build-lock overlay must not mutate Research' >&2
+            exit 1
+          fi
           if grep -q 'Apocalypse' site/v69-research-theorycraft.js research/rage-defense-spirit-theorycraft-2026-08-19.md; then
             echo 'Removed Apocalypse branch leaked back into current Research theorycraft' >&2
             exit 1
