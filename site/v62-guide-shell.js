@@ -1,6 +1,7 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
+  const MODES = new Set(['guide','research','snapshot']);
   let observer;
   let queued = false;
 
@@ -32,7 +33,10 @@
       }
       .shell,.content{position:relative;z-index:0}
       .content{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
-      #guidePage,#researchPage{width:100%;margin:0 auto}
+      #guidePage,#researchPage,#snapshotPage{width:100%;margin:0 auto;display:none!important}
+      body[data-mode='guide'] #guidePage{display:block!important}
+      body[data-mode='research'] #researchPage{display:block!important}
+      body[data-mode='snapshot'] #snapshotPage{display:block!important}
       .v60Section,.section,.researchHero{width:min(1180px,calc(100% - 48px))!important;margin-left:auto!important;margin-right:auto!important}
       #guidePage .heroCopy{width:min(1180px,calc(100% - 48px))!important;margin-left:auto!important;margin-right:auto!important;padding-left:0!important;padding-right:0!important}
       #guidePage .hero{min-height:670px;border-bottom:1px solid rgba(217,179,112,.14)}
@@ -69,6 +73,7 @@
       .v62Mode{border:1px solid var(--line);background:#17100c;color:#bdae95;border-radius:999px;padding:8px 10px;font-size:8px;font-weight:900;cursor:pointer}
       .v62Mode:hover{border-color:rgba(217,179,112,.38);color:#efe2cb}.v62Mode.active{background:#d0b078;color:#1b110b;border-color:#d0b078}
       .v62Mode.research{border-color:rgba(93,168,209,.50);background:#153d54;color:#dff2fb}.v62Mode.research.active{background:#2a789e;border-color:#69b9df;color:white}
+      .v62Mode.snapshot{border-color:rgba(156,126,231,.48);background:#332358;color:#eee8ff}.v62Mode.snapshot.active{background:#7657bd;border-color:#9d82df;color:#fff}
       #researchPage .researchHero{padding-top:68px!important;padding-bottom:32px!important}
       #researchPage .researchHero h1{font-size:clamp(43px,5.5vw,76px)!important;max-width:920px}
       #researchPage .researchHero p{max-width:800px}
@@ -98,18 +103,29 @@
     document.head.appendChild(style);
   }
 
-  function showPage(name, updateHash=true){
-    const research = name === 'research';
-    const guide = $('guidePage');
-    const lab = $('researchPage');
-    if (!guide || !lab) return;
-    guide.classList.toggle('active', !research);
-    lab.classList.toggle('active', research);
-    document.body.dataset.mode = research ? 'research' : 'guide';
-    document.querySelectorAll('[data-v62-mode]').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.v62Mode === (research ? 'research' : 'guide'));
+  function normaliseMode(name){return MODES.has(name) ? name : 'guide'}
+
+  function syncMode(){
+    const mode = normaliseMode(document.body.dataset.mode || 'guide');
+    const pages = {guide:$('guidePage'),research:$('researchPage'),snapshot:$('snapshotPage')};
+    Object.entries(pages).forEach(([key,page]) => {
+      if (page) page.classList.toggle('active',key === mode);
     });
-    if (updateHash) history.replaceState(null,'',research ? '#research' : '#guide');
+    document.querySelectorAll('[data-v62-mode]').forEach(btn => {
+      const active = btn.dataset.v62Mode === mode;
+      btn.classList.toggle('active',active);
+      btn.setAttribute('aria-pressed',active ? 'true' : 'false');
+    });
+  }
+
+  function showPage(name, updateHash=true){
+    const mode = normaliseMode(name);
+    const guide = $('guidePage');
+    const research = $('researchPage');
+    if (!guide || !research) return;
+    document.body.dataset.mode = mode;
+    syncMode();
+    if (updateHash) history.replaceState(null,'',`#${mode}`);
     window.scrollTo({top:0,behavior:'auto'});
   }
 
@@ -121,8 +137,9 @@
     bar.id = 'v62Topbar';
     bar.innerHTML = `<div class="v62TopbarInner">
       <div class="v62Brand"><div class="v62BrandMark">✦</div><div class="v62BrandText"><b>Mana Geyser Shaman</b><span>Runeseeker-free endgame build guide</span></div></div>
-      <button type="button" class="v62Mode" data-v62-mode="guide">Build Guide</button>
-      <button type="button" class="v62Mode research" data-v62-mode="research">Research</button>
+      <button type="button" class="v62Mode" data-v62-mode="guide" data-v66-snap-bound="1">Build Guide</button>
+      <button type="button" class="v62Mode research" data-v62-mode="research" data-v66-snap-bound="1">Research</button>
+      <button type="button" class="v62Mode snapshot" data-v62-mode="snapshot" data-v66-mode="snapshot" data-v66-snap-bound="1">Snapshot</button>
     </div>`;
     shell.prepend(bar);
     bar.querySelectorAll('[data-v62-mode]').forEach(btn => btn.addEventListener('click',()=>showPage(btn.dataset.v62Mode)));
@@ -132,11 +149,13 @@
     document.querySelectorAll('[data-page]').forEach(btn => {
       if (btn.dataset.v62Bound) return;
       btn.dataset.v62Bound = '1';
+      btn.dataset.v66SnapBound = '1';
       if (btn.dataset.page === 'research') btn.classList.add('v62ResearchButton');
       btn.addEventListener('click',ev => {
+        const mode = normaliseMode(btn.dataset.page);
         ev.preventDefault();
         ev.stopImmediatePropagation();
-        showPage(btn.dataset.page);
+        showPage(mode);
       }, true);
     });
   }
@@ -147,6 +166,15 @@
     document.querySelectorAll('a[href*="poe.ninja"]').forEach(el => el.remove());
     document.querySelectorAll('.sectionNav button[data-page="research"]').forEach(btn => btn.removeAttribute('style'));
     document.querySelectorAll('.v60ResearchNote').forEach((el,i) => { if (i) el.remove(); });
+    const snapshotButtons=[...document.querySelectorAll('#v62Topbar [data-v66-mode="snapshot"]')];
+    snapshotButtons.slice(1).forEach(btn=>btn.remove());
+  }
+
+  function initialMode(){
+    const h = location.hash || '';
+    if (h === '#research' || h.startsWith('#r')) return 'research';
+    if (h === '#snapshot' || h.startsWith('#snap')) return 'snapshot';
+    return 'guide';
   }
 
   function enhance(){
@@ -154,19 +182,24 @@
     addTopbar();
     cleanup();
     bindModeButtons();
-    const initial = location.hash === '#research' ? 'research' : 'guide';
-    const current = document.body.dataset.mode;
-    if (!current) showPage(initial,false);
-    else document.querySelectorAll('[data-v62-mode]').forEach(btn => btn.classList.toggle('active',btn.dataset.v62Mode===current));
+    const current = MODES.has(document.body.dataset.mode) ? document.body.dataset.mode : initialMode();
+    document.body.dataset.mode = current;
+    syncMode();
   }
 
   function queue(){
     if (queued) return;
     queued = true;
-    requestAnimationFrame(()=>{queued=false;cleanup();bindModeButtons();});
+    requestAnimationFrame(()=>{queued=false;cleanup();bindModeButtons();syncMode();});
   }
 
   window.v44ShowPage = showPage;
+  window.addEventListener('hashchange',()=>{
+    const h=location.hash || '';
+    if(h==='#guide')showPage('guide',false);
+    else if(h==='#research' || h.startsWith('#r'))showPage('research',false);
+    else if(h==='#snapshot' || h.startsWith('#snap'))showPage('snapshot',false);
+  });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', enhance);
   else enhance();
   observer = new MutationObserver(queue);
