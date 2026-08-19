@@ -30,6 +30,7 @@ jobs:
           node --check site/v60-front-guide.js
           node --check site/v61-chase-defence-notes.js
           node --check site/v62-guide-shell.js
+          node --check site/v63-display-settings.js
           test -s site/assets/shaman-mana-geyser.webp
           grep -q 'Mana Geyser Shaman' site/index.html
           grep -q '<div class="heroArt"></div>' site/index.html
@@ -41,6 +42,9 @@ jobs:
           grep -q 'v60-front-guide.js' site/index.html
           grep -q 'v61-chase-defence-notes.js' site/index.html
           grep -q 'v62-guide-shell.js' site/index.html
+          grep -q 'v63-display-settings.js' site/index.html
+          grep -q 'Mana blue' site/v63-display-settings.js
+          grep -q 'data-v63-mode' site/v63-display-settings.js
           grep -q "background-image:url('./assets/shaman-mana-geyser.webp')" site/v45.css
           if grep -q 'v44-core.js\|v44-instils.js\|v45.js\|v46.js\|v46-benchmark.js\|v47.js\|v48-topology.js' site/index.html; then
             echo 'Removed optimizer/live-character runtime leaked back into final guide' >&2
