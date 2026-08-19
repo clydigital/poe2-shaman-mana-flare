@@ -1,24 +1,27 @@
 from pathlib import Path
 import subprocess, sys, re
 
-# Build only the static guide/research foundation we still use.
-# v60+ supplies the player-facing conclusions; Research keeps the searchable libraries.
+# Build the static guide/research foundation, then mount only the final player-facing layers.
 subprocess.run([sys.executable, 'scripts/build_v44.py'], check=True)
 subprocess.run([sys.executable, 'scripts/build_v44_remnants.py'], check=True)
 
 p = Path('site/index.html')
 s = p.read_text(encoding='utf-8')
 
-# Keep the final Mana-Geyser visual theme without running the old v45/v46 UI layers.
+# Keep the Mana-Geyser visual theme without running the old optimizer/live-character UI.
 s = s.replace('./v44.css', './v45.css', 1)
 
-# Remove calculator / live-character / optimizer runtimes and superseded overlays.
+# Remove calculator / optimizer runtimes and all superseded front-page overlays.
+# v73 is now the only owner of the Build Guide DOM.
 for src in [
     './v44-core.js', './v44-instils.js', './v45.js', './v46.js', './v46-benchmark.js',
     './v47.js', './v48-topology.js', './v50-visual-restoration.js',
     './v51-strugglescream-package.js', './v52-gain-as-extra-lab.js',
-    './v53-advanced-damage-nodes.js', './v61-chase-defence-notes.js',
-    './v63-display-settings.js', './v65-thesis-refinement.js', './v68-research-theorycraft.js'
+    './v53-advanced-damage-nodes.js', './v60-front-guide.js',
+    './v61-chase-defence-notes.js', './v63-display-settings.js',
+    './v65-budget-theorycraft.js', './v65-thesis-refinement.js',
+    './v67-build-visuals.js', './v68-research-theorycraft.js',
+    './v70-build-lock.js', './v72-skill-supports.js'
 ]:
     s = re.sub(r'\s*<script src="' + re.escape(src) + r'"></script>\s*', '\n', s)
 
@@ -27,7 +30,7 @@ s = re.sub(r'<aside class="calcRail".*?</aside>', '', s, flags=re.S)
 s = re.sub(r'\s*<div class="ninjaPanel" id="poeNinjaSnapshot">.*?</article>\s*</div>', '', s, flags=re.S)
 s = re.sub(r'<a href="https://poe\.ninja/[^\"]*"[^>]*>.*?</a>', '', s, flags=re.S | re.I)
 
-# The Research catalogue no longer needs a character-profile field either.
+# Research does not need a live character-profile field.
 data_path = Path('site/v44-data.js')
 data = data_path.read_text(encoding='utf-8')
 data = re.sub(r"\n\s*profile:\s*'https://poe\.ninja/[^']*',", '', data, count=1)
@@ -37,25 +40,24 @@ needle = '</body>'
 if needle not in s:
     raise SystemExit('body closing tag missing')
 
-# v70 locks the player-facing Build page after the exploratory overlays have mounted.
-# v71 then enforces Snapshot as a true peer page, never a Build/Research subsection.
-# v72 adds the player-facing skill/support packages after the locked build thesis.
-# v64 deliberately loads last so the selected hue/brightness owns every surface.
+# Clear ownership:
+#   v62 = Build / Research / Snapshot shell
+#   v66 = Snapshot content (legacy Build/Research injections are scrubbed by v71/v73)
+#   v69 = Research-only theorycraft
+#   v71 = Snapshot isolation safety
+#   v73 = sole Build Guide owner
+#   v64 = display settings/theme, deliberately last
 for script in [
     '<script src="./v54-sortable-tables.js"></script>\n',
-    '<script src="./v60-front-guide.js"></script>\n',
     '<script src="./v62-guide-shell.js"></script>\n',
-    '<script src="./v65-budget-theorycraft.js"></script>\n',
     '<script src="./v66-current-checkpoint.js"></script>\n',
-    '<script src="./v67-build-visuals.js"></script>\n',
     '<script src="./v69-research-theorycraft.js"></script>\n',
-    '<script src="./v70-build-lock.js"></script>\n',
     '<script src="./v71-snapshot-isolation.js"></script>\n',
-    '<script src="./v72-skill-supports.js"></script>\n',
+    '<script src="./v73-front-guide.js"></script>\n',
     '<script src="./v64-display-themes.js"></script>\n',
 ]:
     if script.strip() not in s:
         s = s.replace(needle, script + needle, 1)
 
 p.write_text(s, encoding='utf-8')
-print('built locked Armour+EB Entangle/Rage Mana Flare guide + isolated Snapshot + support packages + full Research', len(s))
+print('built consolidated Mana Geyser Build Guide + isolated Snapshot + full Research', len(s))
