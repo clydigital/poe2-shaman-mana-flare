@@ -18,7 +18,7 @@ for src in [
     './v44-core.js', './v44-instils.js', './v45.js', './v46.js', './v46-benchmark.js',
     './v47.js', './v48-topology.js', './v50-visual-restoration.js',
     './v51-strugglescream-package.js', './v52-gain-as-extra-lab.js',
-    './v53-advanced-damage-nodes.js'
+    './v53-advanced-damage-nodes.js', './v63-display-settings.js'
 ]:
     s = re.sub(r'\s*<script src="' + re.escape(src) + r'"></script>\s*', '\n', s)
 
@@ -41,10 +41,10 @@ for script in [
     '<script src="./v60-front-guide.js"></script>\n',
     '<script src="./v61-chase-defence-notes.js"></script>\n',
     '<script src="./v62-guide-shell.js"></script>\n',
-    '<script src="./v63-display-settings.js"></script>\n',
+    '<script src="./v64-display-themes.js"></script>\n',
 ]:
     if script.strip() not in s:
         s = s.replace(needle, script + needle, 1)
 
 p.write_text(s, encoding='utf-8')
-print('built centered findings-first v63 guide + display settings + static Research', len(s))
+print('built centered findings-first v64 guide + 4x4 display themes + static Research', len(s))
