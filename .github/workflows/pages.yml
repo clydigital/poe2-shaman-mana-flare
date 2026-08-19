@@ -31,8 +31,10 @@ jobs:
           node --check site/v62-guide-shell.js
           node --check site/v64-display-themes.js
           node --check site/v65-budget-theorycraft.js
+          node --check site/v66-current-checkpoint.js
           test -s site/assets/shaman-mana-geyser.webp
           test -s research/mana-flare-budget-thesis-2026-08-19.md
+          test -s research/current-checkpoint-2026-08-19.md
           grep -q 'Mana Geyser Shaman' site/index.html
           grep -q '<div class="heroArt"></div>' site/index.html
           grep -q 'NODE LIBRARY' site/index.html
@@ -43,6 +45,7 @@ jobs:
           grep -q 'v60-front-guide.js' site/index.html
           grep -q 'v62-guide-shell.js' site/index.html
           grep -q 'v65-budget-theorycraft.js' site/index.html
+          grep -q 'v66-current-checkpoint.js' site/index.html
           grep -q 'v64-display-themes.js' site/index.html
           grep -q 'CURRENT MINMAX THESIS' site/v65-budget-theorycraft.js
           grep -q 'DEFAULT FIRST · MANA' site/v65-budget-theorycraft.js
@@ -52,6 +55,13 @@ jobs:
           grep -q "Khatal's Rejuvenation" site/v65-budget-theorycraft.js
           grep -q 'Sacred Flame' site/v65-budget-theorycraft.js
           grep -q 'Arcane Surge' site/v65-budget-theorycraft.js
+          grep -q 'CURRENT CHECKPOINT · LEVEL 53' site/v66-current-checkpoint.js
+          grep -q 'Remove Valako' site/v66-current-checkpoint.js
+          grep -q '2,669' site/v66-current-checkpoint.js
+          grep -q 'Bramble Scratch' site/v66-current-checkpoint.js
+          grep -q '50% CDR' site/v66-current-checkpoint.js
+          grep -q 'Archmage is the next test' site/v66-current-checkpoint.js
+          grep -q '#next15' site/v66-current-checkpoint.js
           grep -q 'Exceptional 2-socket rare Wand' site/v44-research.js
           grep -q 'Aspiring Genius' site/v44-research.js
           grep -q 'Perfect Inspiration Rune' site/v44-research.js
@@ -63,6 +73,9 @@ jobs:
           grep -q 'Best weird non-Wand: Sacred Flame' research/mana-flare-budget-thesis-2026-08-19.md
           grep -q "Khatal's Rejuvenation" research/mana-flare-budget-thesis-2026-08-19.md
           grep -q 'Sacred Flow changes the budget' research/mana-flare-budget-thesis-2026-08-19.md
+          grep -q 'Recommended immediate spend: 0–2 Divines' research/current-checkpoint-2026-08-19.md
+          grep -q 'Bramble Scratch' research/current-checkpoint-2026-08-19.md
+          grep -q '180 Spirit' research/current-checkpoint-2026-08-19.md
           grep -q '80–200%' site/v64-display-themes.js
           grep -q "const brightnesses={light:{label:'Light'},dark:{label:'Dark'}}" site/v64-display-themes.js
           grep -q "background-image:url('./assets/shaman-mana-geyser.webp')" site/v45.css
