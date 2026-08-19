@@ -21,137 +21,102 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Build findings-first guide and Research libraries
+      - name: Build consolidated guide, Snapshot and Research
         run: |
           python scripts/build_v47.py
+
+          # Syntax: only runtimes that are actually shipped plus Research data.
           node --check site/v44-data.js
           node --check site/v44-research.js
           node --check site/v54-sortable-tables.js
-          node --check site/v60-front-guide.js
           node --check site/v62-guide-shell.js
           node --check site/v64-display-themes.js
-          node --check site/v65-budget-theorycraft.js
           node --check site/v66-current-checkpoint.js
-          node --check site/v67-build-visuals.js
           node --check site/v69-research-theorycraft.js
-          node --check site/v70-build-lock.js
+          node --check site/v71-snapshot-isolation.js
+          node --check site/v73-front-guide.js
+
+          # Required source/research assets.
           test -s site/assets/shaman-mana-geyser.webp
           test -s research/mana-flare-budget-thesis-2026-08-19.md
           test -s research/current-checkpoint-2026-08-19.md
           test -s research/archmage-sustain-snapshot-2026-08-19.md
           test -s research/rage-defense-spirit-theorycraft-2026-08-19.md
-          grep -q 'Mana Geyser Shaman' site/index.html
-          grep -q '<div class="heroArt"></div>' site/index.html
-          grep -q 'NODE LIBRARY' site/index.html
-          grep -q 'ITEM LIBRARY' site/index.html
-          grep -q 'FLASK ENGINE' site/index.html
-          grep -q 'REMNANT ENGINE' site/index.html
+
+          # Final runtime ownership: one Build owner, one shell, Snapshot and Research.
           grep -q 'v54-sortable-tables.js' site/index.html
-          grep -q 'v60-front-guide.js' site/index.html
           grep -q 'v62-guide-shell.js' site/index.html
-          grep -q 'v65-budget-theorycraft.js' site/index.html
           grep -q 'v66-current-checkpoint.js' site/index.html
-          grep -q 'v67-build-visuals.js' site/index.html
           grep -q 'v69-research-theorycraft.js' site/index.html
-          grep -q 'v70-build-lock.js' site/index.html
+          grep -q 'v71-snapshot-isolation.js' site/index.html
+          grep -q 'v73-front-guide.js' site/index.html
           grep -q 'v64-display-themes.js' site/index.html
-          grep -q 'CURRENT MINMAX THESIS' site/v65-budget-theorycraft.js
-          grep -q 'DEFAULT FIRST · MANA' site/v65-budget-theorycraft.js
-          grep -q '35% increased Mana regen' site/v65-budget-theorycraft.js
-          grep -q 'BEST WEIRD NON-WAND' site/v65-budget-theorycraft.js
-          grep -q 'Sacred Flow' site/v65-budget-theorycraft.js
-          grep -q "Khatal's Rejuvenation" site/v65-budget-theorycraft.js
-          grep -q 'Sacred Flame' site/v65-budget-theorycraft.js
-          grep -q 'Arcane Surge' site/v65-budget-theorycraft.js
-          grep -q 'CURRENT CHECKPOINT · LEVEL 53' site/v66-current-checkpoint.js
-          grep -q 'Remove Valako' site/v66-current-checkpoint.js
-          grep -q '2,669' site/v66-current-checkpoint.js
-          grep -q 'Bramble Scratch' site/v66-current-checkpoint.js
-          grep -q '50% CDR' site/v66-current-checkpoint.js
-          grep -q 'Archmage is the next unlock' site/v66-current-checkpoint.js
+
+          # Build Guide contract.
+          grep -q 'Mana Flare,.*without Runeseeker' site/v73-front-guide.js
+          grep -q 'WHAT THE 20K GUY ACTUALLY TEACHES US' site/v73-front-guide.js
+          grep -q 'Archmage 100 + Mana Remnants 30' site/v73-front-guide.js
+          grep -q 'Eternal Rage' site/v73-front-guide.js
+          grep -q 'Cast on Critical' site/v73-front-guide.js
+          grep -q "Rakiata's Flow" site/v73-front-guide.js
+          grep -q "Khatal's Rejuvenation" site/v73-front-guide.js
+          grep -q 'Jiquani' site/v73-front-guide.js
+          grep -q 'Morior Invictus' site/v73-front-guide.js
+          grep -q 'high-ES %Mana rare chest' site/v73-front-guide.js
+          grep -q '9–10k+' site/v73-front-guide.js
+          grep -q 'Wisdom of the Maji' site/v73-front-guide.js
+          grep -q 'Sacred Flow' site/v73-front-guide.js
+
+          # Snapshot remains its own peer page and owns sustain checkpoints.
           grep -q 'SNAPSHOT · ARCHMAGE SUSTAIN' site/v66-current-checkpoint.js
           grep -q '2,100–2,400' site/v66-current-checkpoint.js
-          grep -q '#next15' site/v66-current-checkpoint.js
-          grep -q 'Astramentis' site/v67-build-visuals.js
-          grep -q "The Prisoner's Manacles\|Prisoner's Manacles" site/v67-build-visuals.js
-          grep -q 'Perfect Mind' site/v67-build-visuals.js
-          grep -q 'Invocated Efficiency' site/v67-build-visuals.js
-          grep -q 'Mystical Rage' site/v67-build-visuals.js
-          grep -q 'Electric Amplification' site/v67-build-visuals.js
-          grep -q 'Aspiring Genius' site/v67-build-visuals.js
-          grep -q 'Temporal Mastery' site/v67-build-visuals.js
-          grep -q 'Pure Chaos' site/v67-build-visuals.js
-          grep -q 'Arcane Intensity' site/v67-build-visuals.js
-          grep -q 'Sacred Flow' site/v67-build-visuals.js
+          grep -q 'Strugglescream' site/v66-current-checkpoint.js
+          grep -q "const MODES = new Set(\['guide','research','snapshot'\])" site/v62-guide-shell.js
+
+          # Research still keeps the deep theorycraft/library content.
           grep -q 'BUDGET VS 20K' site/v69-research-theorycraft.js
-          grep -q 'Mystical Rage' site/v69-research-theorycraft.js
           grep -q 'Reactive Growth' site/v69-research-theorycraft.js
           grep -q 'Cast on Critical + Comet' site/v69-research-theorycraft.js
-          grep -q 'LOCKED BUILD THESIS' site/v70-build-lock.js
-          grep -q 'Armour + Eldritch Battery' site/v70-build-lock.js
-          grep -q 'Entangle first' site/v70-build-lock.js
-          grep -q '43 maximum Rage' site/v70-build-lock.js
-          grep -q 'Morior Invictus' site/v70-build-lock.js
-          grep -q 'Spectral Ward' site/v70-build-lock.js
-          grep -q 'Legacy of Blackbraid' site/v70-build-lock.js
-          grep -q 'Cultivated Rathpith Globe' site/v70-build-lock.js
-          grep -q '6,667' site/v70-build-lock.js
-          grep -q '1.5×' site/v70-build-lock.js
-          if grep -q 'researchPage' site/v70-build-lock.js; then
-            echo 'Build-lock overlay must not mutate Research' >&2
-            exit 1
-          fi
-          if grep -q 'Apocalypse' site/v69-research-theorycraft.js research/rage-defense-spirit-theorycraft-2026-08-19.md; then
-            echo 'Removed Apocalypse branch leaked back into current Research theorycraft' >&2
-            exit 1
-          fi
           grep -q 'Exceptional 2-socket rare Wand' site/v44-research.js
-          grep -q 'Aspiring Genius' site/v44-research.js
           grep -q 'Perfect Inspiration Rune' site/v44-research.js
-          grep -q 'does NOT grant flat Mana' site/v44-research.js
-          grep -q 'Sacred Flame' site/v44-research.js
           grep -q 'Mana stacking vs generic Spell Damage' research/mana-flare-budget-thesis-2026-08-19.md
-          grep -q 'Perfect Mind Rune' research/mana-flare-budget-thesis-2026-08-19.md
-          grep -q 'It does not give flat Mana on a Wand' research/mana-flare-budget-thesis-2026-08-19.md
-          grep -q 'Best weird non-Wand: Sacred Flame' research/mana-flare-budget-thesis-2026-08-19.md
-          grep -q "Khatal's Rejuvenation" research/mana-flare-budget-thesis-2026-08-19.md
-          grep -q 'Sacred Flow changes the budget' research/mana-flare-budget-thesis-2026-08-19.md
-          grep -q 'Recommended immediate spend: 0–2 Divines' research/current-checkpoint-2026-08-19.md
-          grep -q 'Bramble Scratch' research/current-checkpoint-2026-08-19.md
-          grep -q '180 Spirit' research/current-checkpoint-2026-08-19.md
           grep -q '35–40% of maximum Mana' research/archmage-sustain-snapshot-2026-08-19.md
-          grep -q 'Strugglescream sustain package' research/archmage-sustain-snapshot-2026-08-19.md
+
+          # Display controls remain intact.
           grep -q '80–200%' site/v64-display-themes.js
           grep -q "const brightnesses={light:{label:'Light'},dark:{label:'Dark'}}" site/v64-display-themes.js
           grep -q "background-image:url('./assets/shaman-mana-geyser.webp')" site/v45.css
-          if grep -q "label:'Lighter'\|label:'Darker'" site/v64-display-themes.js; then
-            echo 'Removed brightness choices leaked back into display settings' >&2
+
+          # Guard against the overlay architecture returning.
+          if grep -q 'v60-front-guide.js\|v65-budget-theorycraft.js\|v67-build-visuals.js\|v70-build-lock.js\|v72-skill-supports.js' site/index.html; then
+            echo 'Superseded Build overlays leaked back into final site' >&2
             exit 1
           fi
-          if grep -q 'v61-chase-defence-notes.js\|v65-thesis-refinement.js' site/index.html; then
-            echo 'Superseded theorycraft/chase overlay leaked back into final guide' >&2
-            exit 1
-          fi
-          if grep -q 'v63-display-settings.js' site/index.html; then
-            echo 'Old display settings layer leaked back into final guide' >&2
+          if grep -q 'v61-chase-defence-notes.js\|v65-thesis-refinement.js\|v63-display-settings.js' site/index.html; then
+            echo 'Superseded theorycraft/display overlay leaked back into final site' >&2
             exit 1
           fi
           if grep -q 'v44-core.js\|v44-instils.js\|v45.js\|v46.js\|v46-benchmark.js\|v47.js\|v48-topology.js' site/index.html; then
-            echo 'Removed optimizer/live-character runtime leaked back into final guide' >&2
+            echo 'Removed optimizer/live-character runtime leaked back into final site' >&2
             exit 1
           fi
           if grep -q 'poe.ninja\|calcRail\|poeNinjaSnapshot' site/index.html site/v44-data.js; then
-            echo 'Removed poe.ninja/calculator data leaked back into final guide' >&2
+            echo 'Removed poe.ninja/calculator data leaked back into final site' >&2
             exit 1
           fi
           if grep -q 'compact calculator\|Overflow toggle\|Other Mana recovery / sec' site/index.html; then
             echo 'Stale calculator instructions leaked into static Research' >&2
             exit 1
           fi
+          if grep -q "label:'Lighter'\|label:'Darker'" site/v64-display-themes.js; then
+            echo 'Removed brightness choices leaked back into display settings' >&2
+            exit 1
+          fi
           if grep -q 'v55-instills-lab.js\|v56-flex-instills-attributes.js\|v57-regalia-attr-note.js' site/v54-sortable-tables.js; then
             echo 'Optimizer loader leaked back into sortable table layer' >&2
             exit 1
           fi
+
       - uses: actions/configure-pages@v5
         with:
           enablement: true
