@@ -45,14 +45,20 @@ jobs:
           grep -q 'v65-budget-theorycraft.js' site/index.html
           grep -q 'v64-display-themes.js' site/index.html
           grep -q 'CURRENT MINMAX THESIS' site/v65-budget-theorycraft.js
-          grep -q 'Perfect Inspiration' site/v65-budget-theorycraft.js
+          grep -q 'DEFAULT FIRST · MANA' site/v65-budget-theorycraft.js
+          grep -q '35% increased Mana regen' site/v65-budget-theorycraft.js
           grep -q 'BEST WEIRD NON-WAND' site/v65-budget-theorycraft.js
+          grep -q 'Sacred Flame' site/v65-budget-theorycraft.js
           grep -q 'Arcane Surge' site/v65-budget-theorycraft.js
           grep -q 'Exceptional 2-socket rare Wand' site/v44-research.js
           grep -q 'Aspiring Genius' site/v44-research.js
           grep -q 'Perfect Inspiration Rune' site/v44-research.js
-          grep -q 'Mana stacking vs generic spell scaling' research/mana-flare-budget-thesis-2026-08-19.md
-          grep -q 'Perfect Inspiration Rune is probably the best first weapon rune' research/mana-flare-budget-thesis-2026-08-19.md
+          grep -q 'does NOT grant flat Mana' site/v44-research.js
+          grep -q 'Sacred Flame' site/v44-research.js
+          grep -q 'Mana stacking vs generic Spell Damage' research/mana-flare-budget-thesis-2026-08-19.md
+          grep -q 'Perfect Mind Rune' research/mana-flare-budget-thesis-2026-08-19.md
+          grep -q 'It does not give flat Mana on a Wand' research/mana-flare-budget-thesis-2026-08-19.md
+          grep -q 'Sacred Flame — best weird non-Wand found' research/mana-flare-budget-thesis-2026-08-19.md
           grep -q '80–200%' site/v64-display-themes.js
           grep -q "const brightnesses={light:{label:'Light'},dark:{label:'Dark'}}" site/v64-display-themes.js
           grep -q "background-image:url('./assets/shaman-mana-geyser.webp')" site/v45.css
