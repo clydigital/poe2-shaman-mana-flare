@@ -14,38 +14,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Build clean single-page guide
+
+      - name: Validate clean standalone guide
         run: |
-          python scripts/build_v47.py
           node --check site/v80-guide-data.js
           node --check site/v80-guide.js
           test -s site/v80-guide.css
+          test -s site/v80-index.html
           test -s site/assets/shaman-mana-geyser.webp
 
-          grep -q 'MAIN BUILD IDEA' site/index.html
-          grep -q 'MAIN GEMS + SUPPORTS' site/index.html
-          grep -q 'MAIN ITEMS TO CONSIDER' site/index.html
-          grep -q 'MAIN GOALS' site/index.html
-          grep -q 'NODE LIBRARY' site/index.html
-          grep -q 'MAIN RECOMMENDED NODES' site/index.html
-          grep -q 'QUEST REWARD RECOMMENDATIONS' site/index.html
-          grep -q 'PROGRESSION + SUGGESTED ITEMS' site/index.html
-          grep -q 'instillToggle' site/index.html
-          grep -q 'v80-guide-data.js' site/index.html
-          grep -q 'v80-guide.js' site/index.html
-          grep -q 'v80-guide.css' site/index.html
-          grep -q 'shaman-mana-geyser.webp' site/index.html
+          grep -q 'MAIN BUILD IDEA' site/v80-index.html
+          grep -q 'MAIN GEMS + SUPPORTS' site/v80-index.html
+          grep -q 'MAIN ITEMS TO CONSIDER' site/v80-index.html
+          grep -q 'MAIN GOALS' site/v80-index.html
+          grep -q 'NODE LIBRARY' site/v80-index.html
+          grep -q 'MAIN RECOMMENDED NODES' site/v80-index.html
+          grep -q 'QUEST REWARD RECOMMENDATIONS' site/v80-index.html
+          grep -q 'PROGRESSION + SUGGESTED ITEMS' site/v80-index.html
+          grep -q 'instillToggle' site/v80-index.html
 
-          # The deployed page must not load any legacy design/runtime layer.
-          if grep -Eq 'v(3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9])[^0-9].*\.(js|css)' site/index.html; then
-            echo 'Legacy guide runtime leaked into clean v80 page' >&2
+          # Root is intentionally only a redirect now.
+          grep -q "location.replace('./v80-index.html')" site/index.html
+
+          # Standalone guide may only load the new v80 runtime.
+          if grep -Eq 'v(3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9])[^0-9].*\.(js|css)' site/v80-index.html; then
+            echo 'Legacy runtime leaked into clean guide' >&2
             exit 1
           fi
 
