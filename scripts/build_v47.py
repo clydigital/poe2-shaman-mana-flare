@@ -38,6 +38,7 @@ if needle not in s:
     raise SystemExit('body closing tag missing')
 
 # v70 locks the player-facing Build page after the exploratory overlays have mounted.
+# v71 then enforces Snapshot as a true peer page, never a Build/Research subsection.
 # v64 deliberately loads last so the selected hue/brightness owns every surface.
 for script in [
     '<script src="./v54-sortable-tables.js"></script>\n',
@@ -48,10 +49,11 @@ for script in [
     '<script src="./v67-build-visuals.js"></script>\n',
     '<script src="./v69-research-theorycraft.js"></script>\n',
     '<script src="./v70-build-lock.js"></script>\n',
+    '<script src="./v71-snapshot-isolation.js"></script>\n',
     '<script src="./v64-display-themes.js"></script>\n',
 ]:
     if script.strip() not in s:
         s = s.replace(needle, script + needle, 1)
 
 p.write_text(s, encoding='utf-8')
-print('built locked Armour+EB Entangle/Rage Mana Flare guide + Snapshot + full Research', len(s))
+print('built locked Armour+EB Entangle/Rage Mana Flare guide + isolated Snapshot + full Research', len(s))
