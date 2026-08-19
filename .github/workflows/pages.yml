@@ -28,11 +28,11 @@ jobs:
           node --check site/v44-research.js
           node --check site/v54-sortable-tables.js
           node --check site/v60-front-guide.js
-          node --check site/v61-chase-defence-notes.js
           node --check site/v62-guide-shell.js
           node --check site/v64-display-themes.js
           node --check site/v65-budget-theorycraft.js
           test -s site/assets/shaman-mana-geyser.webp
+          test -s research/mana-flare-budget-thesis-2026-08-19.md
           grep -q 'Mana Geyser Shaman' site/index.html
           grep -q '<div class="heroArt"></div>' site/index.html
           grep -q 'NODE LIBRARY' site/index.html
@@ -41,17 +41,29 @@ jobs:
           grep -q 'REMNANT ENGINE' site/index.html
           grep -q 'v54-sortable-tables.js' site/index.html
           grep -q 'v60-front-guide.js' site/index.html
-          grep -q 'v61-chase-defence-notes.js' site/index.html
           grep -q 'v62-guide-shell.js' site/index.html
-          grep -q 'v64-display-themes.js' site/index.html
           grep -q 'v65-budget-theorycraft.js' site/index.html
-          grep -q 'Spend on uptime first, then Mana' site/v65-budget-theorycraft.js
-          grep -q 'Sacred Flame + Rathpith is legal' site/v65-budget-theorycraft.js
+          grep -q 'v64-display-themes.js' site/index.html
+          grep -q 'CURRENT MINMAX THESIS' site/v65-budget-theorycraft.js
+          grep -q 'Perfect Inspiration' site/v65-budget-theorycraft.js
+          grep -q 'BEST WEIRD NON-WAND' site/v65-budget-theorycraft.js
           grep -q 'Arcane Surge' site/v65-budget-theorycraft.js
+          grep -q 'Exceptional 2-socket rare Wand' site/v44-research.js
+          grep -q 'Aspiring Genius' site/v44-research.js
+          grep -q 'Perfect Inspiration Rune' site/v44-research.js
+          grep -q 'Mana stacking vs generic spell scaling' research/mana-flare-budget-thesis-2026-08-19.md
+          grep -q 'Perfect Inspiration Rune is probably the best first weapon rune' research/mana-flare-budget-thesis-2026-08-19.md
           grep -q '80–200%' site/v64-display-themes.js
-          grep -q "body\[data-v64-brightness='lighter'\]" site/v64-display-themes.js
-          grep -q "body\[data-v64-brightness='light'\]" site/v64-display-themes.js
+          grep -q "const brightnesses={light:{label:'Light'},dark:{label:'Dark'}}" site/v64-display-themes.js
           grep -q "background-image:url('./assets/shaman-mana-geyser.webp')" site/v45.css
+          if grep -q "label:'Lighter'\|label:'Darker'" site/v64-display-themes.js; then
+            echo 'Removed brightness choices leaked back into display settings' >&2
+            exit 1
+          fi
+          if grep -q 'v61-chase-defence-notes.js\|v65-thesis-refinement.js' site/index.html; then
+            echo 'Superseded theorycraft/chase overlay leaked back into final guide' >&2
+            exit 1
+          fi
           if grep -q 'v63-display-settings.js' site/index.html; then
             echo 'Old display settings layer leaked back into final guide' >&2
             exit 1
