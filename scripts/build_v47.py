@@ -37,7 +37,8 @@ needle = '</body>'
 if needle not in s:
     raise SystemExit('body closing tag missing')
 
-# v64 deliberately loads last so the selected hue/brightness owns all current/theorycraft surfaces.
+# v70 locks the player-facing Build page after the exploratory overlays have mounted.
+# v64 deliberately loads last so the selected hue/brightness owns every surface.
 for script in [
     '<script src="./v54-sortable-tables.js"></script>\n',
     '<script src="./v60-front-guide.js"></script>\n',
@@ -46,10 +47,11 @@ for script in [
     '<script src="./v66-current-checkpoint.js"></script>\n',
     '<script src="./v67-build-visuals.js"></script>\n',
     '<script src="./v69-research-theorycraft.js"></script>\n',
+    '<script src="./v70-build-lock.js"></script>\n',
     '<script src="./v64-display-themes.js"></script>\n',
 ]:
     if script.strip() not in s:
         s = s.replace(needle, script + needle, 1)
 
 p.write_text(s, encoding='utf-8')
-print('built findings-first Mana Flare guide + exact lv53 checkpoint + Build visuals + budget/Rage theorycraft + 2x4 display themes + static Research', len(s))
+print('built locked Armour+EB Entangle/Rage Mana Flare guide + Snapshot + full Research', len(s))
