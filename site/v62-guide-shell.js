@@ -37,6 +37,9 @@
       body[data-mode='guide'] #guidePage{display:block!important}
       body[data-mode='research'] #researchPage{display:block!important}
       body[data-mode='snapshot'] #snapshotPage{display:block!important}
+      body[data-mode='guide'] #researchPage,body[data-mode='guide'] #snapshotPage,
+      body[data-mode='research'] #guidePage,body[data-mode='research'] #snapshotPage,
+      body[data-mode='snapshot'] #guidePage,body[data-mode='snapshot'] #researchPage{display:none!important}
       .v60Section,.section,.researchHero{width:min(1180px,calc(100% - 48px))!important;margin-left:auto!important;margin-right:auto!important}
       #guidePage .heroCopy{width:min(1180px,calc(100% - 48px))!important;margin-left:auto!important;margin-right:auto!important;padding-left:0!important;padding-right:0!important}
       #guidePage .hero{min-height:670px;border-bottom:1px solid rgba(217,179,112,.14)}
@@ -80,9 +83,7 @@
       #researchPage .section{background:linear-gradient(180deg,rgba(20,14,11,.24),rgba(20,14,11,0));border-radius:18px;padding-left:18px;padding-right:18px}
       #researchPage .sectionNav{border-radius:0 0 14px 14px}
       .v60Verdict,.v60Item,.v60Math article,.v60Compare article,.v60Stage,.v60Instill article,.v60Skill,.steps,.v60Sell,
-      #researchPage .card,#researchPage .deepCard,#researchPage .tableWrap{
-        box-shadow:0 12px 32px rgba(0,0,0,.12);
-      }
+      #researchPage .card,#researchPage .deepCard,#researchPage .tableWrap{box-shadow:0 12px 32px rgba(0,0,0,.12)}
       .v60Item,.v60Verdict,.v60Math article,.v60Compare article,.v60Stage,.v60Instill article,.v60Skill{backdrop-filter:blur(5px)}
       .tableWrap{scrollbar-color:#4b3929 #120d0a}
       .tableWrap::-webkit-scrollbar{height:9px;width:9px}.tableWrap::-webkit-scrollbar-thumb{background:#4b3929;border-radius:99px}.tableWrap::-webkit-scrollbar-track{background:#120d0a}
@@ -109,7 +110,11 @@
     const mode = normaliseMode(document.body.dataset.mode || 'guide');
     const pages = {guide:$('guidePage'),research:$('researchPage'),snapshot:$('snapshotPage')};
     Object.entries(pages).forEach(([key,page]) => {
-      if (page) page.classList.toggle('active',key === mode);
+      if (!page) return;
+      const active = key === mode;
+      page.classList.toggle('active',active);
+      page.style.setProperty('display',active ? 'block' : 'none','important');
+      page.setAttribute('aria-hidden',active ? 'false' : 'true');
     });
     document.querySelectorAll('[data-v62-mode]').forEach(btn => {
       const active = btn.dataset.v62Mode === mode;
@@ -142,22 +147,32 @@
       <button type="button" class="v62Mode snapshot" data-v62-mode="snapshot" data-v66-mode="snapshot" data-v66-snap-bound="1">Snapshot</button>
     </div>`;
     shell.prepend(bar);
-    bar.querySelectorAll('[data-v62-mode]').forEach(btn => btn.addEventListener('click',()=>showPage(btn.dataset.v62Mode)));
   }
 
   function bindModeButtons(){
     document.querySelectorAll('[data-page]').forEach(btn => {
-      if (btn.dataset.v62Bound) return;
       btn.dataset.v62Bound = '1';
       btn.dataset.v66SnapBound = '1';
       if (btn.dataset.page === 'research') btn.classList.add('v62ResearchButton');
-      btn.addEventListener('click',ev => {
-        const mode = normaliseMode(btn.dataset.page);
-        ev.preventDefault();
-        ev.stopImmediatePropagation();
-        showPage(mode);
-      }, true);
     });
+  }
+
+  function modeFromControl(el){
+    if (!el) return null;
+    if (el.dataset.v62Mode) return normaliseMode(el.dataset.v62Mode);
+    if (el.dataset.v66Mode === 'snapshot') return 'snapshot';
+    if (el.dataset.page && MODES.has(el.dataset.page)) return el.dataset.page;
+    return null;
+  }
+
+  function interceptModeClick(ev){
+    const control = ev.target.closest('[data-v62-mode],[data-v66-mode="snapshot"],[data-page]');
+    const mode = modeFromControl(control);
+    if (!mode) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    ev.stopImmediatePropagation();
+    showPage(mode,true);
   }
 
   function cleanup(){
@@ -194,6 +209,7 @@
   }
 
   window.v44ShowPage = showPage;
+  document.addEventListener('click',interceptModeClick,true);
   window.addEventListener('hashchange',()=>{
     const h=location.hash || '';
     if(h==='#guide')showPage('guide',false);
