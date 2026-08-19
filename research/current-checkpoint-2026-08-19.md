@@ -128,7 +128,7 @@ With 2,669 current Mana:
 
 - one full-current Flare consumes **667.25 Mana**;
 - Crest already supplies a **1.50 Flare/s theoretical cooldown ceiling**;
-- sustaining that ceiling at full Mana would imply roughly **1,000 Mana/s** of Flare consumption before carrier costs and incoming damage.
+- sustaining that ceiling from full current Mana would imply roughly **1,000 Mana/s** of Mana-Flare consumption before Archmage, carrier costs or incoming damage.
 
 The current configured Mana regen/recovery readout is only about **272.8 Mana/s** before treating Remnant/flask pickups separately.
 
@@ -136,7 +136,7 @@ That is why more CDR is the wrong purchase now.
 
 The correct order is:
 
-> **protect current Mana → add flask/recovery → improve trigger reliability → only then raise CDR beyond Crest's existing 50%.**
+> **protect current Mana → add recovery + cost efficiency → improve trigger reliability → only then raise CDR beyond Crest's existing 50%.**
 
 ## Resistances are an offensive stat while MoM is active
 
@@ -153,7 +153,7 @@ After the same raw incoming hit, capping Fire resistance leaves the next Flare b
 
 Therefore cheap Fire/Cold resistance fixes are currently both defensive and offensive upgrades.
 
-## Archmage — massive damage, but not yet a free toggle
+## Archmage — massive damage, but the full loop is much more expensive than the first estimate
 
 Archmage is not currently equipped.
 
@@ -165,13 +165,46 @@ At 2,669 maximum Mana:
 - simplified Archmage raw multiplier = **2.3776**.
 - relative raw increase from adding Archmage to the current gain-as-extra package = about **81.5%** before increased-damage/penetration/crit effects.
 
-That is enormous.
+That is enormous and is now the largest obvious damage unlock.
 
-But level-appropriate Archmage also adds roughly 6.8% of maximum Mana to the cost of each non-channelling spell. At 2,669 Mana that is about **181.5 Mana per cast before Eldritch Battery's doubled Mana Costs**. After EB, the added component is roughly **363 Mana per cast** before other cost modifiers.
+### Correction to the earlier sustain estimate
 
-At the current Frost Darts display rate of roughly 1.6 casts/s, that alone can represent roughly **581 Mana/s of additional cost** before the spell's normal cost, other skills, Mana Flare consumption, or incoming MoM damage.
+The first checkpoint estimate only priced the Archmage cost added to the Frost Darts carrier. That was too optimistic for planning the whole trigger loop.
 
-So Archmage should be treated as the **next A/B test**, not an automatic permanent switch today.
+The new conservative model tracks:
+
+1. Frost Darts carrier Archmage cost.
+2. The triggered spell loop's Archmage tax.
+3. Eldritch Battery doubling Mana Costs.
+4. Mana Flare separately consuming **25% of current Mana**.
+
+Mana Flare's 25% consume is not a normal Mana Cost, so Mana Cost Efficiency does not reduce that part.
+
+At the current level, Archmage is roughly **6.8% of maximum Mana** per applicable non-channelling spell before Eldritch Battery and cost efficiency.
+
+The current Astramentis already provides **Invocated Efficiency = 10% Mana Cost Efficiency**. Zenith II adds **25% Mana Cost Efficiency** to Frost Darts.
+
+Using a conservative model where Zenith II is counted on the carrier only:
+
+- global cost efficiency = 10%.
+- Frost Darts carrier efficiency = 35%.
+- fixed Archmage portion of a successful carrier → Flare cycle ≈ **22.44% of maximum Mana**.
+- at a 75%-current-Mana Flare, total cycle drain ≈ **41.19% of maximum Mana**.
+
+At 2,669 maximum Mana, maintaining a Flare around 75% current Mana therefore requires approximately:
+
+- **0.50 Flare/s → 550 Mana/s**.
+- **0.75 Flare/s → 824 Mana/s**.
+- **1.00 Flare/s → 1,099 Mana/s**.
+- **1.50 Flare/s → 1,649 Mana/s**.
+
+The normal Frost Darts base cost and incoming Mind Over Matter damage are still on top.
+
+This is why the current **272.8 Mana/s** recovery cannot feed the 1.5/s CDR ceiling.
+
+The detailed 2.7k → 4k → 6k model now lives in:
+
+**`research/archmage-sustain-snapshot-2026-08-19.md`**
 
 ### Safe current package
 
@@ -193,7 +226,48 @@ Use all 180 Spirit as:
 
 Remove Time of Need, Clarity I and Vitality II for the test. This gives up periodic healing/ailment cleanse and Life regeneration, so it is a real trade rather than a free damage toggle.
 
-Zenith II is an especially coherent support to test on Frost Darts because it adds Mana Cost Efficiency and 30% more Spell Damage while above 90% Mana — exactly the state this build is trying to preserve.
+Zenith II remains coherent on Frost Darts because its **25% Mana Cost Efficiency works at all Mana levels**. Its 30% more Spell Damage clause only works above 90% maximum Mana and should be treated as an opener / recovered-state bonus because Mana Flare itself immediately removes 25% of current Mana.
+
+## Updated Archmage progression gates
+
+### ~2.7k Mana — test state
+
+- Current recovery: **272.8/s**.
+- First useful recovery target: **550–650/s**.
+- This supports roughly 0.5 high-current Flare/s before mapping pickups.
+- Mana Remnants + the second Waistgate Mana Flask can bridge mapping bursts.
+- Do not expect permanent full-rate boss sustain.
+
+### ~4k Mana — permanent Archmage transition
+
+Treat 4k as the number **after** any Astramentis → Strugglescream swap.
+
+Target:
+
+- ~60% global Mana Cost Efficiency.
+- Zenith II on Frost Darts.
+- stable Arcane Surge.
+- ~1,000–1,200 Mana/s repeatable recovery.
+
+A coherent four-instill Strugglescream sustain package is:
+
+- Invocated Efficiency.
+- Conservative Casting.
+- Efficient Casting.
+- Mind Eraser.
+
+Together those give about **60% global Mana Cost Efficiency +55% increased Mana Regeneration Rate**, while Invocated Efficiency also keeps the triggered-spell damage bonus.
+
+### ~6k Mana — mature Archmage engine
+
+Target:
+
+- ~75% global Mana Cost Efficiency.
+- ~100% carrier efficiency on Frost Darts after Zenith II.
+- **35–40% of maximum Mana recovered per second** in repeatable boss conditions.
+- At 6k, that means roughly **2,100–2,400 Mana/s**.
+
+That range supports about one high-current Flare/s in the conservative model, with faster burst windows available. Only after this recovery layer exists should the build pay to push CDR beyond Crest's current 50%.
 
 ## What to do now — exact order
 
@@ -205,10 +279,11 @@ Zenith II is an especially coherent support to test on Frost Darts because it ad
 6. **Keep Crest of Ardura.** 50% CDR already makes cooldown a later problem.
 7. **Keep the current helmet, boots and Prisoner's Manacles** until a clearly superior endgame piece exists.
 8. **Keep both Dream Fragments.** The corrupted 12% damage-taken-from-Mana-before-Life ring is particularly valuable for the eventual fake-MoM route.
-9. **Keep Astramentis for now.** Switch to Strugglescream only after stats are solved and its three extra notables beat the Mana/Life loss.
+9. **Keep Astramentis for now.** Switch to Strugglescream only after stats are solved and the post-swap Mana total plus its sustain instills clearly beat the current package.
 10. **Bank most of the remaining ~15 Divines.** Level 65–80 unlocks the body/boot/wand ceiling that is actually worth paying for.
-11. After the free/cheap recovery changes, **A/B test Archmage**. If current Mana cannot stay high in realistic fights, keep levelling without it rather than forcing the tooltip damage.
-12. Later, target Arcane-Surge-on-crit gloves, Cultivated Rathpith and an intentional Exceptional Mana wand — not before their whole-build trade is favourable.
+11. After the free/cheap recovery changes, **A/B test Archmage**. Judge it by current Mana after 8–10 seconds of realistic fighting, not by the first hit or tooltip.
+12. Build toward the **4k permanent gate**, then the **6k 35–40% recovery/s gate**.
+13. Later, target Arcane-Surge-on-crit gloves, Cultivated Rathpith and an intentional Exceptional Mana wand — not before their whole-build trade is favourable.
 
 ## Spend decision at level 53
 
@@ -216,4 +291,4 @@ Zenith II is an especially coherent support to test on Frost Darts because it ad
 
 Use that only for a strong Mana flask and cheap resistance/attribute fixes if they are needed. Keep roughly **13+ Divines liquid** for the level-65–80 transition.
 
-The profile changes the earlier generic plan: the current wand and Crest are already good enough that premature replacement would waste currency.
+The profile changes the earlier generic plan: the current wand and Crest are already good enough that premature replacement would waste currency. The next real project is now **Archmage sustain architecture**.
