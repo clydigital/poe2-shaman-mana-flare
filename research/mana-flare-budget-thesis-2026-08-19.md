@@ -1,685 +1,752 @@
 # Mana Geyser Shaman — Budget Minmax Thesis
 
 **Date:** 2026-08-19  
-**Build objective:** Reach the Runeseeker farm, sell Runeseeker, and keep a strong Runeseeker-free Mana Flare Shaman.  
-**Total build ceiling:** ~50 Divines.  
-**Working budget remaining:** ~15 Divines.  
-
-## Executive thesis
-
-The best version of this build is **not** a generic spell-damage caster and it is not a Runeseeker imitation. It is a Mana engine.
-
-For Mana Flare Shaman, **stacking actual Mana is the first-order offensive stat** until the character has a healthy endgame pool. Mana simultaneously scales:
-
-1. Mana Flare's native hit because the Flare consumes **25% of current Mana**.
-2. Archmage, which grants **4% of damage as extra Lightning per 100 maximum Mana**.
-3. Cultivated Rathpith, which grants **6% increased damage and 3% increased spell critical chance per 100 maximum Mana**.
-4. Arcane Intensity, which grants **3% increased Spell Damage per 100 maximum Mana**.
-5. Base Mana regeneration, because the raw regeneration base grows with maximum Mana.
-6. Defence whenever damage is redirected to Mana before Life.
-
-This creates several simultaneous returns from the same point of Mana. Generic `% increased Spell Damage` is useful, but it enters an additive bucket that is already very large once Rathpith and Arcane Intensity are active.
-
-**Therefore:**
-
-> **Mana first → recovery and trigger reliability second → CDR third → multiplicative/gain-as-extra/penetration after the engine is healthy.**
-
-At the present budget, the best new discoveries are:
-
-- **Arcane Surge should be added**, preferably from a **10–15% chance to gain Arcane Surge on Critical Hit Kurgal glove suffix**, not by forcing the Arcane Surge support gem.
-- **Arctic Armour should be the preferred third persistent skill** once Spirit reaches roughly **160** for Archmage + Mana Remnants + Arctic Armour.
-- **A two-socket Exceptional rare wand is the best non-Runeseeker one-hand ceiling** for this build. Celestial Alloy + Sovereign Alloy + caster runes can scale Mana much more efficiently than a martial weapon.
-- **Adonia's Ego is a very good cheap bridge**, but its +3 spell levels are more valuable to Arc/Entangle/Frost Darts than to Mana Flare itself. A good rare Mana/augment wand should eventually beat it for a Flare-centric Shaman.
-- **Guiding Palm of the Mind is a real experiment, not a joke:** 100 Spirit + 25% damage as extra Lightning can solve Arctic Armour Spirit and add damage. However, as Mana rises, Archmage makes the marginal value of another 25% gain-as-extra smaller, while a caster wand continues to add Mana, cast speed, spell utility and augment scaling.
-- **Mind Over Matter remains a cheap defensive bridge, not the preferred finished state.** The finished direction is high damage-taken-from-Mana-before-Life without MoM's 50% less Mana Recovery, but a Shaman must pay more gear/passive pressure for this than a Stormweaver.
-- **Cloak of Defiance is now a serious budget body competitor** because it grants 50% damage taken from Mana before Life, +100–150 Mana, 50–100% Mana regeneration and local ES that Eldritch Battery can convert.
+**Objective:** Reach the Runeseeker farm, sell Runeseeker, and keep a strong Runeseeker-free Mana Flare Shaman.  
+**Total endgame ceiling:** about **50 Divines**.  
+**Working budget remaining:** about **15 Divines**.
 
 ---
 
-# 1. External benchmark: what the Maxroll Stormweaver actually teaches us
+## Executive decision
 
-Reference build: <https://maxroll.gg/poe2/pob/3s56jm06>
+The build should be treated as a **Mana engine**, not as a normal caster that happens to use Mana Flare.
 
-The imported Level 97 Stormweaver benchmark exposes the following useful totals:
+The same point of Mana can scale all of these at once:
+
+1. **Mana Flare base hit** — consumes 25% of current Mana to deal that much Fire damage.
+2. **Archmage** — 4% of damage gained as extra Lightning per 100 maximum Mana.
+3. **Cultivated Rathpith** — 6% increased damage and 3% increased spell crit per 100 maximum Mana.
+4. **Arcane Intensity** — 3% increased Spell Damage per 100 maximum Mana.
+5. **Mana regeneration base** — more maximum Mana raises the raw 4%-per-second regeneration base.
+6. **Defence** — whenever damage is redirected to Mana before Life.
+
+That overlap is why the main rule is:
+
+> **Mana first → trigger reliability + recovery → CDR → penetration / gain-as-extra / CDB.**
+
+The external Stormweaver build is useful because it validates the recovery architecture, but we should **not copy the class**. The best Shaman version combines:
+
+- Stormweaver-style Mana/recovery/cost-efficiency discipline;
+- Shaman Rage scaling;
+- Strugglescream;
+- Cultivated Rathpith;
+- Mana Flare rather than Arc as the main payload.
+
+### Current build conclusion
+
+**Preferred finished direction, within the 50d philosophy:**
+
+- **Cultivated Rathpith** offhand.
+- **Strugglescream** with Invocated Efficiency locked.
+- **Arcane Surge on-crit rare gloves** rather than buying Kurgal's Gaze.
+- **Archmage + Mana Remnants + Arctic Armour** once 160 Spirit is available.
+- **Exceptional 2-socket caster Wand** as the best long-term weapon target.
+- Prefer **Perfect Inspiration Rune + Perfect Mind Rune** for the balanced weapon socket pair when recovery is still the constraint.
+- Use **Perfect Storm Rune** instead of Mind only when Mana/recovery are already comfortable and boss payload/Shock is the better marginal upgrade.
+- Keep **Mind Over Matter** until a real replacement defence exists; the eventual ideal is high damage-taken-from-Mana-before-Life **without** MoM's 50% less Mana Recovery.
+- Treat **Cloak of Defiance** as a serious budget transition body, not a curiosity.
+
+---
+
+# 1. What the Maxroll / Phoenix Stormweaver actually teaches us
+
+Reference PoB: <https://maxroll.gg/poe2/pob/3s56jm06>
+
+The imported Level 97 Stormweaver benchmark shows approximately:
 
 - **6,268 Mana**
 - **14,824 eHP**
-- **75/75/75 elemental resistances**
-- **86% crit chance**
-- **441% crit multiplier shown for Arc**
-- **187% increased Mana Regeneration Rate** from the tree summary
+- **75 / 75 / 75** elemental resistances
+- **86% crit** on Arc
+- **441% crit multiplier** shown for Arc
+- **187% increased Mana Regeneration Rate** in the tree summary
 - **15% increased Mana Recovery Rate**
-- **80% increased Mana Cost Efficiency**
-- **52% of Damage taken from Mana before Life** in the passive/tree summary before the remainder from gear
+- **80% Mana Cost Efficiency**
+- **52% damage taken from Mana before Life** visible in the passive summary before remaining gear contributions
 - **30% Lightning penetration**
 - **50% increased Shock magnitude**
 - Eldritch Battery + Chaos Inoculation
-- Permanent Arcane Surge through Stormweaver
+- permanent Arcane Surge from Stormweaver
 
-The key lesson is that a successful endgame Mana caster does **not** spend every point on generic increased damage. Its tree is a balance of:
+The important lesson is the **stat allocation**, not the skill:
 
 - Mana
 - Mana regeneration
 - Mana Cost Efficiency
-- damage taken from Mana before Life
-- penetration
-- Shock
-- crit/CDB
+- Mana-before-Life
+- Lightning penetration
+- Shock magnitude
+- spell crit / CDB
 - cast speed
 - Intelligence
 
-That architecture is directly transferable to our Shaman. The Stormweaver ascendancy itself is not.
+This is a much better template than spending every point on generic increased Spell Damage.
 
-## What we cannot copy
+## What Shaman cannot copy
 
-Stormweaver has two enormous advantages that Shaman does not:
+Stormweaver gets two enormous class advantages:
 
 - **Constant Gale:** permanent Arcane Surge.
-- **Force of Will:** 20% damage taken from Mana before Life plus Arcane Surge effect scaling as Mana is missing.
+- **Force of Will:** 20% damage taken from Mana before Life and increasing Arcane Surge effect as Mana is missing.
 
-So a Shaman needs to manufacture those functions elsewhere.
+Shaman has to manufacture those functions from gear/passives.
 
 ## What Shaman gets instead
 
-Our compensation is real:
+- **Druidic Champion:** every 2 Rage grants 1% more Spell Damage.
+- **Furious Wellspring:** Mana-regeneration modifiers also scale Rage regeneration.
+- **Mystical Rage:** 2% increased Spell Damage per Rage.
+- **Strugglescream:** four instilled notables.
+- **Cultivated Rathpith:** Mana directly scales spell damage and spell crit.
 
-- Druidic Champion converts Rage into **more Spell Damage**.
-- Furious Wellspring creates a Rage-regeneration engine that benefits from Mana-regeneration modifiers.
-- Mystical Rage converts Rage into additional increased Spell Damage.
-- Strugglescream gives four instilled notables, with Invocated Efficiency already locked in.
-- Cultivated Rathpith directly scales non-channelling spell damage and crit from Mana.
+So the thesis is:
 
-The correct strategy is therefore **Stormweaver recovery architecture + Shaman damage architecture**, not a class conversion.
+> **Steal the Stormweaver's recovery engineering, not its ascendancy. Keep Shaman's Rage/Rathpith/Strugglescream damage engine.**
 
 ---
 
-# 2. Mana stacking versus generic Mana/spell scaling
+# 2. Mana stacking vs generic spell scaling
 
-Current mechanics used in this model:
+Current mechanics used in the simplified marginal-value model:
 
-- Mana Flare: `Base Fire = 0.25 × current Mana`
-- Archmage: `+4% of damage as extra Lightning per 100 maximum Mana`
+- Mana Flare: `Fire base = 0.25 × current Mana`
+- Archmage: `+4% damage as extra Lightning per 100 maximum Mana`
 - Cultivated Rathpith: `+6% increased Damage per 100 maximum Mana`
 - Arcane Intensity: `+3% increased Spell Damage per 100 maximum Mana`
 
-For an easy comparison, assume current Mana is near maximum and add a fixed **+200% other increased damage** bucket. This is not a DPS simulator; it is a marginal-value model.
+Assume current Mana is near maximum and assume an illustrative **+200% other increased-damage bucket**.
 
-### Model
+### Simplified formula
 
 `Flare base = 0.25M`
 
 `Archmage raw multiplier = 1 + 0.0004M`
 
-`Mana-linked increased-damage contribution = 0.0009M`
+`Rathpith + Arcane Intensity = +0.0009M increased damage`
 
-`Illustrative total = 0.25M × (1 + 0.0004M) × (3 + 0.0009M)`
+`Illustrative payload = 0.25M × (1 + 0.0004M) × (3 + 0.0009M)`
 
-The `3` is the base 1.0 multiplier plus the assumed +200% other increased damage.
+This is deliberately not presented as exact in-game DPS. It is a **marginal-stat comparison**.
 
-| Maximum Mana | Flare base | Archmage extra | Raw Fire + Lightning before increased damage | Rathpith + Arcane Intensity linked increased damage | Illustrative total |
-|---:|---:|---:|---:|---:|---:|
-| 3,000 | 750 | +120% | 1,650 | +270% | 9,405 |
-| 4,000 | 1,000 | +160% | 2,600 | +360% | 17,160 |
-| 6,000 | 1,500 | +240% | 5,100 | +540% | 42,840 |
-| 8,000 | 2,000 | +320% | 8,400 | +720% | 85,680 |
+| Max Mana | Flare base | Archmage extra Lightning | Mana-linked increased damage | Illustrative payload |
+|---:|---:|---:|---:|---:|
+| 3,000 | 750 | +120% | +270% | 9,405 |
+| 4,000 | 1,000 | +160% | +360% | 17,160 |
+| 6,000 | 1,500 | +240% | +540% | 42,840 |
+| 8,000 | 2,000 | +320% | +720% | 85,680 |
 
-The exact total is illustrative; the **relative behaviour** is the useful part.
+## Marginal +100 Mana vs +20% generic Spell Damage
 
-## Marginal value of +100 Mana
-
-With the same model:
-
-| Starting Mana | Approx gain from +100 Mana | Approx gain from another +20% increased Spell Damage |
+| Starting Mana | +100 Mana | +20% generic increased Spell Damage |
 |---:|---:|---:|
 | 3,000 | **+6.87%** | +3.51% |
 | 4,000 | **+5.50%** | +3.03% |
 | 6,000 | **+3.96%** | +2.38% |
 | 8,000 | **+3.12%** | +1.96% |
 
-So even around 6–8k Mana, another +100 Mana can remain more valuable than +20% generic increased Spell Damage before defensive/recovery value is counted.
-
-## Marginal value of another 25% gain-as-extra Lightning
-
-If the extra 25% is measured against the original damage and does not recursively chain, its relative value is diluted by Archmage's existing extra Lightning:
-
-| Mana | Archmage extra Lightning | Approx relative value of +25% additional gain-as-extra Lightning |
-|---:|---:|---:|
-| 3,000 | +120% | **11.36%** |
-| 4,000 | +160% | **9.62%** |
-| 6,000 | +240% | **7.35%** |
-| 8,000 | +320% | **5.95%** |
-
-This explains why **Guiding Palm of the Mind** is unusually attractive at low/mid Mana but loses relative value as a huge Archmage pool grows.
+This is the key answer to **Mana stacking or Mana scaling?**
 
 ### Decision
 
-- Below ~5–6k Mana: aggressively buy efficient flat Mana / local ES-to-EB Mana / Intelligence / % maximum Mana.
-- Around ~6k+: Mana still wins often, but start comparing it to **penetration, gain-as-extra, crit/CDB, CDR and recovery** on a per-slot basis.
-- Do not pay premium prices for ordinary `% increased Spell Damage` unless it is attached to another valuable stat.
+**Actual Mana is the better first-order purchase** until the pool is already large, because it simultaneously increases base damage, Archmage, Rathpith, Arcane Intensity, regen base and defensive capacity.
+
+Generic `% increased Spell Damage` is still useful, but becomes heavily diluted by the enormous Rathpith + Arcane Intensity additive bucket.
+
+Around **6k+ Mana**, start comparing each extra Mana roll against:
+
+- penetration;
+- gain-as-extra;
+- CDB;
+- trigger crit/hit-rate;
+- CDR;
+- recovery.
+
+Mana does not become bad. It simply stops being the only answer.
 
 ---
 
-# 3. Arcane Surge: yes, we should use it
+# 3. Why Arcane Surge should be part of our build
 
 Current Arcane Surge buff:
 
 - **15% increased Cast Speed**
 - **20% more Mana Regeneration Rate**
-- default duration **4 seconds**
+- default duration: **4 seconds**
 
 Reference: <https://poe2db.tw/us/Arcane_Surge>
 
-This is excellent for Mana Flare because it attacks **both sides of uptime**:
+This is unusually efficient for Mana Flare because it improves **two separate bottlenecks**:
 
-1. More regeneration raises the recovery-limited Flare rate.
-2. Cast speed raises carrier hit frequency, which improves trigger saturation, especially once CDR shortens the trigger window.
+1. more regen increases the recovery-limited Flare rate;
+2. cast speed can increase carrier hit frequency, improving trigger saturation.
 
-## Arcane Surge does not solve 2 Flare/s by itself
+## Recovery example at 6,000 Mana
 
-At 6,000 Mana:
+At 6k Mana:
 
-- 1 Flare/s consumes up to **1,500 Mana/s** at full current Mana.
-- 1.5 Flares/s consumes up to **2,250 Mana/s**.
-- 2 Flares/s consumes up to **3,000 Mana/s**.
+- base regen at 4% = **240 Mana/s**
+- with +250% increased Mana regen = **840/s**
+- with Arcane Surge = **1,008/s**
+- with full MoM's 50% less Mana Recovery = only **504/s**
 
-Example with 6,000 Mana and +250% increased Mana regeneration:
+Meanwhile:
 
-- base regen = 4% × 6,000 = **240/s**
-- after +250% increased regen = **840/s**
-- with base Arcane Surge = **1,008/s**
-- with MoM's 50% less Mana Recovery = only **504/s**
+- 1 Flare/s at full Mana consumes **1,500 Mana/s**
+- 1.5 Flares/s consumes **2,250 Mana/s**
+- 2 Flares/s consumes **3,000 Mana/s**
 
-So Arcane Surge is a powerful multiplier, but Mana Remnants/flasks/direct recovery are still required for high Flare frequency. It also makes the MoM recovery penalty look even worse at endgame.
+Arcane Surge is therefore a strong multiplier, but **not a complete sustain engine**. Mana Remnants, flask/direct recovery and recovery-rate scaling remain important.
 
-## How Shaman gets Arcane Surge
+## Trigger-saturation benefit
 
-### Best budget-endgame source: Kurgal glove suffix
+Using a 46% carrier-crit / 4 eligible-hits-per-second baseline:
+
+- without Surge, 1.0s trigger window ≈ **91.5% saturation**
+- if 15% cast speed translates to 4.6 hits/s, ≈ **94.1%**
+
+At a 0.5s cooldown window:
+
+- 4 hits/s ≈ **70.8%**
+- 4.6 hits/s ≈ **75.8%**
+
+So Arcane Surge becomes even more useful as CDR rises.
+
+---
+
+# 4. Best Shaman source of Arcane Surge
+
+## Best budget-endgame source: rare Kurgal gloves
 
 Desecrated gloves can roll:
 
 > **10–15% chance to Gain Arcane Surge when you deal a Critical Hit**
 
-This gives the buff without spending Mana merely to maintain it and without consuming a Strugglescream slot.
+This is superior to deliberately spending Mana to maintain the support buff.
+
+Approximate uptime with a 4-second buff:
+
+`Uptime ≈ 1 - (1 - procChance)^(criticalHitsPerSecond × 4)`
 
 At 46% carrier crit:
 
-| Eligible hits/s | Critical hits/s | 10% proc uptime | 12.5% proc uptime | 15% proc uptime |
+| Eligible hits/s | Crit hits/s | 10% proc | 12.5% proc | 15% proc |
 |---:|---:|---:|---:|---:|
-| 4 | 1.84 | **54.0%** | 62.6% | **69.8%** |
-| 8 | 3.68 | **78.8%** | 86.0% | **90.9%** |
-| 10 | 4.60 | **85.6%** | 91.4% | **95.0%** |
+| 4 | 1.84 | 54.0% | 62.6% | **69.8%** |
+| 8 | 3.68 | 78.8% | 86.0% | **90.9%** |
+| 10 | 4.60 | 85.6% | 91.4% | **95.0%** |
 
-At a more mature 70% carrier crit and 8 hits/s, a 15% roll is roughly **97.4% uptime**.
+At 70% crit and 8 hits/s, the 15% roll is roughly **97.4% uptime**.
 
-This means the glove suffix gets dramatically better as the same crit/hit-rate upgrades that improve Mana Flare are purchased. It is an unusually efficient synergy.
+This is excellent because the same crit/hit-rate purchases that improve Mana Flare also improve Surge uptime.
 
-### Temporary / alternative source: Aspiring Genius
+## Temporary answer: Aspiring Genius
 
-**Aspiring Genius**:
+**Aspiring Genius** gives:
 
 - 20% increased Mana Regeneration Rate
-- 10% chance to gain Arcane Surge on Critical Hit
+- 10% chance to gain Arcane Surge on crit
 
-Recipe: Concentrated Liquid Suffering + Diluted Liquid Greed + Diluted Liquid Greed.
+This is an excellent temporary **fourth Strugglescream instill** before good Surge gloves exist.
 
-This is a very good **temporary fourth Strugglescream slot** if gloves do not yet provide Arcane Surge. Once a good Kurgal glove is acquired, reclaim the slot for Temporal Mastery or Pure Chaos.
+Once the gloves provide Surge, replace Aspiring Genius with:
 
-### Arcane Surge support gem: workable, but not preferred
+- **Temporal Mastery** if cooldown is the actual cap;
+- **Pure Chaos** if CDR is already solved and payload is the cap.
 
-The support gives 10 seconds of Arcane Surge after spending **100% of maximum Mana** on supported self-cast spells.
+## Arcane Surge support gem
 
-With Archmage adding roughly 6.1–8% of maximum Mana to each non-channelling spell cost, a carrier costing ~6.1% max Mana and cast twice per second spends ~12.2% max Mana/s. It can ramp into near-continuous Surge after roughly 8.2 seconds of sustained casting.
+The support gives 10 seconds of Surge after spending 100% of maximum Mana on supported self-cast spells.
 
-But that same maintenance costs around **732 Mana/s at 6,000 Mana** before other costs. For a build whose damage spell consumes current Mana, this is the wrong way to buy recovery unless those casts were already required.
+With Archmage adding roughly 6.1% max-Mana cost and two casts per second, that can mean roughly **12.2% of max Mana spent each second**, or about **732 Mana/s at 6k** before other cost modifiers.
 
-**Conclusion:** proc Surge from crit, not from deliberate Mana spending.
+That is the wrong maintenance model for a skill whose damage is based on **current Mana**.
 
-## Trigger-saturation effect
+### Conclusion
 
-Using the old 46% carrier-crit / 4 hits/s benchmark:
-
-- no Surge, 1.0s window: ~**91.5%** trigger saturation
-- if the full 15% cast-speed increase translated into hit rate, 4 → 4.6 hits/s: ~**94.1%**
-- at a 0.5s window, the same move improves ~**70.8% → 75.8%**
-
-So Surge's cast speed matters more as CDR becomes aggressive.
+> **Proc Arcane Surge from crit. Do not burn Mana merely to keep Arcane Surge active.**
 
 ---
 
-# 4. Arctic Armour belongs in the finished utility package
+# 5. Arctic Armour is now recommended utility
 
 Current Arctic Armour:
 
 - reserves **30 Spirit**
 - **11% base crit**
-- retaliates with a Cold Spell hit when a melee attack removes a stage
+- retaliates with a Cold Spell hit when a melee hit consumes a stage
 - 100% more Chill magnitude
 - 100% more Freeze buildup
-- can be supported by Mana Flare
 
 Reference: <https://poe2db.tw/us/Arctic_Armour>
 
-The desirable persistent package is therefore:
+Preferred persistent package:
 
 - Archmage: **100 Spirit**
 - Mana Remnants: **30 Spirit**
 - Arctic Armour: **30 Spirit**
-- total target: **160 Spirit**
+- target: **160 Spirit**
 
-Arctic Armour does three useful jobs:
+Why it fits:
 
-1. anti-melee Chill/Freeze defence;
-2. retaliatory crit events that can trigger Mana Flare;
-3. those crits can also feed a global on-crit Arcane Surge glove proc.
+- anti-melee Chill/Freeze defence;
+- retaliatory spell hits can crit and trigger Mana Flare;
+- those crits can also contribute to a global Arcane-Surge-on-crit glove proc;
+- it keeps producing value while moving/repositioning or under melee pressure.
 
-Do not model Arctic Armour as an independent extra Mana Flare cooldown. Treat it as **trigger redundancy and defence**.
-
-**Recommendation:** once Spirit reaches 160 without crippling gear, Arctic Armour moves into the preferred endgame skill package.
+Do **not** model it as a second independent Mana Flare cooldown. Treat it as **defence + trigger redundancy**.
 
 ---
 
-# 5. One-hand weapon thesis: Exceptional rare wand wins
+# 6. One-hand weapon thesis
 
-## The socket ceiling we should actually plan around
+## Best final type: Exceptional 2-socket Wand
 
-By default, one-handed weapons can have one augment socket. High-level **Exceptional** items can drop with an additional socket, so an Exceptional wand can practically be planned as a **2-socket caster weapon**.
+For our budget philosophy, plan around **two augment sockets**, not a Runeseeker-style socket fantasy.
 
-A third socket through corruption is not something the 15-div budget plan should assume. Current sources conflict on whether the corruption socket outcome applies to wands in the present patch, so the recommendation is built around two sockets only.
+The current crafting ecosystem supports high-level 2-socket Exceptional wands. A current 0.5 crafting route commonly starts from an item-level-81 2-socket wand.
 
-Reference: <https://www.poe2wiki.net/wiki/Augment_socket>
+With only ~15d remaining, however, **buying a good existing base/item is safer than attempting a mirror-tier craft from scratch**.
 
-## Best rare-wand modifier package
+## Best explicit Alloy mods
 
 ### Celestial Alloy — prefix
 
-On a Wand:
+Wand / Staff:
 
 - **+142–188 maximum Mana**
 - **+1 to all Spell Skills**
 
 ### Sovereign Alloy — suffix
 
-On a Wand:
+Weapons:
 
 - **20–30% increased effect of Socketed Augment Items**
 
-These can coexist because Celestial is a prefix and Sovereign is a suffix.
+This is particularly important because our sockets are not decorative: they can carry Mana, regen or gain-as-extra.
 
-References:
+### Transcendent Alloy — suffix
 
-- <https://poe2db.tw/us/Celestial_Alloy>
-- <https://poe2db.tw/us/Sovereign_Alloy>
+Current 0.5.3+ Wand values:
 
-## Rune choices
+- **26–31% increased Cast Speed**
+- **Gain 7–11% of Elemental Damage as Extra Cold Damage**
 
-### Perfect Mind Rune
+It was briefly removed from Wands in 0.5.2, then restored in 0.5.3 at lower Wand values than Staff values.
 
-Wand/Staff:
+This makes the **chase explicit package** approximately:
 
-- **+90 maximum Mana**
-- Bonded with Wisdom of the Maji: **5% increased maximum Mana**
+- Celestial Mana/+1 prefix
+- Sovereign augment-effect suffix
+- Transcendent cast-speed + gain-as-extra suffix
+- plus natural/other useful crit, spell-level or Mana modifiers
 
-At a perfect 30% Sovereign roll, the primary +90 line becomes **+117 Mana**. If the Bonded line is also scaled by augment-effect as expected, 5% becomes **6.5% increased maximum Mana**. Confirm the equipped tooltip before committing expensive runes.
-
-The current Runes of Aldur currency snapshot puts Perfect Mind Rune around **549 Exalted**, with Divine around **325 Exalted**, or roughly **1.7 Divine** per rune at that snapshot.
-
-### Perfect Storm Rune
-
-Wand/Staff:
-
-- **Gain 12% of Damage as Extra Lightning Damage**
-- Bonded: 30% increased Shock magnitude
-
-At +30% socketed-augment effect, the 12% primary line becomes roughly **15.6% gain-as-extra Lightning**.
-
-This is the better second socket if Mana is already healthy and penetration/Shock/gain-as-extra gives more marginal value than more Mana.
-
-## How strong is one boosted Perfect Mind Rune?
-
-The exact result depends on how much `% increased maximum Mana` the build already has, because those modifiers are additive. Using a 6,000-Mana example and plausible existing total increased-Mana values of +50% to +150%, a +117 flat / +6.5 percentage-point Mana rune produces roughly a **7.3–7.6% increase in the actual Mana pool** in a simplified reconstruction.
-
-Feeding that new Mana back through Mana Flare + Archmage + Rathpith + Arcane Intensity gives roughly **18–19% illustrative offensive gain** in the same marginal model.
-
-That is why the Exceptional/Sovereign caster-wand route deserves priority over generic `% spell damage` weapon shopping.
-
-## Two Mind Runes?
-
-Two boosted Mind runes are the maximum-Mana configuration. In the same 6,000-Mana reconstruction they can produce roughly a **15% larger Mana pool** before the rest of the gear is rebalanced. That is enormous, but the second rune should still be compared against Perfect Storm because:
-
-- Archmage already supplies huge extra Lightning at high Mana;
-- Lightning penetration and Shock can become the real boss-DPS bottlenecks;
-- recovery must keep up with the larger 25%-current-Mana Flare cost.
-
-### Preferred socket logic
-
-- **Recovery/payload still Mana-limited:** Mind + Mind.
-- **Mana healthy, boss damage needs multiplicative scaling:** Mind + Storm.
-- **Do not spend both sockets on generic Spell Damage runes** unless the good caster runes are unavailable.
+This package is powerful, but **not a 15d deterministic craft target**. The budget goal is to buy the best partial version available.
 
 ---
 
-# 6. Non-wand one-hand experiments
+# 7. Best caster rune pair — new conclusion
 
-## Guiding Palm of the Mind — real, but conditional
+This is where the uptime theorycraft changes the weapon recommendation.
 
-Current item:
+## Perfect Inspiration Rune
 
-- 100 Spirit
-- Gain **25% of Damage as Extra Lightning Damage**
-- +20–30 Dexterity
-- Guided Tempest Shrine
+Wand / Staff:
 
-Reference: <https://poe2db.tw/Guiding_Palm_of_the_Mind>
+- **+60 maximum Mana**
+- **35% increased Mana Regeneration Rate**
+- Bonded: **5% increased maximum Mana**
 
-Why it is interesting here:
+## Perfect Mind Rune
 
-- 100 Spirit instantly removes the pressure of fitting Archmage + Mana Remnants + Arctic Armour.
-- +25% gain-as-extra Lightning is global and useful.
-- Dexterity may fix our weakest attribute.
+Wand / Staff:
 
-Why it is probably not the final answer:
+- **+90 maximum Mana**
+- Bonded: **5% increased maximum Mana**
 
-- sceptres do not naturally give the caster-wand Mana/spell-level/cast-speed package;
-- it gives no flat Mana itself;
-- as Mana rises, Archmage dilutes another fixed +25% gain-as-extra Lightning: about 7.35% relative at 6k Mana and 5.95% at 8k in the simple non-recursive model;
-- it competes with a rare wand that can add hundreds of effective Mana and augment scaling.
+## Perfect Storm Rune
 
-**Verdict:** excellent cheap experiment / Spirit solution; not the preferred high-end weapon unless the rest of the build is Spirit-starved.
+Wand / Staff:
+
+- **Gain 12% of Damage as Extra Lightning Damage**
+- Bonded: **30% increased Shock magnitude**
+
+## With perfect 30% Sovereign effect
+
+Primary socket effects become approximately:
+
+- Inspiration: **+78 Mana +45.5% increased Mana Regen**
+- Mind: **+117 Mana**
+- Storm: **15.6% gain-as-extra Lightning**
+
+If Sovereign also scales the Bonded line in the equipped tooltip, the 5% increased-max-Mana Bonded line becomes **6.5%**. Verify this in-game before committing currency.
+
+## Inspiration vs Mind at 6k Mana
+
+Illustrative assumption:
+
+- current 6,000 Mana;
+- roughly +100% existing increased maximum Mana;
+- average Celestial roll +165 flat Mana;
+- perfect 30% Sovereign;
+- Bonded maximum-Mana effect scales as expected.
+
+### Celestial + Mind
+
+Approx reconstructed Mana: **6,777**
+
+Illustrative payload increase vs 6,000 baseline: **~33.6%**
+
+### Celestial + Inspiration
+
+Approx reconstructed Mana: **6,697**
+
+Illustrative payload increase vs 6,000 baseline: **~29.8%**
+
+So choosing Inspiration instead of Mind costs only about **2.9% relative illustrative payload** between these two completed variants.
+
+But Inspiration also adds **45.5 percentage points of increased Mana regen**.
+
+If existing increased Mana regen is +250%:
+
+- old multiplier = 3.50
+- with Inspiration = 3.955
+- regen component improves by roughly **13%**
+
+### Decision
+
+For this Mana Flare Shaman, where recovery is a known bottleneck:
+
+> **Perfect Inspiration Rune is probably the best first weapon rune.**
+
+Then:
+
+- **Inspiration + Mind** = preferred balanced pair.
+- **Inspiration + Storm** = recovery + boss-damage/Shock pair once Mana is healthy.
+- **Mind + Mind** = maximum raw-Mana/payload/defence pair if recovery is already solved.
+
+This is more useful than blindly socketing two Mind Runes.
+
+## Current currency snapshot
+
+Recent Runes of Aldur economy snapshot:
+
+- Divine Orb ≈ **325.4 Exalted**
+- Perfect Inspiration Rune ≈ **652.5 Exalted** ≈ **2.0d**
+- Perfect Mind Rune ≈ **549 Exalted** ≈ **1.69d**
+- Perfect Storm Rune ≈ **557.6 Exalted** ≈ **1.71d**
+
+These are snapshot prices, not permanent guide prices.
+
+---
+
+# 8. Non-wand one-hand options
 
 ## Adonia's Ego — best cheap bridge
 
-Current item:
+Current useful lines:
 
 - +100–150 maximum Mana
-- +3 to all Spell Skills
-- 15–30% Cast Speed
+- +3 all Spell Skills
+- 15–30% increased Cast Speed
 - Pinnacle of Power
-- elemental-resistance penalty per Power Charge
 
-Reference: <https://poe2db.tw/us/Adonias_Ego>
+Why it is good:
 
-It is especially good when Entangle/Frost Darts/Orb of Storms native spell damage still matters. For pure Mana Flare payload, +3 levels do not multiply the 25%-of-current-Mana base the way raw Mana does.
+- cheap combination of Mana + speed + native carrier skill levels;
+- particularly good while Entangle/Frost Darts/Orb native damage matters.
 
-**Verdict:** use if it is a cheap large upgrade over the present wand; do not sink currency min-maxing it instead of saving for an Exceptional rare Mana wand.
+Why it is not the final Flare weapon:
+
+- +3 skill levels do not multiply Mana Flare's 25%-of-current-Mana base like actual Mana does;
+- a strong 2-socket rare Wand can scale Mana, recovery, caster utility and augment effects simultaneously.
+
+### Verdict
+
+**Excellent bridge. Do not sink premium currency into building around it.**
+
+## Guiding Palm of the Mind — legitimate experiment
+
+Current item:
+
+- **100 Spirit**
+- **Gain 25% of Damage as Extra Lightning**
+- +20–30 Dexterity
+- permanent Guided Tempest Shrine effect
+
+This is not a meme for us.
+
+It can single-handedly solve the Spirit pressure for:
+
+- Archmage
+- Mana Remnants
+- Arctic Armour
+
+But fixed gain-as-extra is diluted by Archmage as Mana rises.
+
+Approx relative value of another fixed +25% extra Lightning:
+
+| Mana | Existing Archmage extra | +25% relative raw value |
+|---:|---:|---:|
+| 3,000 | +120% | 11.36% |
+| 4,000 | +160% | 9.62% |
+| 6,000 | +240% | **7.35%** |
+| 8,000 | +320% | **5.95%** |
+
+### Verdict
+
+**Great budget Spirit experiment; not the preferred final weapon once Spirit is solved elsewhere.**
 
 ## Generic martial one-hand weapons
 
-Reject for this build. Caster runes change behaviour on martial weapons: Perfect Mind becomes physical Mana leech rather than flat Mana, and damage runes become attack stats. The augment system itself pushes us back toward Wand/Staff.
+Reject.
+
+Caster runes change to attack/leech effects on martial weapons, so they lose the exact Mana/caster socket scaling we want.
 
 ---
 
-# 7. Defence thesis: fake MoM is the destination, not the immediate purchase
+# 9. Defence: fake MoM is the destination, not today's obligation
 
-Current Mind Over Matter:
+Mind Over Matter:
 
-- all damage taken from Mana before Life
+- all damage from Mana before Life
 - **50% less Mana Recovery Rate**
+
+That recovery penalty is especially painful because the same Mana pool powers Mana Flare.
 
 Current no-MoM sources include:
 
 - Cloak of Defiance: **50%**
 - Feathered Raiment implicit: 5–10%
 - Kurgal body suffix: 10–20%
-- Genesis ring prefix: up to 13–15% each
-- Sapphire jewel suffix: 2–4%
-- Lucidity: 8%
-- Mental Perseverance: 10%
-- Chakra of Thought: 8%
-- Greatwolf body rune: 15%
+- selected ring/jewel/passive sources
+- Greatwolf body rune
 
-References:
+The Stormweaver reference build demonstrates why **100% Mana-before-Life without MoM** is an excellent premium endpoint.
 
-- <https://poe2db.tw/us/Mana_before_Life>
-- <https://poe2db.tw/us/Cloak_of_Defiance>
+But Stormweaver gets 20% from Force of Will for free. Shaman does not.
 
-The Stormweaver benchmark confirms that **100% Mana-before-Life without MoM** is the correct premium architecture because it keeps the Mana defence without halving Mana Recovery.
+### Therefore
 
-However, the Stormweaver gets 20% from Force of Will for free. Shaman does not.
+Do **not** spend the remaining 15d forcing 100% fake MoM if it ruins the rest of the character.
 
-## Budget conclusion
+## Cloak of Defiance becomes important
 
-Do **not** spend the remaining 15 Divines forcing 100% fake-MoM if it destroys Mana, resists, crit or recovery elsewhere.
+Current Cloak:
 
-### Recommended defence progression
+- 50–100% increased ES
+- +100–150 maximum Mana
+- 50–100% increased Mana Regeneration Rate
+- **50% damage taken from Mana before Life**
 
-1. **MoM while cheap gear is still weak.**
-2. **Cloak of Defiance is the best budget bridge to test** if a good copy is inexpensive: 50% MBL + Mana + regen + local ES-to-Mana in one slot.
-3. Move to **partial/high MBL without MoM** only when the combined gear/passive package is clearly stronger.
-4. The eventual premium rare/Feathered body can chase 100% total, but that is not the 15-div priority.
+This makes it a strong budget test item because it combines:
 
-## Cloak versus Morior versus rare high-ES body
+- Mana;
+- regen;
+- EB-convertible local ES;
+- half of the fake-MoM problem in one slot.
 
-### Cloak of Defiance
+### Body decision
 
-Best when:
+**Cloak wins** when MoM's recovery penalty is the dominant problem and one item can let the rest of the defence transition safely.
 
-- recovery is painful;
-- MoM's 50% less Recovery is the main bottleneck;
-- you need a cheap one-slot defensive transition.
+**Morior wins** when its actual socket rolls solve several constraints — especially Mana + Spirit + attributes/resists.
 
-### Morior Invictus
+**High-ES rare wins** when displayed local ES + flat Mana + exact suffixes are simply better.
 
-Best when:
-
-- Mana/socket roll is strong;
-- Spirit/attributes/resists/socket utility solve several constraints;
-- its actual local defence + socket package beats the rare.
-
-### High-ES rare / Exceptional rare
-
-Best when:
-
-- displayed local ES is exceptional;
-- flat Mana is strong;
-- suffixes solve the exact build pressure;
-- later fake-MoM/desecrated/rune architecture is affordable.
-
-There is no universal chest winner. For the current budget, **Cloak is the value challenger, Morior/rare is the ceiling challenger.**
+There is no universal body winner.
 
 ---
 
-# 8. What Arcane Surge does to our recovery target
-
-The Maxroll benchmark's tree summary shows 6,268 Mana, +187% Mana regeneration, +15% Mana Recovery Rate, +50% moving regen and Arcane Surge.
-
-Using only those visible values:
-
-- base 4% regen at 6,268 = **250.7 Mana/s**
-- +187% increased regen = **719.6/s**
-- while moving with another +50% increased = **844.9/s**
-- ×1.15 Recovery Rate = **971.7/s**
-- ×1.20 Arcane Surge = **1,166.0/s**
-
-The transcript's ~2,000 Mana/s claim therefore requires the remaining gear/ring/skill sources, which is plausible. More importantly, it shows the build stacks **multiple recovery layers**, not one giant regen notable.
-
-For our Shaman, Arcane Surge is therefore a **20% multiplier on the regen component**, not a replacement for Remnants or flasks.
-
----
-
-# 9. Updated Strugglescream recommendation
+# 10. Updated Strugglescream package
 
 One slot is already locked:
 
-1. **Invocated Efficiency** — keep.
+1. **Invocated Efficiency**
 
-The other three should now be conditional rather than blindly fixed.
+Before Arcane-Surge gloves:
 
-## Default with Arcane Surge gloves
-
-2. **Mystical Rage** — Shaman/Rage synergy.  
-3. **Electric Amplification** — Lightning penetration + gain-as-extra, increasingly valuable with Archmage.  
-4. **Temporal Mastery** if cooldown is still the active cap, otherwise **Pure Chaos** for clean payload.
-
-## Before Arcane Surge gloves
-
-Use:
-
-2. Mystical Rage  
-3. Electric Amplification  
+2. **Mystical Rage**
+3. **Electric Amplification**
 4. **Aspiring Genius**
 
-Aspiring Genius gives both 20% increased Mana regeneration and the 10% on-crit Surge source. Once the glove suffix is acquired, it becomes redundant and the fourth slot can return to CDR/payload.
+After Arcane-Surge gloves:
 
-This is a better budget progression than buying Kurgal's Gaze. Current economy snapshots put Kurgal's Gaze around **20k Exalted**, over 60 Divines at the same snapshot — already beyond the entire remaining budget.
+2. Mystical Rage
+3. Electric Amplification
+4. **Temporal Mastery** if cooldown is the cap, otherwise **Pure Chaos**
+
+This is better than buying Kurgal's Gaze. A recent economy snapshot puts Kurgal's Gaze around **17,614 Exalted**, or roughly **54 Divines** at the same Divine quote — more than the entire remaining budget and around the whole intended build ceiling.
 
 ---
 
-# 10. Remaining ~15 Divine spend plan
+# 11. Remaining ~15 Divine spend plan
 
-Prices move. This is a **priority budget**, not a shopping list with guaranteed prices.
+This is a priority order, not a promise that every market listing fits the band.
 
-## Tier 1 — buy only if missing
+## Priority 1 — Arcane Surge gloves
 
-### A. Arcane Surge gloves — target 2–4d-equivalent value band
+**Target value band: roughly 2–4d, but skip if overpriced.**
 
-Desired rare gloves:
+Desired:
 
-- 10–15% chance to gain Arcane Surge on Critical Hit (Kurgal suffix)
-- Mana and/or local ES
-- CDB / crit utility if available
-- resistance/attribute as needed
+- 10–15% chance to gain Arcane Surge on crit;
+- Mana and/or good local ES;
+- CDB/crit or useful defence;
+- needed resistance/attribute.
 
-If the market charges too much, **do not chase the perfect glove**. Instill Aspiring Genius temporarily.
+If good gloves are too expensive, use **Aspiring Genius** temporarily instead.
 
-### B. Reach 160 Spirit — ~0–2d depending current gear
+## Priority 2 — reach 160 Spirit
 
-Enough for:
+Spend as little as possible.
+
+This turns on:
 
 - Archmage 100
 - Mana Remnants 30
 - Arctic Armour 30
 
-Do this with the least destructive slot. Spirit on Morior/socket/amulet/boots is worth more now because it activates a real defensive skill.
+Spirit on an otherwise-good Morior/amulet/boot becomes meaningfully valuable because it activates an actual defensive/trigger layer.
 
-## Tier 2 — biggest offensive target
+## Priority 3 — weapon
 
-### C. Exceptional 2-socket rare wand — allocate roughly 5–8d only if a good base/craft is available
+Do **not** attempt a chase craft from scratch with 15d.
 
-Priority:
+Look for a strong existing **2-socket Exceptional Wand** or a significantly cheaper partial version.
 
-1. strong flat Mana / Celestial Alloy package;
-2. Sovereign Alloy 20–30% augment effect;
-3. useful crit/cast/gain line;
-4. socket one Perfect Mind Rune first;
-5. second socket Mind or Perfect Storm depending bottleneck.
+Desired order:
 
-Current Perfect Mind/Perfect Storm currency snapshots are each around 1.7d. Do not buy both runes before the base is worth socketing.
+1. high Mana / Celestial package;
+2. Sovereign augment effect;
+3. strong natural crit/cast/spell-level modifier;
+4. one good rune first;
+5. second rune after the first weapon is clearly permanent enough.
 
-### Cheap bridge if the rare wand is not ready
+### Preferred first rune
 
-**Adonia's Ego** is acceptable. Spend little; save the rest.
+**Perfect Inspiration Rune** if recovery is still binding.
 
-### Guiding Palm experiment
+### Preferred second rune
 
-Only buy if Spirit is the current bottleneck and the item is cheap. It is not the default final weapon.
+**Perfect Mind Rune** for the balanced version.
 
-## Tier 3 — defence if MoM is choking recovery
+Swap the second slot to **Perfect Storm** only if recovery/Mana are comfortable and boss damage/Shock is the better marginal purchase.
 
-### D. Test Cloak of Defiance before buying a premium body
+## Priority 4 — defence reserve
 
-A decent Cloak is interesting because one slot gives 50% fake-MoM, Mana, regen and EB-convertible ES. If it lets us drop the MoM keystone without becoming fragile, the recovery gain can be enormous.
+Keep several Divines liquid.
 
-If it cannot reach a safe total damage-to-Mana share with the rest of the current gear, **keep MoM and postpone the transition**.
+If full MoM is clearly choking recovery, test whether Cloak + existing Mana-before-Life sources let the build drop MoM without becoming fragile.
 
-## Do not spend the remaining budget on
+Do not refund MoM first and hope the defence works afterward.
+
+---
+
+# 12. What not to buy with the last 15d
 
 - Kurgal's Gaze
 - Jiquani's Thesis
 - Temporalis
 - Runeseeker itself
-- perfect 100% fake-MoM at the cost of the whole character
-- generic expensive +spell-damage gear with no Mana/recovery/crit/pen utility
+- mirror-tier wand crafting steps
+- a forced 100% fake-MoM package that destroys Mana/resists/crit
+- expensive generic `% increased Spell Damage` with no second job
 - a power-charge package merely to justify Adonia's Pinnacle of Power
 
 ---
 
-# 11. Recommended finished architecture under the 50-div philosophy
+# 13. Final finished architecture
 
 ## Weapon
 
-**Exceptional 2-socket rare Wand**  
-Celestial Mana/+1 prefix + Sovereign augment-effect suffix if attainable, with Perfect Mind + Mind/Storm.
+**Exceptional 2-socket rare Wand**
+
+Ideal direction:
+
+- high flat Mana / Celestial
+- Sovereign augment effect
+- useful crit/cast/spell-level modifier
+- Transcendent if the item/budget supports it
+- **Perfect Inspiration + Perfect Mind** as the balanced socket pair
 
 Budget bridge: **Adonia's Ego**.  
-Experiment: **Guiding Palm of the Mind**.
+Spirit experiment: **Guiding Palm of the Mind**.
 
 ## Offhand
 
-**Cultivated Rathpith** remains the preferred Flare-centric offhand. It is too synergistic with actual Mana to drop for a generic focus unless the replacement solves a much larger recovery/defence problem.
+**Cultivated Rathpith**.
 
 ## Amulet
 
-**Strugglescream** with Invocated Efficiency locked.
+**Strugglescream**.
 
-Preferred variable package after Arcane Surge gloves:
+Core:
 
+- Invocated Efficiency
 - Mystical Rage
 - Electric Amplification
-- Temporal Mastery **or** Pure Chaos
 
-Before Arcane Surge gloves: use Aspiring Genius in the fourth slot.
+Fourth:
+
+- Aspiring Genius before Surge gloves;
+- Temporal Mastery or Pure Chaos afterward.
 
 ## Body
 
-Current-budget choice is contextual:
+Choose by actual bottleneck:
 
-- **Cloak of Defiance** if it enables dropping MoM safely and recovery is the cap.
-- **Morior** if socket rolls solve Mana + Spirit/attributes/resists well.
-- **High-ES rare** if actual displayed ES + Mana + useful suffixes win the direct comparison.
+- Cloak = value recovery/fake-MoM bridge
+- Morior = socket-flexibility + Mana/Spirit/stats
+- high-ES rare = raw EB Mana + exact affixes
 
 ## Gloves
 
-Priority has changed.
+Preferred endgame budget direction:
 
-The best budget-endgame rare glove is now one with **10–15% Arcane Surge on crit** plus Mana/ES/CDB/defence. Nightscale remains an excellent recovery bridge; Leopold remains a strong damage glove only after Surge/recovery are solved.
+**rare gloves with 10–15% Arcane Surge on crit**.
 
-## Boots
-
-High movement + local ES/Mana + attribute/resists. Chronomancy/Uhtred remains desirable if CDR is the bottleneck, but do not sacrifice the entire defensive budget to force it.
+Nightscale remains the recovery bridge.  
+Leopold remains the payload glove once Surge/recovery are solved.
 
 ## Persistent skills
 
-1. Archmage
-2. Mana Remnants
-3. **Arctic Armour** once 160 Spirit is available
+- Archmage
+- Mana Remnants
+- Arctic Armour
+
+Target: **160 Spirit**.
 
 ## Carrier skills
 
-- Mapping: Entangle / Orb of Storms depending coverage and feel.
-- Bossing: Frost Darts + Orb of Storms for repeated crit events.
-- Arctic Armour supplies defensive retaliation/trigger redundancy.
+- mapping: Entangle / Orb of Storms by feel and coverage
+- bossing: Frost Darts + Orb of Storms for repeated crit events
+- Arctic Armour: defensive retaliatory trigger redundancy
 
 ---
 
-# 12. Final decision tree
+# 14. Final decision tree
 
-### If current Mana is below ~5–6k
+**Mana below ~5–6k?**  
+Buy efficient actual Mana / local ES / INT / %max Mana first.
 
-Buy Mana first.
+**Flare procs inconsistent?**  
+Improve carrier crit/hit-rate and Arcane Surge uptime before buying more CDR.
 
-### If Mana is healthy but Flare frequency feels inconsistent
+**Cooldown visibly capped?**  
+Then buy CDR.
 
-Buy carrier crit/hit-rate and Arcane Surge uptime before more CDR.
+**Current Mana collapsing during sustained damage?**  
+Recovery is the cap. Prioritise Surge, Remnants, regen, Inspiration Rune, flask/direct recovery and question full MoM.
 
-### If the cooldown indicator is the obvious cap
+**Recovery + trigger rate healthy?**  
+Buy penetration, gain-as-extra, CDB and premium weapon effects.
 
-Buy CDR through boots/Temporal Mastery.
-
-### If current Mana collapses during sustained damage
-
-Recovery is the cap. Prioritise Arcane Surge, Mana Remnants, regen, flask/direct recovery; question MoM.
-
-### If recovery and trigger rate are healthy
-
-Then buy penetration, gain-as-extra, CDB and premium wand augments.
-
-### If a new item has only `% increased Spell Damage`
-
-It must be very cheap or carry another premium stat. Mana already creates a huge additive damage bucket.
+**Item only offers generic `% Spell Damage`?**  
+It should be cheap or have a second premium job.
 
 ---
 
-# Primary sources
+# Sources
 
 - Mana Flare: <https://poe2db.tw/us/Mana_Flare>
 - Archmage: <https://poe2db.tw/us/Archmage>
@@ -687,17 +754,18 @@ It must be very cheap or carry another premium stat. Mana already creates a huge
 - Arctic Armour: <https://poe2db.tw/us/Arctic_Armour>
 - Cultivated Rathpith: <https://poe2db.tw/us/Rathpith_Globe>
 - Arcane Intensity: <https://poe2db.tw/us/Arcane_Intensity>
-- Mana before Life: <https://poe2db.tw/us/Mana_before_Life>
+- Mana-before-Life: <https://poe2db.tw/us/Mana_before_Life>
 - Cloak of Defiance: <https://poe2db.tw/us/Cloak_of_Defiance>
 - Celestial Alloy: <https://poe2db.tw/us/Celestial_Alloy>
 - Sovereign Alloy: <https://poe2db.tw/us/Sovereign_Alloy>
-- Perfect Mind Rune / runes: <https://poe2db.tw/us/Rune>
+- Transcendent Alloy: <https://poe2db.tw/us/Transcendent_Alloy>
+- Runes: <https://poe2db.tw/us/Rune>
 - Guiding Palm of the Mind: <https://poe2db.tw/Guiding_Palm_of_the_Mind>
 - Adonia's Ego: <https://poe2db.tw/us/Adonias_Ego>
-- Augment socket mechanics: <https://www.poe2wiki.net/wiki/Augment_socket>
-- External benchmark: <https://maxroll.gg/poe2/pob/3s56jm06>
-- Economy context: <https://divindex.com/>
+- Maxroll benchmark: <https://maxroll.gg/poe2/pob/3s56jm06>
+- Current wand crafting context: <https://mobalytics.gg/poe-2/profile/bigdaddygaming/guides/0-5-7-wand-crafting-guide>
+- Runes of Aldur currency snapshot: <https://divindex.com/>
 
 ## Research note
 
-The provided Phoenix/YouTube transcript was used as an architectural reference for the current Stormweaver mana-stacking approach. Its class-specific claims were not copied into the Shaman recommendation unless they were independently compatible with Shaman mechanics.
+The supplied Phoenix/YouTube transcript was treated as an architectural reference. Class-specific Stormweaver conclusions were not copied into the Shaman recommendation unless the underlying mechanic also made sense for Shaman.
