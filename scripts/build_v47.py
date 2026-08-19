@@ -42,9 +42,10 @@ for script in [
     '<script src="./v61-chase-defence-notes.js"></script>\n',
     '<script src="./v62-guide-shell.js"></script>\n',
     '<script src="./v64-display-themes.js"></script>\n',
+    '<script src="./v65-budget-theorycraft.js"></script>\n',
 ]:
     if script.strip() not in s:
         s = s.replace(needle, script + needle, 1)
 
 p.write_text(s, encoding='utf-8')
-print('built centered findings-first v64 guide + 4x4 display themes + static Research', len(s))
+print('built findings-first v65 guide + budget theorycraft + 4x4 themes + static Research', len(s))
