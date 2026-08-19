@@ -44,6 +44,7 @@ for script in [
     '<script src="./v62-guide-shell.js"></script>\n',
     '<script src="./v65-budget-theorycraft.js"></script>\n',
     '<script src="./v66-current-checkpoint.js"></script>\n',
+    '<script src="./v67-build-visuals.js"></script>\n',
     '<script src="./v69-research-theorycraft.js"></script>\n',
     '<script src="./v64-display-themes.js"></script>\n',
 ]:
@@ -51,4 +52,4 @@ for script in [
         s = s.replace(needle, script + needle, 1)
 
 p.write_text(s, encoding='utf-8')
-print('built findings-first Mana Flare guide + exact lv53 checkpoint + budget/Rage theorycraft + 2x4 display themes + static Research', len(s))
+print('built findings-first Mana Flare guide + exact lv53 checkpoint + Build visuals + budget/Rage theorycraft + 2x4 display themes + static Research', len(s))
