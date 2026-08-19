@@ -43,10 +43,16 @@ jobs:
           grep -q 'v61-chase-defence-notes.js' site/index.html
           grep -q 'v62-guide-shell.js' site/index.html
           grep -q 'v64-display-themes.js' site/index.html
-          grep -q "lighter:{label:'Lighter'}" site/v64-display-themes.js
-          grep -q "darker:{label:'Darker'}" site/v64-display-themes.js
+          grep -q "lighter:{label:'Lighter'}" <(tr -d '\n ' < site/v64-display-themes.js)
+          grep -q "darker:{label:'Darker'}" <(tr -d '\n ' < site/v64-display-themes.js)
           grep -q "brown:{label:'Brown'" site/v64-display-themes.js
+          grep -q "blue:{label:'Blue'" site/v64-display-themes.js
+          grep -q "green:{label:'Green'" site/v64-display-themes.js
           grep -q "purple:{label:'Purple'" site/v64-display-themes.js
+          grep -q 'Background hue' site/v64-display-themes.js
+          grep -q 'Hue now changes the full page gradient' site/v64-display-themes.js
+          grep -q "body\[data-v64-brightness='lighter'\]" site/v64-display-themes.js
+          grep -q "body\[data-v64-brightness='light'\]" site/v64-display-themes.js
           grep -q '80–200%' site/v64-display-themes.js
           grep -q "background-image:url('./assets/shaman-mana-geyser.webp')" site/v45.css
           if grep -q 'v63-display-settings.js' site/index.html; then
