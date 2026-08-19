@@ -48,6 +48,8 @@ jobs:
           grep -q 'DEFAULT FIRST · MANA' site/v65-budget-theorycraft.js
           grep -q '35% increased Mana regen' site/v65-budget-theorycraft.js
           grep -q 'BEST WEIRD NON-WAND' site/v65-budget-theorycraft.js
+          grep -q 'Sacred Flow' site/v65-budget-theorycraft.js
+          grep -q "Khatal's Rejuvenation" site/v65-budget-theorycraft.js
           grep -q 'Sacred Flame' site/v65-budget-theorycraft.js
           grep -q 'Arcane Surge' site/v65-budget-theorycraft.js
           grep -q 'Exceptional 2-socket rare Wand' site/v44-research.js
@@ -58,7 +60,9 @@ jobs:
           grep -q 'Mana stacking vs generic Spell Damage' research/mana-flare-budget-thesis-2026-08-19.md
           grep -q 'Perfect Mind Rune' research/mana-flare-budget-thesis-2026-08-19.md
           grep -q 'It does not give flat Mana on a Wand' research/mana-flare-budget-thesis-2026-08-19.md
-          grep -q 'Sacred Flame — best weird non-Wand found' research/mana-flare-budget-thesis-2026-08-19.md
+          grep -q 'Best weird non-Wand: Sacred Flame' research/mana-flare-budget-thesis-2026-08-19.md
+          grep -q "Khatal's Rejuvenation" research/mana-flare-budget-thesis-2026-08-19.md
+          grep -q 'Sacred Flow changes the budget' research/mana-flare-budget-thesis-2026-08-19.md
           grep -q '80–200%' site/v64-display-themes.js
           grep -q "const brightnesses={light:{label:'Light'},dark:{label:'Dark'}}" site/v64-display-themes.js
           grep -q "background-image:url('./assets/shaman-mana-geyser.webp')" site/v45.css
