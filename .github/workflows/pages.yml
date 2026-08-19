@@ -35,6 +35,7 @@ jobs:
           test -s site/assets/shaman-mana-geyser.webp
           test -s research/mana-flare-budget-thesis-2026-08-19.md
           test -s research/current-checkpoint-2026-08-19.md
+          test -s research/archmage-sustain-snapshot-2026-08-19.md
           grep -q 'Mana Geyser Shaman' site/index.html
           grep -q '<div class="heroArt"></div>' site/index.html
           grep -q 'NODE LIBRARY' site/index.html
@@ -60,7 +61,9 @@ jobs:
           grep -q '2,669' site/v66-current-checkpoint.js
           grep -q 'Bramble Scratch' site/v66-current-checkpoint.js
           grep -q '50% CDR' site/v66-current-checkpoint.js
-          grep -q 'Archmage is the next test' site/v66-current-checkpoint.js
+          grep -q 'Archmage is the next unlock' site/v66-current-checkpoint.js
+          grep -q 'SNAPSHOT · ARCHMAGE SUSTAIN' site/v66-current-checkpoint.js
+          grep -q '2,100–2,400' site/v66-current-checkpoint.js
           grep -q '#next15' site/v66-current-checkpoint.js
           grep -q 'Exceptional 2-socket rare Wand' site/v44-research.js
           grep -q 'Aspiring Genius' site/v44-research.js
@@ -76,6 +79,8 @@ jobs:
           grep -q 'Recommended immediate spend: 0–2 Divines' research/current-checkpoint-2026-08-19.md
           grep -q 'Bramble Scratch' research/current-checkpoint-2026-08-19.md
           grep -q '180 Spirit' research/current-checkpoint-2026-08-19.md
+          grep -q '35–40% of maximum Mana' research/archmage-sustain-snapshot-2026-08-19.md
+          grep -q 'Strugglescream sustain package' research/archmage-sustain-snapshot-2026-08-19.md
           grep -q '80–200%' site/v64-display-themes.js
           grep -q "const brightnesses={light:{label:'Light'},dark:{label:'Dark'}}" site/v64-display-themes.js
           grep -q "background-image:url('./assets/shaman-mana-geyser.webp')" site/v45.css
