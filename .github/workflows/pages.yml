@@ -1,4 +1,5 @@
-name: Deploy Mana Geyser guide
+name: Deploy blank Mana Geyser site
+
 on:
   push:
     branches: [main]
@@ -21,34 +22,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Validate clean standalone guide
-        run: |
-          node --check site/v80-guide-data.js
-          node --check site/v80-guide.js
-          test -s site/v80-guide.css
-          test -s site/v80-index.html
-          test -s site/assets/shaman-mana-geyser.webp
-
-          grep -q 'MAIN BUILD IDEA' site/v80-index.html
-          grep -q 'MAIN GEMS + SUPPORTS' site/v80-index.html
-          grep -q 'MAIN ITEMS TO CONSIDER' site/v80-index.html
-          grep -q 'MAIN GOALS' site/v80-index.html
-          grep -q 'NODE LIBRARY' site/v80-index.html
-          grep -q 'MAIN RECOMMENDED NODES' site/v80-index.html
-          grep -q 'QUEST REWARD RECOMMENDATIONS' site/v80-index.html
-          grep -q 'PROGRESSION + SUGGESTED ITEMS' site/v80-index.html
-          grep -q 'instillToggle' site/v80-index.html
-
-          # Root is intentionally only a redirect now.
-          grep -q "location.replace('./v80-index.html')" site/index.html
-
-          # Standalone guide may only load the new v80 runtime.
-          if grep -Eq 'v(3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9])[^0-9].*\.(js|css)' site/v80-index.html; then
-            echo 'Legacy runtime leaked into clean guide' >&2
-            exit 1
-          fi
-
+      - name: Validate blank site
+        run: test -s site/index.html
       - uses: actions/configure-pages@v5
         with:
           enablement: true
