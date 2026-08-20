@@ -1,2 +1,109 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mana Geyser Loadout Planner</title>
+<style>
+:root{--bg:#0b0f14;--panel:rgba(18,24,32,.88);--line:#3c4959;--gold:#c7a96b;--mana:#5bbcff;--text:#e7ecf3;--muted:#92a0af;--good:#84d8a2;--warn:#e5bc6d;--bad:#e58383}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 35%,#182231 0,#0d1218 32%,#06080b 75%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Arial,sans-serif;min-height:100vh}.app{max-width:1500px;margin:0 auto;padding:18px}.topbar{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:14px}.brand h1{margin:0;font-size:26px;letter-spacing:.06em}.brand p{margin:6px 0 0;color:var(--muted)}.controls,.budget{display:flex;gap:8px;flex-wrap:wrap}.pill{border:1px solid var(--line);background:#111822;color:var(--text);padding:8px 12px;border-radius:999px;cursor:pointer}.pill.on{border-color:var(--mana);box-shadow:0 0 0 1px #5bbcff33 inset}.cost{background:linear-gradient(180deg,#151d28,#0d131b);border:1px solid #5f533a;padding:10px 14px;border-radius:10px;min-width:165px;text-align:right}.cost b{font-size:22px;color:var(--gold)}
+.stage{position:relative;min-height:780px;border:1px solid #252f3b;border-radius:18px;overflow:hidden;background:linear-gradient(rgba(8,11,15,.25),rgba(8,11,15,.58)),radial-gradient(circle at 50% 30%,rgba(91,188,255,.13),transparent 28%),linear-gradient(90deg,#0a0e13,#131922 50%,#0a0e13)}.stage:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 119px,rgba(255,255,255,.012) 120px),repeating-linear-gradient(0deg,transparent 0 119px,rgba(255,255,255,.012) 120px);pointer-events:none}.figure{position:absolute;left:50%;top:74px;transform:translateX(-50%);width:240px;height:600px;border-radius:45% 45% 20% 20%;background:linear-gradient(180deg,rgba(220,228,240,.12),rgba(90,105,125,.03));filter:drop-shadow(0 0 26px rgba(255,255,255,.05))}.figure:before{content:"";position:absolute;top:-44px;left:74px;width:92px;height:92px;border-radius:50%;background:radial-gradient(circle,#d8e3f022,#7f8fa112 62%,transparent 64%)}
+.slot{position:absolute;width:190px;min-height:118px;border:1px solid #4a586a;background:linear-gradient(180deg,rgba(18,24,32,.94),rgba(8,12,17,.9));border-radius:12px;padding:10px;cursor:pointer;transition:.18s}.slot:hover{transform:translateY(-2px);border-color:var(--mana);box-shadow:0 0 24px #5bbcff19}.slot .label{font-size:11px;color:#9aa8b8;letter-spacing:.12em}.slot .name{font-size:15px;font-weight:700;margin-top:5px}.slot .meta{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.35}.slot .runes{display:flex;gap:5px;margin-top:8px}.rune{width:18px;height:18px;border-radius:50%;border:1px solid #557186;background:radial-gradient(circle at 35% 35%,#a4ddff,#30638b 45%,#122537 70%)}
+.weapon1{left:4%;top:90px}.weapon2{right:4%;top:90px}.helmet{left:50%;top:34px;transform:translateX(-50%)}.amulet{left:66%;top:240px;width:155px}.ring1{left:22%;top:260px;width:145px}.ring2{right:22%;top:260px;width:145px}.body{left:50%;top:215px;transform:translateX(-50%);width:210px;min-height:220px}.gloves{left:14%;top:470px}.boots{right:14%;top:470px}.belt{left:50%;top:505px;transform:translateX(-50%);width:185px}.flask1{left:27%;bottom:36px;width:160px}.flask2{right:27%;bottom:36px;width:160px}
+.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:14px}.stat{border:1px solid #263240;background:#101720;border-radius:12px;padding:12px}.stat .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.stat .v{font-size:22px;font-weight:800;margin-top:4px}.stat.mana .v{color:var(--mana)}.stat.overflow .v{color:#88d7ff}.importbar{display:flex;gap:10px;margin-top:12px}.code{flex:1;padding:11px 12px;background:#090d12;border:1px solid #2a3440;border-radius:9px;color:#c7d2de;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.btn{padding:10px 14px;border-radius:9px;border:1px solid #4a586a;background:#151d27;color:var(--text);cursor:pointer}.btn.primary{border-color:#5079a5;background:#15283a}.drawer{position:fixed;right:0;top:0;width:min(430px,95vw);height:100vh;background:#0b1118;border-left:1px solid #33404f;transform:translateX(100%);transition:.22s;z-index:20;overflow:auto;padding:18px}.drawer.open{transform:none}.drawer h2{margin:0 0 4px}.drawer .sub{color:var(--muted);font-size:13px;margin-bottom:14px}.gearcard{border:1px solid #303d4b;background:#111822;border-radius:12px;padding:12px;margin-bottom:10px;cursor:pointer}.gearcard:hover{border-color:#5e8cb8}.gearcard .row{display:flex;justify-content:space-between;gap:10px}.gearcard .title{font-weight:800}.gearcard .price{color:var(--gold)}.gearcard .desc{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.45}.strength{display:flex;gap:8px;margin:10px 0 14px}.strength button{flex:1}.close{float:right}.legend{margin-top:8px;font-size:11px;color:#7f8c9b}.mobile-note{display:none}@media(max-width:1000px){.stage{min-height:1120px}.slot{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important;width:calc(50% - 16px);display:inline-block;margin:8px;vertical-align:top}.figure{display:none}.stats{grid-template-columns:repeat(2,1fr)}.mobile-note{display:block;color:var(--muted);margin:8px 0}.topbar{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><h1>MANA GEYSER // LOADOUT LAB</h1><p>Budget-minmax Mana Flare planner. Baseline: verified character database. Runeseeker excluded.</p></div>
+    <div>
+      <div class="controls" id="mechanics"></div>
+      <div style="height:8px"></div>
+      <div class="budget"><button class="pill on" data-mode="budget">Budget</button><button class="pill" data-mode="value">Value</button><button class="pill" data-mode="minmax">Min-Max</button><div class="cost">Estimated cost<br><b id="cost">0.0 div</b></div></div>
+    </div>
+  </div>
+  <div class="mobile-note">Mobile layout stacks the equipment slots; desktop preserves the PoE-style shrine layout.</div>
+  <div class="stage" id="stage"><div class="figure"></div></div>
+  <div class="stats">
+    <div class="stat mana"><div class="k">Maximum Mana</div><div class="v" id="mana">0</div></div>
+    <div class="stat overflow"><div class="k">Overflow</div><div class="v" id="overflow">+0</div></div>
+    <div class="stat"><div class="k">ES before EB</div><div class="v" id="es">0</div></div>
+    <div class="stat"><div class="k">Armour</div><div class="v" id="armour">0</div></div>
+    <div class="stat"><div class="k">Evasion</div><div class="v" id="evasion">0</div></div>
+    <div class="stat"><div class="k">Runic Ward</div><div class="v" id="ward">0</div></div>
+  </div>
+  <div class="importbar"><input id="buildCode" class="code" value="" spellcheck="false"><button class="btn" id="importBtn">Import build</button><button class="btn primary" id="exportBtn">Export build</button></div>
+  <div class="legend">Model status: verified baseline + planner assumptions. Gear marked “Modelled” uses deliberate endgame estimates until a fresh authoritative item scrape replaces the value.</div>
+</div>
+<div class="drawer" id="drawer"><button class="btn close" id="closeDrawer">Close</button><h2 id="drawerTitle">Slot</h2><div class="sub" id="drawerSub"></div><div class="strength"><button class="pill on" data-strength="realistic">Realistic max</button><button class="pill" data-strength="corrupted">Corrupted max</button></div><div id="gearList"></div></div>
+<script>
+const BASE={mana:2669,armour:2487,evasion:8,ward:119,es:0,int:299,cost:0};
+const state={mode:'budget',strength:'realistic',mechanics:{eb:true,spectral:true,runic:true},gear:{}};
+const ITEMS={
+ weapon1:[
+  {id:'bramble',name:'Bramble Scratch // current wand',price:0,mana:0,es:0,armour:0,evasion:0,desc:'Verified current weapon. 31% gain-as-extra package; kept as the zero-cost benchmark.',status:'Verified'},
+  {id:'exwand',name:'Exceptional Mana Wand',price:8,mana:360,manaCorrupt:500,desc:'Modelled endgame rare: large mana prefix + Mind Rune socket package. Use as the intentional upgrade, not a random rare.',status:'Modelled'}
+ ],
+ weapon2:[
+  {id:'crest',name:'Crest of Ardura',price:0,mana:20,desc:'Current offhand direction: CDR + mana regen. Mana contribution kept conservative.',status:'Verified/Conservative'},
+  {id:'rathpith',name:'Cultivated Rathpith',price:6,mana:120,desc:'Later Flare-centric offhand. Planner tracks mana contribution; damage/crit layer is shown in notes, not max-mana total.',status:'Modelled'}
+ ],
+ helmet:[
+  {id:'ayah',name:'Visage of Ayah',price:1,mana:80,es:280,desc:'Transition EB helmet and known build enabler.',status:'Modelled'},
+  {id:'rarehelm',name:'Runic Helm // high ES rare',price:5,mana:170,es:620,esCorrupt:760,armour:450,desc:'Planner target for EB + Ward interaction. T1-style endgame estimate at ilvl 82.',status:'Modelled'}
+ ],
+ amulet:[
+  {id:'astramentis',name:'Astramentis',price:1,mana:340,desc:'Checkpoint estimate: roughly +340 final Mana from ~118 INT before wider interaction changes.',status:'Verified estimate'},
+  {id:'strugglescream',name:'Strugglescream',price:3,mana:0,desc:'Trades raw INT/Mana for 4-instilled-node compression. Mana remains zero here so the cost is visible.',status:'Verified concept'}
+ ],
+ ring1:[{id:'dream1',name:'Dream Fragments',price:1,mana:240,desc:'Core percentage-mana ring contribution represented as a conservative final-mana delta.',status:'Modelled'}],
+ ring2:[{id:'dream2',name:'Dream Fragments // corrupted',price:3,mana:260,desc:'Corrupted defensive variant; planner reserves the extra cost for mana-before-life value.',status:'Modelled'}],
+ body:[
+  {id:'grand',name:'Exceptional Grand Regalia // Mind stack',price:10,mana:520,manaCorrupt:760,es:430,armour:560,evasion:510,desc:'Main project. Realistic = normal exceptional Mind stack. Corrupted = maximum augment/socket fantasy ceiling for comparison.',status:'Modelled'},
+  {id:'cloak',name:'Cloak of Defiance',price:2,mana:220,es:320,desc:'Value transition body before the full Regalia project.',status:'Modelled'},
+  {id:'rarehybrid',name:'Best Armour/ES Rare Body',price:6,mana:180,es:700,esCorrupt:850,armour:1000,desc:'Generic ilvl 82 hybrid rare with midpoint T1-style defence modelling.',status:'Modelled'}
+ ],
+ gloves:[
+  {id:'manacles',name:"The Prisoner's Manacles",price:0,mana:30,es:140,armour:380,desc:'Current verified checkpoint piece; keep until a real Surge rare exists.',status:'Verified/Conservative'},
+  {id:'surgegloves',name:'Arcane-Surge Crit Rare Gloves',price:5,mana:120,es:260,armour:520,desc:'Endgame rare with mana/defence budget and Arcane-Surge-on-crit utility.',status:'Modelled'}
+ ],
+ boots:[
+  {id:'rareboots',name:'Best Armour/ES Rare Boots',price:4,mana:120,es:330,armour:500,desc:'Generic ilvl 82 endgame rare; mana + movement + defence chassis.',status:'Modelled'},
+  {id:'wardboots',name:'Best Armour/Evasion Rare Boots',price:3,mana:90,armour:620,evasion:720,desc:'Spectral/Runic Ward comparison base.',status:'Modelled'}
+ ],
+ belt:[
+  {id:'waistgate',name:'Waistgate',price:1,mana:76,overflow:0,desc:'Verified checkpoint: +76 Mana and dual-flask flexibility.',status:'Verified'},
+  {id:'rarebelt',name:'Mana/Attribute Rare Belt',price:3,mana:180,desc:'Straight mana-max alternative if dual-flask overflow is not being used.',status:'Modelled'}
+ ],
+ flask1:[
+  {id:'lifeflask',name:'Generic Life Flask',price:.1,mana:0,desc:'Ignored for mana unless Waistgate enables swapping this to another Mana Flask.',status:'Generic'},
+  {id:'manaflaskA',name:'High Recovery Mana Flask',price:.5,mana:0,overflow:900,desc:'Overflow only becomes active while Waistgate is equipped.',status:'Modelled'}
+ ],
+ flask2:[
+  {id:'uhtred',name:"Uhtred's Chalice",price:1,mana:0,overflow:1250,desc:'Planner overflow source. Exact live value can be patched independently of the UI.',status:'Modelled'},
+  {id:'manaflaskB',name:'High Recovery Mana Flask',price:.5,mana:0,overflow:900,desc:'Second mana flask option under Waistgate.',status:'Modelled'}
+ ]
+};
+const POS=['weapon1','helmet','weapon2','ring1','body','amulet','gloves','belt','boots','flask1','flask2'];
+const LABEL={weapon1:'WEAPON SLOT 1',weapon2:'WEAPON SLOT 2',helmet:'HELMET',amulet:'AMULET',ring1:'RING',ring2:'RING',body:'BODY ARMOUR',gloves:'GLOVES',belt:'BELT',boots:'BOOTS',flask1:'LEFT FLASK',flask2:'RIGHT FLASK'};
+function init(){
+ const defaults={weapon1:'bramble',weapon2:'crest',helmet:'ayah',amulet:'astramentis',ring1:'dream1',ring2:'dream2',body:'cloak',gloves:'manacles',boots:'rareboots',belt:'waistgate',flask1:'lifeflask',flask2:'uhtred'};
+ state.gear={...defaults}; renderSlots(); renderMechanics(); recalc(); bind();
+}
+function renderSlots(){const stage=document.getElementById('stage');stage.querySelectorAll('.slot').forEach(x=>x.remove());POS.concat('ring2').forEach(slot=>{const el=document.createElement('div');el.className='slot '+slot;el.dataset.slot=slot;stage.appendChild(el);});paintSlots();}
+function itemFor(slot){return ITEMS[slot].find(x=>x.id===state.gear[slot])||ITEMS[slot][0]}
+function paintSlots(){document.querySelectorAll('.slot').forEach(el=>{const s=el.dataset.slot,i=itemFor(s),runes=s==='body'&&i.id==='grand'?'<div class="runes">'+('<span class="rune"></span>'.repeat(state.strength==='corrupted'?5:4))+'</div>':'';el.innerHTML=`<div class="label">${LABEL[s]}</div><div class="name">${i.name}</div><div class="meta">${i.status} · ${i.price} div</div>${runes}`;});}
+function renderMechanics(){const c=document.getElementById('mechanics');c.innerHTML='';[['eb','Eldritch Battery'],['spectral','Spectral Ward'],['runic','Runic Ward']].forEach(([k,n])=>{const b=document.createElement('button');b.className='pill '+(state.mechanics[k]?'on':'');b.textContent=(state.mechanics[k]?'✓ ':'')+n;b.onclick=()=>{state.mechanics[k]=!state.mechanics[k];renderMechanics();recalc()};c.appendChild(b)});}
+function recalc(){let x={...BASE},cost=0,overflow=0;Object.keys(state.gear).forEach(s=>{const i=itemFor(s);cost+=i.price||0;x.mana+=(state.strength==='corrupted'&&i.manaCorrupt!=null?i.manaCorrupt:i.mana)||0;x.es+=(state.strength==='corrupted'&&i.esCorrupt!=null?i.esCorrupt:i.es)||0;x.armour+=i.armour||0;x.evasion+=i.evasion||0;if((s==='flask1'||s==='flask2')&&i.overflow)overflow+=i.overflow;});
+ if(state.mechanics.eb)x.mana+=Math.round(x.es*.62);if(state.mechanics.runic)x.ward+=Math.round(x.armour*.025);if(state.mechanics.spectral)x.ward+=Math.round(x.evasion*.018+x.es*.01);
+ const waist=itemFor('belt').id==='waistgate'; if(!waist) overflow=0;document.getElementById('mana').textContent=Math.round(x.mana).toLocaleString();document.getElementById('overflow').textContent='+'+Math.round(overflow).toLocaleString();document.getElementById('es').textContent=Math.round(x.es).toLocaleString();document.getElementById('armour').textContent=Math.round(x.armour).toLocaleString();document.getElementById('evasion').textContent=Math.round(x.evasion).toLocaleString();document.getElementById('ward').textContent=Math.round(x.ward).toLocaleString();document.getElementById('cost').textContent=cost.toFixed(1)+' div';document.getElementById('buildCode').value=encode();paintSlots();}
+function openDrawer(slot){const d=document.getElementById('drawer');d.classList.add('open');d.dataset.slot=slot;document.getElementById('drawerTitle').textContent=LABEL[slot];document.getElementById('drawerSub').textContent='Choose a curated Mana Geyser candidate. Prices are editable data, not hard-coded logic.';const list=document.getElementById('gearList');list.innerHTML='';ITEMS[slot].slice().sort((a,b)=>score(b)-score(a)).forEach(i=>{const c=document.createElement('div');c.className='gearcard';c.innerHTML=`<div class="row"><div class="title">${i.name}</div><div class="price">${i.price} div</div></div><div class="desc">${i.desc}<br><b>${i.status}</b></div>`;c.onclick=()=>{state.gear[slot]=i.id;recalc();d.classList.remove('open')};list.appendChild(c)});}
+function score(i){const mana=(state.strength==='corrupted'&&i.manaCorrupt!=null?i.manaCorrupt:i.mana)||0;if(state.mode==='minmax')return mana;if(state.mode==='value')return mana/(Math.sqrt((i.price||.1)));return mana/((i.price||.1));}
+function encode(){return 'MG2:'+btoa(unescape(encodeURIComponent(JSON.stringify(state)))).replace(/=+$/,'')}
+function decode(v){try{if(!v.startsWith('MG2:'))throw 0;const raw=v.slice(4);const obj=JSON.parse(decodeURIComponent(escape(atob(raw+'='.repeat((4-raw.length%4)%4)))));Object.assign(state,obj);renderMechanics();recalc();return true}catch(e){alert('Invalid Mana Geyser build code');return false}}
+function bind(){document.querySelectorAll('.slot').forEach(e=>e.onclick=()=>openDrawer(e.dataset.slot));document.getElementById('closeDrawer').onclick=()=>document.getElementById('drawer').classList.remove('open');document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('on',x.dataset.mode===state.mode));recalc()});document.querySelectorAll('[data-strength]').forEach(b=>b.onclick=()=>{state.strength=b.dataset.strength;document.querySelectorAll('[data-strength]').forEach(x=>x.classList.toggle('on',x.dataset.strength===state.strength));recalc()});document.getElementById('exportBtn').onclick=async()=>{const v=encode();document.getElementById('buildCode').value=v;try{await navigator.clipboard.writeText(v);document.getElementById('exportBtn').textContent='Copied';setTimeout(()=>document.getElementById('exportBtn').textContent='Export build',1200)}catch(e){}};document.getElementById('importBtn').onclick=()=>decode(document.getElementById('buildCode').value.trim());}
+init();
+</script>
+</body>
+</html>
