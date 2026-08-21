@@ -1,0 +1,1 @@
+.jewelGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}.jewelPanel{min-width:0}.jewelModeFields{display:none}.jewelModeFields.active{display:block}@media(max-width:900px){.jewelGrid{grid-template-columns:1fr}}
