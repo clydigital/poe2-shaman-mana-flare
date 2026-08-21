@@ -1,0 +1,2 @@
+.stage{grid-template-areas:"weapon1 helmet helmet helmet weapon2" "ring1 ring2 body amulet amulet" "gloves gloves body boots boots" "flask1 belt belt belt flask2"}
+@media(max-width:1150px){.stage{grid-template-columns:1fr 1fr;grid-template-areas:"helmet helmet" "weapon1 weapon2" "ring1 ring2" "amulet amulet" "body body" "gloves boots" "belt belt" "flask1 flask2"}}
