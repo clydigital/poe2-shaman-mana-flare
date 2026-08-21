@@ -1,15 +1,16 @@
 // Timeless Jewel lab: user-owned jewel defaults.
 // Notables: 3% increased Intelligence each. Small passives: +10 maximum Mana each.
 (function(){
-  const defaults={notables:3,intPerNotable:3,smalls:10,manaPerSmall:10};
+  const defaults={enabled:true,notables:3,intPerNotable:3,smalls:10,manaPerSmall:10};
   state.timeless=Object.assign({},defaults,state.timeless||{});
 
   const lab=document.querySelector('.labgrid');
   if(lab){
     const panel=document.createElement('div');
     panel.className='panel';
-    panel.innerHTML=`<h3>Timeless Jewel lab</h3>
-      <div class="small">Your jewel modifiers. Counts and roll values are adjustable; defaults are 3% increased Intelligence per affected Notable and +10 maximum Mana per affected Small Passive.</div>
+    panel.id='ownedTimelessPanel';
+    panel.innerHTML=`<h3>Your Timeless Jewel lab</h3>
+      <div class="small">Your owned jewel modifiers. This panel is used when Current owned jewel is selected in the live-jewel comparison.</div>
       <div class="field"><span>Affected Notables</span><input id="tjNotables" type="number" min="0" value="${state.timeless.notables}"></div>
       <div class="field"><span>% INT per Notable</span><input id="tjIntPerNotable" type="number" min="0" step="0.1" value="${state.timeless.intPerNotable}"></div>
       <div class="field"><span>Affected Small Passives</span><input id="tjSmalls" type="number" min="0" value="${state.timeless.smalls}"></div>
@@ -32,9 +33,9 @@
   window.evaluate=function(){
     const x=baseEvaluate();
     const t=readTJ();
-    const intPct=t.notables*t.intPerNotable;
-    const intGain=x.totalInt*(intPct/100);
-    const flatGain=t.smalls*t.manaPerSmall;
+    const intPct=t.enabled?t.notables*t.intPerNotable:0;
+    const intGain=t.enabled?x.totalInt*(intPct/100):0;
+    const flatGain=t.enabled?t.smalls*t.manaPerSmall:0;
     x.timelessIntPct=intPct;
     x.timelessIntGain=intGain;
     x.timelessFlatMana=flatGain;
@@ -57,8 +58,9 @@
     baseCalc();
     const x=window.evaluate();
     const a=document.getElementById('tjIntOut'),m=document.getElementById('tjManaOut');
-    if(a)a.textContent=`+${x.timelessIntPct.toFixed(1)}% = +${fmt(x.timelessIntGain,1)} INT`;
-    if(m)m.textContent=`+${fmt(x.timelessFlatMana)} Mana`;
+    if(a)a.textContent=state.timeless.enabled?`+${x.timelessIntPct.toFixed(1)}% = +${fmt(x.timelessIntGain,1)} INT`:'inactive';
+    if(m)m.textContent=state.timeless.enabled?`+${fmt(x.timelessFlatMana)} Mana`:'inactive';
+    const p=document.getElementById('ownedTimelessPanel');if(p)p.style.opacity=state.timeless.enabled?'1':'0.55';
   };
 
   ['tjNotables','tjIntPerNotable','tjSmalls','tjManaPerSmall'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>window.calc()));
