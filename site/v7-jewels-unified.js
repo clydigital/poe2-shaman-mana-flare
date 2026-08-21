@@ -1,0 +1,66 @@
+// Unified two-slot jewel planner for current PoE2 build testing.
+(function(){
+  const defaultOwned={mode:'owned',enabled:true,notables:3,intPerNotable:3,smalls:10,manaPerSmall:10};
+  const defaultOther={mode:'owned',enabled:true,notables:3,intPerNotable:3,smalls:10,manaPerSmall:10,force:0,natural:0,runic:0,war:0,scorched:0,tribute:100,lavish:false,unrestrained:false,ancient:false,desecratedIntNodes:0,desecratedIntEach:6,desecratedEsSmalls:0,desecratedEsEach:3,desecratedRegenSmalls:0,desecratedRegenEach:2.5,int:0,flatMana:0,incMana:0,incES:0,regen:0};
+  state.jewels=[Object.assign({},defaultOwned,state.timeless||{},state.jewels?.[0]||{}),Object.assign({},defaultOther,state.jewel2||{},state.jewels?.[1]||{})];
+
+  const anchor=document.getElementById('stage');
+  if(anchor){
+    const section=document.createElement('div');
+    section.className='jewelSection';
+    section.innerHTML='<h3 class="jewelTitle">Jewel sockets</h3><div class="jewelGrid" id="jewelGrid"></div>';
+    anchor.parentNode.insertBefore(section,anchor);
+  }
+
+  function panelHtml(i,j){const n=i+1;return `<div class="panel jewelPanel" id="jewelPanel${n}">
+    <div class="jewelHead"><h3>Jewel Slot ${n}</h3><label class="jewelEnable"><input id="j${n}Enabled" type="checkbox" ${j.enabled!==false?'checked':''}> Enabled</label></div>
+    <div class="field"><span>Jewel type</span><select id="j${n}Mode"><option value="owned">Current Owned Jewel (Cloneable)</option><option value="heroic">Heroic Tragedy</option><option value="undying">Undying Hate (Kurgal)</option><option value="custom">Custom / Rare Jewel</option></select></div>
+    <div class="jewelModeFields" id="j${n}Owned">
+      <div class="small">Clone your current jewel or change the affected-node counts.</div>
+      <div class="field"><span>Affected Notables</span><input id="j${n}Notables" type="number" min="0" value="${j.notables??3}"></div>
+      <div class="field"><span>% INT per Notable</span><input id="j${n}IntPerNotable" type="number" min="0" step="0.1" value="${j.intPerNotable??3}"></div>
+      <div class="field"><span>Affected Small Passives</span><input id="j${n}Smalls" type="number" min="0" value="${j.smalls??10}"></div>
+      <div class="field"><span>Max Mana per Small</span><input id="j${n}ManaPerSmall" type="number" min="0" value="${j.manaPerSmall??10}"></div>
+    </div>
+    <div class="jewelModeFields" id="j${n}Heroic">
+      <div class="small">Relevant Heroic Tragedy outcomes.</div>
+      <div class="field"><span>Force of Will (+2% Mana)</span><input id="j${n}Force" type="number" min="0" value="${j.force||0}"></div>
+      <div class="field"><span>Natural Energies (+40% ES)</span><input id="j${n}Natural" type="number" min="0" value="${j.natural||0}"></div>
+      <div class="field"><span>Runic Tattoos (+30% regen)</span><input id="j${n}Runic" type="number" min="0" value="${j.runic||0}"></div>
+      <div class="field"><span>War Tactics (+20% regen)</span><input id="j${n}War" type="number" min="0" value="${j.war||0}"></div>
+      <div class="field"><span>Scorched Earth (+15 INT)</span><input id="j${n}Scorched" type="number" min="0" value="${j.scorched||0}"></div>
+    </div>
+    <div class="jewelModeFields" id="j${n}Undying">
+      <div class="small">Kurgal / Undying Hate Mana-EB branch.</div>
+      <div class="field"><span>Tribute</span><input id="j${n}Tribute" type="number" min="0" value="${j.tribute??100}"></div>
+      <div class="field"><span>Lavish Soul (+5% Mana at 100)</span><input id="j${n}Lavish" type="checkbox" ${j.lavish?'checked':''}></div>
+      <div class="field"><span>Unrestrained Intellect</span><input id="j${n}Unrestrained" type="checkbox" ${j.unrestrained?'checked':''}></div>
+      <div class="field"><span>Ancient Bastion</span><input id="j${n}Ancient" type="checkbox" ${j.ancient?'checked':''}></div>
+      <div class="field"><span>Desecrated INT nodes</span><input id="j${n}DIntNodes" type="number" min="0" value="${j.desecratedIntNodes||0}"></div>
+      <div class="field"><span>INT per node</span><input id="j${n}DIntEach" type="number" min="4" max="8" value="${j.desecratedIntEach??6}"></div>
+      <div class="field"><span>Desecrated ES smalls</span><input id="j${n}DESmalls" type="number" min="0" value="${j.desecratedEsSmalls||0}"></div>
+      <div class="field"><span>ES % per small</span><input id="j${n}DESEach" type="number" min="2" max="4" step="0.5" value="${j.desecratedEsEach??3}"></div>
+      <div class="field"><span>Desecrated regen smalls</span><input id="j${n}DRegenSmalls" type="number" min="0" value="${j.desecratedRegenSmalls||0}"></div>
+      <div class="field"><span>Regen % per small</span><input id="j${n}DRegenEach" type="number" min="2" max="3" step="0.5" value="${j.desecratedRegenEach??2.5}"></div>
+    </div>
+    <div class="jewelModeFields" id="j${n}Custom">
+      <div class="small">Manual rare/custom jewel values.</div>
+      <div class="field"><span>+ Intelligence</span><input id="j${n}Int" type="number" value="${j.int||0}"></div>
+      <div class="field"><span>+ Maximum Mana</span><input id="j${n}FlatMana" type="number" value="${j.flatMana||0}"></div>
+      <div class="field"><span>% increased Max Mana</span><input id="j${n}IncMana" type="number" step="0.1" value="${j.incMana||0}"></div>
+      <div class="field"><span>% increased Max ES</span><input id="j${n}IncES" type="number" step="0.1" value="${j.incES||0}"></div>
+      <div class="field"><span>% Mana regeneration</span><input id="j${n}Regen" type="number" step="0.1" value="${j.regen||0}"></div>
+    </div>
+    <div class="row"><span>Mana gained by slot</span><b id="j${n}Gain">—</b></div>
+  </div>`}
+  const grid=document.getElementById('jewelGrid');if(grid)grid.innerHTML=state.jewels.map((j,i)=>panelHtml(i,j)).join('');
+
+  function val(id){return +document.getElementById(id)?.value||0}function chk(id){return !!document.getElementById(id)?.checked}
+  function read(i){const n=i+1,j=state.jewels[i];j.enabled=chk(`j${n}Enabled`);j.mode=document.getElementById(`j${n}Mode`)?.value||'owned';j.notables=val(`j${n}Notables`);j.intPerNotable=val(`j${n}IntPerNotable`);j.smalls=val(`j${n}Smalls`);j.manaPerSmall=val(`j${n}ManaPerSmall`);j.force=val(`j${n}Force`);j.natural=val(`j${n}Natural`);j.runic=val(`j${n}Runic`);j.war=val(`j${n}War`);j.scorched=val(`j${n}Scorched`);j.tribute=val(`j${n}Tribute`);j.lavish=chk(`j${n}Lavish`);j.unrestrained=chk(`j${n}Unrestrained`);j.ancient=chk(`j${n}Ancient`);j.desecratedIntNodes=val(`j${n}DIntNodes`);j.desecratedIntEach=val(`j${n}DIntEach`);j.desecratedEsSmalls=val(`j${n}DESmalls`);j.desecratedEsEach=val(`j${n}DESEach`);j.desecratedRegenSmalls=val(`j${n}DRegenSmalls`);j.desecratedRegenEach=val(`j${n}DRegenEach`);j.int=val(`j${n}Int`);j.flatMana=val(`j${n}FlatMana`);j.incMana=val(`j${n}IncMana`);j.incES=val(`j${n}IncES`);j.regen=val(`j${n}Regen`);return j}
+  function show(i){const n=i+1,m=state.jewels[i].mode;['Owned','Heroic','Undying','Custom'].forEach(k=>{const e=document.getElementById(`j${n}${k}`);if(e)e.style.display=m===k.toLowerCase()?'block':'none'});const s=document.getElementById(`j${n}Mode`);if(s)s.value=m}
+
+  const baseEvaluate=window.evaluate;
+  window.evaluate=function(){let x=baseEvaluate();for(let i=0;i<2;i++){const j=read(i),before=x.normal;if(!j.enabled){x[`jewel${i+1}Gain`]=0;continue}let intGain=0,flat=0,inc=0,esPct=0,regenPct=0;if(j.mode==='owned'){const intPct=j.notables*j.intPerNotable;intGain=x.totalInt*(intPct/100);flat=j.smalls*j.manaPerSmall}else if(j.mode==='heroic'){inc=2*j.force;esPct=40*j.natural;regenPct=30*j.runic+20*j.war;intGain=15*j.scorched}else if(j.mode==='undying'){const t=j.tribute;inc=(j.lavish&&t>=100)?5:0;intGain=j.desecratedIntNodes*j.desecratedIntEach+(j.unrestrained?Math.floor(t/25)*2:0);esPct=j.desecratedEsSmalls*j.desecratedEsEach+(j.ancient?Math.floor(t/10)*4:0);regenPct=j.desecratedRegenSmalls*j.desecratedRegenEach}else{intGain=j.int;flat=j.flatMana;inc=j.incMana;esPct=j.incES;regenPct=j.regen}x.totalInt+=intGain;x.characterBase+=2*intGain;x.flat+=flat;x.inc+=inc;if(esPct){const raw=x.finalES/(1+x.globalDefPct/100);x.finalES=raw*(1+(x.globalDefPct+esPct)/100);x.ebFuel=state.mechanics.eb?x.finalES:0}if(regenPct){const base=state.customRecovery/(1+REF_ITEM_REGEN/100);x.projectedRecovery=base*(1+(x.itemRegen+regenPct)/100)}x.normal=(x.characterBase+x.flat+x.ebFuel)*(1+x.inc/100);x[`jewel${i+1}Gain`]=x.normal-before;x.flareCost=x.normal*.25;x.overflowExtra=Math.min(x.potential,x.normal*.5);x.overflowTotal=x.normal+x.overflowExtra;x.overflowFlare=x.overflowTotal*.25;x.recoveryLimited=x.flareCost?x.projectedRecovery/x.flareCost:0;x.sustainable=Math.min(x.cooldownLimited,x.recoveryLimited);x.bottleneck=x.recoveryLimited<x.cooldownLimited?'Recovery':'Cooldown'}return x};
+  const baseCalc=window.calc;window.calc=function(){baseCalc();const x=window.evaluate();for(let i=0;i<2;i++){show(i);const out=document.getElementById(`j${i+1}Gain`);if(out)out.textContent=state.jewels[i].enabled?`+${fmt(x[`jewel${i+1}Gain`])} Mana`:'OFF'}document.getElementById('mana').textContent=fmt(x.normal);document.getElementById('overflow').textContent='+'+fmt(x.overflowExtra);document.getElementById('overflowTotal').textContent=fmt(x.overflowTotal);document.getElementById('flareHit').textContent=fmt(x.flareCost);document.getElementById('overflowHit').textContent=fmt(x.overflowFlare);document.getElementById('es').textContent=fmt(x.finalES)};
+  document.querySelectorAll('.jewelPanel input,.jewelPanel select').forEach(el=>el.addEventListener('input',()=>window.calc()));for(let i=0;i<2;i++){const m=document.getElementById(`j${i+1}Mode`);if(m)m.value=state.jewels[i].mode||'owned';show(i)}window.calc();
+})();
