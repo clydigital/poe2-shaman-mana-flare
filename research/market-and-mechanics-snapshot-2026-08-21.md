@@ -6,7 +6,7 @@ This file records the v7 planner corrections so later iterations do not regress 
 
 Primary current currency source: Divindex, Runes of Aldur, Exalted quote mode.
 
-- Divine Orb: **338.1 Exalted Orbs** per Divine at the captured snapshot.
+- Divine Orb: **375.8 Exalted Orbs** per Divine at the captured snapshot.
 - Jiquani's Thesis: **170,042 Ex** on the current Divindex result.
 - Perfect Mind Rune: **499.9 Ex**.
 - Perfect Iron Rune: **457.0 Ex**.
@@ -20,7 +20,7 @@ Primary current currency source: Divindex, Runes of Aldur, Exalted quote mode.
 
 Planner normalization rule:
 
-`normalized_divines = raw_divines + raw_exalts / 338.1`
+`normalized_divines = raw_divines + raw_exalts / 375.8`
 
 Source: https://divindex.com/
 
