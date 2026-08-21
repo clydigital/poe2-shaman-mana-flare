@@ -16,3 +16,11 @@ applyAugments=function(s,d){
   return out;
 };
 calc();
+
+// Load current-league additions without disturbing the core v7 file order.
+// live-data adds equipment candidates; live-options wraps the final calculator after the Timeless lab has initialised.
+window.addEventListener('load',()=>{
+  const d=document.createElement('script');d.src='v7-live-data.js';d.async=false;
+  d.onload=()=>{const j=document.createElement('script');j.src='v7-live-options.js';j.async=false;document.body.appendChild(j);};
+  document.body.appendChild(d);
+});
