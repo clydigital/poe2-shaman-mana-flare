@@ -1,2 +1,5 @@
-.stage{grid-template-areas:"weapon1 helmet helmet helmet weapon2" "ring1 ring2 body amulet amulet" "gloves gloves body boots boots" "flask1 belt belt belt flask2"}
-@media(max-width:1150px){.stage{grid-template-columns:1fr 1fr;grid-template-areas:"helmet helmet" "weapon1 weapon2" "ring1 ring2" "amulet amulet" "body body" "gloves boots" "belt belt" "flask1 flask2"}}
+.stage{grid-template-areas:"weapon1 helmet helmet helmet weapon2" "ring1 ring2 body amulet amulet" "gloves gloves body boots boots" ". flask1 belt flask2 ."}
+.stage .flask1{justify-self:end;align-self:center}
+.stage .belt{justify-self:center;align-self:center}
+.stage .flask2{justify-self:start;align-self:center}
+@media(max-width:1150px){.stage{grid-template-columns:1fr 1fr;grid-template-areas:"helmet helmet" "weapon1 weapon2" "ring1 ring2" "amulet amulet" "body body" "gloves boots" "belt belt" "flask1 flask2"}.stage .flask1,.stage .flask2,.stage .belt{justify-self:center;align-self:center}}
